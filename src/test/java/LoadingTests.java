@@ -20,7 +20,7 @@ public class LoadingTests {
                 {'7', '7', '7'}
         });
 
-        List<char[][]> trucks = Main.loadParcelsIntoTrucks(parcels, 1); // Strategy 1 (Largest First)
+        List<char[][]> trucks = Main.loadParcelsIntoTrucks(parcels, 1);
         assertEquals(1, trucks.size(), "Strategy 1 should use 1 truck");
     }
 
@@ -36,7 +36,7 @@ public class LoadingTests {
                 {'7', '7', '7','7'}
         });
 
-        List<char[][]> trucks = Main.loadParcelsIntoTrucks(parcels, 2); // Strategy 2 (One parcel per truck)
+        List<char[][]> trucks = Main.loadParcelsIntoTrucks(parcels, 2);
         assertEquals(2, trucks.size(), "Strategy 2 should use 2 trucks");
     }
 }

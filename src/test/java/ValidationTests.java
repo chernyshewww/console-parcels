@@ -73,6 +73,6 @@ public class ValidationTests {
     public void testReadParcelsFromFile() {
         List<char[][]> parcels = Main.readParcelsFromFile("src/test/resources/test_parcels.txt");
         assertNotNull(parcels);
-        assertTrue(parcels.size() > 0);
+        assertFalse(parcels.isEmpty());
     }
 }

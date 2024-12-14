@@ -16,6 +16,7 @@ public class Main {
 
     public static final int TRUCK_WIDTH = 6;
     public static final int TRUCK_HEIGHT = 6;
+    public static final String FILE_PATH = "src/main/resources/parcels.txt";
 
     // PROGRAM WILL SKIP ALL THE INVALID SEQUENCES AND WRITE WARNING ABOUT IT
     public static final List<String> VALID_SEQUENCES = Arrays.asList(
@@ -35,7 +36,7 @@ public class Main {
         logger.info("Program started.");
 
         // Read parcels from file
-        var parcels = readParcelsFromFile("src/main/resources/parcels.txt");
+        var parcels = readParcelsFromFile(FILE_PATH);
         logger.info("Read {} valid parcels from file.", parcels.size());
 
         // Load parcels into trucks with first strategy
@@ -144,7 +145,7 @@ public class Main {
                 for (char[] row : newTruck) {
                     Arrays.fill(row, ' ');
                 }
-                placeParcel(parcel, newTruck, TRUCK_HEIGHT - parcel.length, 0); // Place parcel at bottom left
+                placeParcel(parcel, newTruck, TRUCK_HEIGHT - parcel.length, 0);
                 trucks.add(newTruck);
                 logger.info("New truck created for parcel");
             } else {
@@ -164,7 +165,7 @@ public class Main {
                     for (char[] row : newTruck) {
                         Arrays.fill(row, ' ');
                     }
-                    placeParcel(parcel, newTruck, TRUCK_HEIGHT - parcel.length, 0); // Place parcel at bottom left
+                    placeParcel(parcel, newTruck, TRUCK_HEIGHT - parcel.length, 0);
                     trucks.add(newTruck);
                 }
             }
