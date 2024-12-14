@@ -39,7 +39,7 @@ public class Main {
         logger.info("Read {} valid parcels from file.", parcels.size());
 
         // Load parcels into trucks with first strategy
-        logger.info("Using Strategy 1 (Largest First).");
+        logger.info("Using Strategy 1 (Largest First)");
         var trucksStrategy1 = loadParcelsIntoTrucks(parcels, 1);
 
         System.out.println("\nStrategy 1: Largest First");
@@ -110,6 +110,7 @@ public class Main {
         }
         return matrix;
     }
+
     public static boolean containsChar(char[][] array, char target) {
         for (char[] row : array) {
             for (char cell : row) {
@@ -120,6 +121,7 @@ public class Main {
         }
         return false;
     }
+
     public static List<char[][]> loadParcelsIntoTrucks(List<char[][]> parcels, int strategy) {
         List<char[][]> trucks = new ArrayList<>();
 
