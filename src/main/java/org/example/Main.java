@@ -2,8 +2,13 @@ package org.example;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.*;
-import java.util.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public class Main {
@@ -105,9 +110,20 @@ public class Main {
         }
         return matrix;
     }
-
+    public static boolean containsChar(char[][] array, char target) {
+        for (char[] row : array) {
+            for (char cell : row) {
+                if (cell == target) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public static List<char[][]> loadParcelsIntoTrucks(List<char[][]> parcels, int strategy) {
         List<char[][]> trucks = new ArrayList<>();
+
+        parcels.sort((a, b) -> Boolean.compare(!containsChar(a, '7'), !containsChar(b, '7')));
 
         if (strategy == 1) {
             // Strategy 1: We will sort the parcels by size
