@@ -1,23 +1,23 @@
-package com.deliverysystem;
+package com.deliverysystem.service;
 
 import java.util.Arrays;
 
 // Abstraction for trucks
-public class Truck {
+public class TruckService {
     public static final int WIDTH = 6;
     public static final int HEIGHT = 6;
     public static final char EMPTY_CELL = ' ';
 
     private final char[][] grid;
 
-    public Truck() {
+    public TruckService() {
         this.grid = new char[HEIGHT][WIDTH];
         for (char[] row : grid) {
             Arrays.fill(row, ' ');
         }
     }
 
-    public boolean canPlace(Parcel parcel, int row, int col) {
+    public boolean canPlace(ParcelService parcel, int row, int col) {
         char[][] parcelData = parcel.getData();
         var parcelHeight = parcelData.length;
         var parcelWidth = parcelData[0].length;
@@ -36,7 +36,7 @@ public class Truck {
         return true;
     }
 
-    public void place(Parcel parcel, int row, int col) {
+    public void place(ParcelService parcel, int row, int col) {
         char[][] parcelData = parcel.getData();
         for (var i = 0; i < parcelData.length; i++) {
             for (var j = 0; j < parcelData[0].length; j++) {

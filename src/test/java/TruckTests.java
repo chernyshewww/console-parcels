@@ -1,7 +1,7 @@
 package org.example;
 
-import com.deliverysystem.Parcel;
-import com.deliverysystem.Truck;
+import com.deliverysystem.service.ParcelService;
+import com.deliverysystem.service.TruckService;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,8 +13,8 @@ class TruckTests {
     @Test
     void testCanPlace_ValidPosition() {
         // Arrange
-        Truck truck = new Truck();
-        Parcel parcel = new Parcel(List.of(
+        TruckService truck = new TruckService();
+        ParcelService parcel = new ParcelService(List.of(
                 "66",
                 "66"
         ));
@@ -29,8 +29,8 @@ class TruckTests {
     @Test
     void testCanPlace_OutOfBounds() {
         // Arrange
-        Truck truck = new Truck();
-        Parcel parcel = new Parcel(List.of(
+        TruckService truck = new TruckService();
+        ParcelService parcel = new ParcelService(List.of(
                 "66",
                 "66"
         ));
@@ -45,12 +45,12 @@ class TruckTests {
     @Test
     void testCanPlace_OccupiedSpace() {
         // Arrange
-        Truck truck = new Truck();
-        Parcel parcel1 = new Parcel(List.of(
+        TruckService truck = new TruckService();
+        ParcelService parcel1 = new ParcelService(List.of(
                 "66",
                 "66"
         ));
-        Parcel parcel2 = new Parcel(List.of(
+        ParcelService parcel2 = new ParcelService(List.of(
                 "77",
                 "77"
         ));

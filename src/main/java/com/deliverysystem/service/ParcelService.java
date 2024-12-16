@@ -1,4 +1,4 @@
-package com.deliverysystem;
+package com.deliverysystem.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 // Simple class for creating parcel and make matrix
-public class Parcel {
-    private static final Logger logger = LoggerFactory.getLogger(Parcel.class);
+public class ParcelService {
+    private static final Logger logger = LoggerFactory.getLogger(ParcelService.class);
     private final char[][] data;
 
-    public Parcel(List<String> lines) {
+    public ParcelService(List<String> lines) {
         this.data = convertToMatrix(lines);
         logger.info("Parcel created with dimensions: {}x{}", data.length, data[0].length);
     }

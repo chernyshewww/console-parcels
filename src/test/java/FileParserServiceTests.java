@@ -1,6 +1,6 @@
 package org.example;
 
-import com.deliverysystem.FileParser;
+import com.deliverysystem.service.FileParserService;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileParserTests {
+class FileParserServiceTests {
 
     @Test
     void testReadParcelsFromFile_ValidParcels() {
@@ -16,7 +16,7 @@ class FileParserTests {
         String fileName = "src/test/resources/test_parcels.txt";
 
         // Act
-        List<char[][]> parcels = FileParser.readParcelsFromFile(fileName);
+        List<char[][]> parcels = FileParserService.readParcelsFromFile(fileName);
 
         // Assert
         assertEquals(2, parcels.size(), "Only two valid parcels should be read from the file.");
@@ -35,7 +35,7 @@ class FileParserTests {
         String fileName = "src/test/resources/test_parcels.txt";
 
         // Act
-        List<char[][]> parcels = FileParser.readParcelsFromFile(fileName);
+        List<char[][]> parcels = FileParserService.readParcelsFromFile(fileName);
 
         // Assert
         assertEquals(2, parcels.size(), "Invalid parcels should be skipped.");
@@ -47,7 +47,7 @@ class FileParserTests {
         String invalidFileName = "src/test/resources/non_existent.txt";
 
         // Act & Assert
-        List<char[][]> parcels = FileParser.readParcelsFromFile(invalidFileName);
+        List<char[][]> parcels = FileParserService.readParcelsFromFile(invalidFileName);
         assertTrue(parcels.isEmpty(), "If the file doesn't exist, the parcel list should be empty.");
     }
 
@@ -58,7 +58,7 @@ class FileParserTests {
         String fileName = emptyFile.getAbsolutePath();
 
         // Act
-        List<char[][]> parcels = FileParser.readParcelsFromFile(fileName);
+        List<char[][]> parcels = FileParserService.readParcelsFromFile(fileName);
 
         // Assert
         assertTrue(parcels.isEmpty(), "An empty file should result in no parcels being read.");

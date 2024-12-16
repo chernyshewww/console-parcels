@@ -1,4 +1,4 @@
-package com.deliverysystem;
+package com.deliverysystem.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 // Class for parsing file and validate incoming parcels
-public class FileParser {
-    private static final Logger logger = LoggerFactory.getLogger(FileParser.class);
+public class FileParserService {
+    private static final Logger logger = LoggerFactory.getLogger(FileParserService.class);
 
     // PROGRAM WILL SKIP ALL THE INVALID SEQUENCES AND WRITE WARNING ABOUT IT
     private static final List<String> VALID_SEQUENCES = Arrays.asList(
@@ -52,7 +52,7 @@ public class FileParser {
         if (!lines.isEmpty()) {
             String parcelString = String.join("\n", lines).trim();
             if (VALID_SEQUENCES.contains(parcelString)) {
-                parcels.add(new Parcel(lines).getData());
+                parcels.add(new ParcelService(lines).getData());
             } else {
                 logger.warn("Invalid parcel skipped: {}", lines);
             }

@@ -1,7 +1,7 @@
 package org.example;
 
-import com.deliverysystem.ParcelLoader;
-import com.deliverysystem.Truck;
+import com.deliverysystem.service.ParcelLoaderService;
+import com.deliverysystem.service.TruckService;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ class ParcelLoaderTests {
         });
 
         // Act
-        List<Truck> trucks = ParcelLoader.loadParcels(parcels, 2);
+        List<TruckService> trucks = ParcelLoaderService.loadParcels(parcels, 2);
 
         // Assert
         assertEquals(2, trucks.size(), "Strategy 2 should use one truck per parcel.");
@@ -37,7 +37,7 @@ class ParcelLoaderTests {
         List<char[][]> parcels = new ArrayList<>();
 
         // Act
-        List<Truck> trucks = ParcelLoader.loadParcels(parcels, 1);
+        List<TruckService> trucks = ParcelLoaderService.loadParcels(parcels, 1);
 
         // Assert
         assertTrue(trucks.isEmpty(), "No trucks should be created for an empty list of parcels.");
