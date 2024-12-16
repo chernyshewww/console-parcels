@@ -11,17 +11,21 @@ public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
     public static final String FILE_PATH = "src/main/resources/parcels.txt";
 
-    @SuppressWarnings("ALL")
+//    @SuppressWarnings("ALL") //todo Зачем?
+    //todo убрать лишние комментарии
     // The word 'package' is reserved in java, so we use 'parcel' instead
     public static void main(String[] args) {
         logger.info("Program started.");
 
         // Read parcels
         var parcels = FileParserService.readParcelsFromFile(FILE_PATH);
+        //todo слишком много инфо. Лучше сделай если хочешь уровня debug
         logger.info("Read {} valid parcels from file.", parcels.size());
 
         // Strategy 1: Largest First
         logger.info("Using Strategy 1 (Largest First)");
+        //todo название должно быть информативной. Лучше сделай чтобы понили. Тут загружают машину под завязку
+        //в другом: посылку на машину
         var trucksStrategy1 = ParcelLoaderService.loadParcels(parcels, 1);
 
         System.out.println("\nStrategy 1: Largest First");
