@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//todo убрать комменты, если хочешь можешь написать документацию. Но если ведешь документаци - види для всех классов
+
 public class ParcelLoaderService {
+    //todo вначале паблики потом прайваты
     private static final Logger logger = LoggerFactory.getLogger(ParcelLoaderService.class);
 
     public static final int STRATEGY_LARGEST_FIRST = 1;
@@ -15,6 +18,8 @@ public class ParcelLoaderService {
     public static final char EMPTY_CELL = ' ';
     public static final double HALF_PARCEL_SUPPORT = 2.0;
 
+    //todo Не надо через номер стратегии
+    // сделай через паттерн Стратегии. И лучше не номер а говорящие названия
     public static List<TruckService> loadParcels(List<char[][]> parcels, int strategy) {
         logger.info("Loading parcels using strategy {}", strategy);
         List<TruckService> trucks = new ArrayList<>();

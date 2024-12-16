@@ -1,7 +1,7 @@
 package com.deliverysystem.service;
 
 import java.util.Arrays;
-
+//todo убрать комменты, если хочешь можешь написать документацию. Но если ведешь документаци - види для всех классов
 // Abstraction for trucks
 public class TruckService {
     public static final int WIDTH = 6;
