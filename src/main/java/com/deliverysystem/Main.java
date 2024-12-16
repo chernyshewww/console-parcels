@@ -6,7 +6,8 @@ import com.deliverysystem.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// todo разбей гад класс на сервисы.
+// DONE
 public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
     public static final String FILE_PATH = "src/main/resources/parcels.txt";
