@@ -17,6 +17,11 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.5")
 }
 
+spotless {
+    java {
+        removeUnusedImports()
+    }
+}
 tasks.test {
     useJUnitPlatform()
 }
