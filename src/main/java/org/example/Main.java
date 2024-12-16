@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("ALL")
+//todo разбей гад класс на сервисы.
 public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
