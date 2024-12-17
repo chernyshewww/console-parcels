@@ -3,17 +3,15 @@ package com.deliverysystem;
 import com.deliverysystem.model.enums.StrategyType;
 import com.deliverysystem.service.FileParserService;
 import com.deliverysystem.service.ParcelLoaderService;
-import com.deliverysystem.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("Program started");
+        logger.debug("Program started");
 
         try {
             ParcelLoaderService loaderService = new ParcelLoaderService();
@@ -46,6 +44,6 @@ public class Main {
             logger.error("An error occurred in the application: {}", e.getMessage(), e);
         }
 
-        logger.info("Program finished");
+        logger.debug("Program finished");
     }
 }

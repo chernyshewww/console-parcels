@@ -34,7 +34,7 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
             TruckService newTruck = new TruckService();
             if (placeParcelFromBottom(newTruck, parcel)) {
                 trucks.add(newTruck);
-                logger.info("Placed parcel in a new truck");
+                logger.debug("Placed parcel in a new truck");
             } else {
                 logger.warn("Failed to place parcel in a new truck");
             }
