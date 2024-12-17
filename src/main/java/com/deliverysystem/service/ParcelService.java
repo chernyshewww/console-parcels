@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-//todo убрать комменты, если хочешь можешь написать документацию. Но если ведешь документаци - види для всех классов
 
-// Simple class for creating parcel and make matrix
 public class ParcelService {
     private static final Logger logger = LoggerFactory.getLogger(ParcelService.class);
     private final char[][] data;

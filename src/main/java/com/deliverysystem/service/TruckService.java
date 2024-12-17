@@ -1,8 +1,7 @@
 package com.deliverysystem.service;
 
 import java.util.Arrays;
-//todo убрать комменты, если хочешь можешь написать документацию. Но если ведешь документаци - види для всех классов
-// Abstraction for trucks
+
 public class TruckService {
     public static final int WIDTH = 6;
     public static final int HEIGHT = 6;
@@ -13,7 +12,7 @@ public class TruckService {
     public TruckService() {
         this.grid = new char[HEIGHT][WIDTH];
         for (char[] row : grid) {
-            Arrays.fill(row, ' ');
+            Arrays.fill(row, EMPTY_CELL);
         }
     }
 
@@ -38,8 +37,8 @@ public class TruckService {
 
     public void place(ParcelService parcel, int row, int col) {
         char[][] parcelData = parcel.getData();
-        for (var i = 0; i < parcelData.length; i++) {
-            for (var j = 0; j < parcelData[0].length; j++) {
+        for (int i = 0; i < parcelData.length; i++) {
+            for (int j = 0; j < parcelData[0].length; j++) {
                 if (parcelData[i][j] != EMPTY_CELL) {
                     grid[row + i][col + j] = parcelData[i][j];
                 }
@@ -47,7 +46,12 @@ public class TruckService {
         }
     }
 
-    public void print() {
+    public char[][] getGrid() {
+        return grid;
+    }
+
+    public void printTruck(int truckNumber) {
+        System.out.println("Truck " + truckNumber + ":");
         System.out.println("+      +");
         for (char[] row : grid) {
             System.out.print("+");
@@ -57,11 +61,5 @@ public class TruckService {
             System.out.println("+");
         }
         System.out.println("++++++++");
-        System.out.println();
-
-    }
-
-    public char getCell(int row, int col) {
-        return grid[row][col];
     }
 }

@@ -1,46 +1,51 @@
 package com.deliverysystem;
 
+import com.deliverysystem.model.enums.StrategyType;
 import com.deliverysystem.service.FileParserService;
 import com.deliverysystem.service.ParcelLoaderService;
 import com.deliverysystem.service.TruckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// todo разбей гад класс на сервисы.
-// DONE
+import java.util.List;
+
 public class Main {
-    public static final Logger logger = LoggerFactory.getLogger(Main.class);
-    public static final String FILE_PATH = "src/main/resources/parcels.txt";
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-//    @SuppressWarnings("ALL") //todo Зачем?
-    //todo убрать лишние комментарии
-    // The word 'package' is reserved in java, so we use 'parcel' instead
     public static void main(String[] args) {
-        logger.info("Program started.");
+        logger.info("Program started");
 
-        // Read parcels
-        var parcels = FileParserService.readParcelsFromFile(FILE_PATH);
-        //todo слишком много инфо. Лучше сделай если хочешь уровня debug
-        logger.info("Read {} valid parcels from file.", parcels.size());
+        try {
+            ParcelLoaderService loaderService = new ParcelLoaderService();
 
-        // Strategy 1: Largest First
-        logger.info("Using Strategy 1 (Largest First)");
-        //todo название должно быть информативной. Лучше сделай чтобы понили. Тут загружают машину под завязку
-        //в другом: посылку на машину
-        var trucksStrategy1 = ParcelLoaderService.loadParcels(parcels, 1);
+            String fileName = "src/main/resources/parcels.txt";
+            logger.debug("Reading parcels from file: {}", fileName);
+            var parcels = FileParserService.readParcelsFromFile(fileName);
+            logger.debug("Number of parcels loaded: {}", parcels.size());
 
-        System.out.println("\nStrategy 1: Largest First");
-        trucksStrategy1.forEach(TruckService::print);
+            StrategyType type = StrategyType.MAXIMUM_CAPACITY;
+            logger.debug("Loading parcels using strategy: {}", type);
+            var trucks = loaderService.loadParcels(parcels, type);
+            logger.debug("Number of trucks used for {} strategy: {}", type, trucks.size());
 
-        // Strategy 2: One-to-One
-        // Very strange strategy, but still it works
-        logger.info("Using Strategy 2 (One-to-one)");
-        var trucksStrategy2 = ParcelLoaderService.loadParcels(parcels, 2);
+            for (int i = 0; i < trucks.size(); i++) {
+                logger.debug("Printing truck #{} for strategy {}", i + 1, type);
+                trucks.get(i).printTruck(i + 1);
+            }
 
-        System.out.println("\nStrategy 2: One-to-One");
-        trucksStrategy2.forEach(TruckService::print);
+            type = StrategyType.ONE_TO_ONE;
+            logger.debug("Loading parcels using strategy: {}", type);
+            trucks = loaderService.loadParcels(parcels, type);
+            logger.debug("Number of trucks used for {} strategy: {}", type, trucks.size());
 
-        logger.info("Program finished. Total trucks used: Strategy 1: {}, Strategy 2: {}",
-                trucksStrategy1.size(), trucksStrategy2.size());
+            for (int i = 0; i < trucks.size(); i++) {
+                logger.debug("Printing truck #{} for strategy {}", i + 1, type);
+                trucks.get(i).printTruck(i + 1);
+            }
+        } catch (Exception e) {
+            logger.error("An error occurred in the application: {}", e.getMessage(), e);
+        }
+
+        logger.info("Program finished");
     }
 }
