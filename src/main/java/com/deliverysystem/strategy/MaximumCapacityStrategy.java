@@ -13,6 +13,35 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(MaximumCapacityStrategy.class);
     public static final double HALF_PARCEL_SUPPORT = 2.0;
 
+    private boolean tryPlaceParcel(TruckService truck, ParcelService parcel) {
+        for (var row = TruckService.HEIGHT - parcel.getData().length; row >= 0; row--) {
+            for (var col = 0; col <= TruckService.WIDTH - parcel.getData()[0].length; col++) {
+                if (truck.canPlace(parcel, row, col) && isSupported(truck, parcel, row, col)) {
+                    truck.place(parcel, row, col);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isSupported(TruckService truck, ParcelService parcel, int row, int col) {
+        var width = parcel.getData()[0].length;
+        var requiredSupport = (int) Math.ceil(width / HALF_PARCEL_SUPPORT);
+        var supportCount = 0;
+
+        if (row == TruckService.HEIGHT - parcel.getData().length) {
+            return true;
+        }
+
+        for (var i = 0; i < width; i++) {
+            if (truck.getGrid()[row + parcel.getData().length][col + i] != ' ') {
+                supportCount++;
+            }
+        }
+        return supportCount >= requiredSupport;
+    }
+
     @Override
     public List<TruckService> loadParcels(List<char[][]> parcels) {
         logger.info("Executing MaximumCapacityStrategy");
@@ -46,34 +75,5 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
 
         logger.info("Total trucks used: {}", trucks.size());
         return trucks;
-    }
-
-    private boolean tryPlaceParcel(TruckService truck, ParcelService parcel) {
-        for (var row = TruckService.HEIGHT - parcel.getData().length; row >= 0; row--) {
-            for (var col = 0; col <= TruckService.WIDTH - parcel.getData()[0].length; col++) {
-                if (truck.canPlace(parcel, row, col) && isSupported(truck, parcel, row, col)) {
-                    truck.place(parcel, row, col);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isSupported(TruckService truck, ParcelService parcel, int row, int col) {
-        var width = parcel.getData()[0].length;
-        var requiredSupport = (int) Math.ceil(width / HALF_PARCEL_SUPPORT);
-        var supportCount = 0;
-
-        if (row == TruckService.HEIGHT - parcel.getData().length) {
-            return true;
-        }
-
-        for (var i = 0; i < width; i++) {
-            if (truck.getGrid()[row + parcel.getData().length][col + i] != ' ') {
-                supportCount++;
-            }
-        }
-        return supportCount >= requiredSupport;
     }
 }
