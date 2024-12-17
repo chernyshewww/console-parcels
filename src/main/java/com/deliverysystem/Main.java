@@ -12,14 +12,10 @@ public class Main {
     private static final String fileName  = "src/main/resources/parcels.txt";
 
     public static void main(String[] args) {
-        logger.debug("Program started");
-
         try {
             ParcelLoaderService loaderService = new ParcelLoaderService();
 
-            logger.debug("Reading parcels from file: {}", fileName);
             var parcels = FileParserService.readParcelsFromFile(fileName);
-            logger.debug("Number of parcels loaded: {}", parcels.size());
 
             StrategyType type = StrategyType.MAXIMUM_CAPACITY;
             logger.debug("Loading parcels using strategy: {}", type);
@@ -43,7 +39,5 @@ public class Main {
         } catch (Exception e) {
             logger.error("An error occurred in the application: {}", e.getMessage(), e);
         }
-
-        logger.debug("Program finished");
     }
 }

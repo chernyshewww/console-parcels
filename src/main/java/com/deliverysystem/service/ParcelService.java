@@ -9,6 +9,14 @@ public class ParcelService {
     private static final Logger logger = LoggerFactory.getLogger(ParcelService.class);
     private final char[][] data;
 
+    public ParcelService(List<String> lines) {
+        this.data = convertToMatrix(lines);
+    }
+
+    public char[][] getData() {
+        return data;
+    }
+
     private char[][] convertToMatrix(List<String> lines) {
         var height = lines.size();
         var width = lines.stream().mapToInt(String::length).max().orElse(0);
@@ -23,12 +31,4 @@ public class ParcelService {
         return matrix;
     }
 
-    public ParcelService(List<String> lines) {
-        this.data = convertToMatrix(lines);
-        logger.info("Parcel created with dimensions: {}x{}", data.length, data[0].length);
-    }
-
-    public char[][] getData() {
-        return data;
-    }
 }

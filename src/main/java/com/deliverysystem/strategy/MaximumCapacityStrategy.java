@@ -37,7 +37,6 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
                 TruckService newTruck = new TruckService();
                 if (tryPlaceParcel(newTruck, parcel)) {
                     trucks.add(newTruck);
-                    logger.info("Parcel placed in new truck");
                 } else {
                     logger.error("Failed to place parcel even in an empty truck");
                 }
