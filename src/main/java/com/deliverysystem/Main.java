@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final String fileName  = "src/main/resources/parcels.txt";
 
     public static void main(String[] args) {
         logger.debug("Program started");
@@ -16,7 +17,6 @@ public class Main {
         try {
             ParcelLoaderService loaderService = new ParcelLoaderService();
 
-            String fileName = "src/main/resources/parcels.txt";
             logger.debug("Reading parcels from file: {}", fileName);
             var parcels = FileParserService.readParcelsFromFile(fileName);
             logger.debug("Number of parcels loaded: {}", parcels.size());

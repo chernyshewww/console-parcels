@@ -12,17 +12,6 @@ import java.util.List;
 public class OneParcelPerTruckStrategy implements LoadingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(OneParcelPerTruckStrategy.class);
 
-    private boolean placeParcelFromBottom(TruckService truck, ParcelService parcel) {
-        for (var row = TruckService.HEIGHT - parcel.getData().length; row >= 0; row--) {
-            if (truck.canPlace(parcel, row, 0)) {
-                truck.place(parcel, row, 0);
-                return true;
-            }
-        }
-        logger.warn("Could not place parcel in the truck");
-        return false;
-    }
-
     @Override
     public List<TruckService> loadParcels(List<char[][]> parcels) {
         logger.info("Executing OneParcelPerTruckStrategy");
@@ -42,5 +31,16 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
 
         logger.info("Total trucks used in OneParcelPerTruckStrategy: {}", trucks.size());
         return trucks;
+    }
+
+    private boolean placeParcelFromBottom(TruckService truck, ParcelService parcel) {
+        for (var row = TruckService.HEIGHT - parcel.getData().length; row >= 0; row--) {
+            if (truck.canPlace(parcel, row, 0)) {
+                truck.place(parcel, row, 0);
+                return true;
+            }
+        }
+        logger.warn("Could not place parcel in the truck");
+        return false;
     }
 }

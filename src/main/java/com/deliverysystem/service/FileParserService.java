@@ -10,7 +10,6 @@ import java.util.List;
 public class FileParserService {
     private static final Logger logger = LoggerFactory.getLogger(FileParserService.class);
 
-    // PROGRAM WILL SKIP ALL THE INVALID SEQUENCES AND WRITE WARNING ABOUT IT
     private static final List<String> VALID_SEQUENCES = Arrays.asList(
             "1",
             "22",

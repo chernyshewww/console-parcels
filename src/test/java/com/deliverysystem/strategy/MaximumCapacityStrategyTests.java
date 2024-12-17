@@ -1,7 +1,6 @@
-package org.example;
+package com.deliverysystem.strategy;
 
 import com.deliverysystem.service.TruckService;
-import com.deliverysystem.strategy.MaximumCapacityStrategy;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ class MaximumCapacityStrategyTests {
 
     @Test
     void testLoadParcels_OneParcelPerTruck() {
-        // Arrange
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
@@ -23,18 +21,13 @@ class MaximumCapacityStrategyTests {
                 {'3', '3', '3'}
         });
 
-        // Act
         List<TruckService> trucks = strategy.loadParcels(parcels);
 
-        // Assert
         assertEquals(1, trucks.size(), "Expected all parcels to fit in one truck.");
-        TruckService truck = trucks.getFirst();
-        truck.printTruck(1);
     }
 
     @Test
     void testLoadParcels_MultipleTrucksNeeded() {
-        // Arrange
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
@@ -47,29 +40,23 @@ class MaximumCapacityStrategyTests {
                 {'3', '3', '3'}
         });
 
-        // Act
         List<TruckService> trucks = strategy.loadParcels(parcels);
 
-        // Assert
-        trucks.get(0).printTruck(1);
+        assertNotNull(trucks, "Check that truck list should not be null");
     }
 
     @Test
     void testLoadParcels_EmptyInput() {
-        // Arrange
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
 
-        // Act
         List<TruckService> trucks = strategy.loadParcels(parcels);
 
-        // Assert
         assertTrue(trucks.isEmpty(), "Expected no trucks when input is empty.");
     }
 
     @Test
     void testLoadParcels_FullTruckUtilization() {
-        // Arrange
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
@@ -85,12 +72,8 @@ class MaximumCapacityStrategyTests {
                 {'6', '6'}
         });
 
-        // Act
         List<TruckService> trucks = strategy.loadParcels(parcels);
 
-        // Assert
         assertEquals(1, trucks.size(), "Expected all parcels to fit into one truck.");
-        TruckService truck = trucks.get(0);
-        truck.printTruck(1);
     }
 }
