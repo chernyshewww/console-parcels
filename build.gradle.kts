@@ -1,8 +1,9 @@
 plugins {
     id("java")
+    id ("com.diffplug.spotless")      version "6.19.0"
 }
 
-group = "org.example"
+group = "com.deliverysystem"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -10,10 +11,23 @@ repositories {
 }
 
 dependencies {
+    implementation("org.slf4j:slf4j-api:2.0.0")
+    implementation("ch.qos.logback:logback-classic:1.4.5")
+
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+spotless {
+    java {
+        removeUnusedImports()
+    }
+}
 tasks.test {
     useJUnitPlatform()
 }
