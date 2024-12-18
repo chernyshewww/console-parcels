@@ -2,9 +2,9 @@ package com.deliverysystem.service;
 
 import com.deliverysystem.model.Truck;
 
-import static com.deliverysystem.util.Constants.EMPTY_CELL;
-
 public class TruckService {
+    public static final char EMPTY_CELL = ' ';
+
     private final Truck truck;
 
     public TruckService(Truck truck) {

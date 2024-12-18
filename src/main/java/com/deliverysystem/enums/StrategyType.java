@@ -1,4 +1,4 @@
-package com.deliverysystem.model.enums;
+package com.deliverysystem.enums;
 
 public enum StrategyType {
     MAXIMUM_CAPACITY,

@@ -1,6 +1,6 @@
 package com.deliverysystem.strategy;
 
-import com.deliverysystem.model.enums.StrategyType;
+import com.deliverysystem.enums.StrategyType;
 
 public class StrategySelector {
 

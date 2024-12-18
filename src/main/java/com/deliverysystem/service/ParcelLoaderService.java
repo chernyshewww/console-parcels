@@ -3,7 +3,7 @@ package com.deliverysystem.service;
 import com.deliverysystem.model.Truck;
 import com.deliverysystem.strategy.LoadingStrategy;
 import com.deliverysystem.strategy.StrategySelector;
-import com.deliverysystem.model.enums.StrategyType;
+import com.deliverysystem.enums.StrategyType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.deliverysystem;
 
-import com.deliverysystem.model.enums.StrategyType;
+import com.deliverysystem.enums.StrategyType;
 import com.deliverysystem.service.FileParserService;
 import com.deliverysystem.service.ParcelLoaderService;
 import com.deliverysystem.service.TruckService;
