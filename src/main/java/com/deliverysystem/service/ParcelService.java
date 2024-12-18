@@ -1,20 +1,18 @@
 package com.deliverysystem.service;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+@Getter
 public class ParcelService {
     private static final Logger logger = LoggerFactory.getLogger(ParcelService.class);
     private final char[][] data;
 
     public ParcelService(List<String> lines) {
         this.data = convertToMatrix(lines);
-    }
-
-    public char[][] getData() {
-        return data;
     }
 
     private char[][] convertToMatrix(List<String> lines) {

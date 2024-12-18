@@ -1,5 +1,6 @@
 package com.deliverysystem.strategy;
 
+import com.deliverysystem.model.Truck;
 import com.deliverysystem.service.ParcelService;
 import com.deliverysystem.service.TruckService;
 import org.slf4j.Logger;
@@ -14,9 +15,9 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
     public static final double HALF_PARCEL_SUPPORT = 2.0;
 
     @Override
-    public List<TruckService> loadParcels(List<char[][]> parcels) {
+    public List<Truck> loadParcels(List<char[][]> parcels) {
         logger.info("Executing MaximumCapacityStrategy");
-        List<TruckService> trucks = new ArrayList<>();
+        List<Truck> trucks = new ArrayList<>();
 
         parcels.sort((a, b) -> Integer.compare(b.length * b[0].length, a.length * a[0].length));
         logger.info("Parcels sorted by area in descending order");
@@ -25,7 +26,7 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
             ParcelService parcel = new ParcelService(Arrays.stream(parcelData).map(String::new).toList());
             boolean placed = false;
 
-            for (TruckService truck : trucks) {
+            for (Truck truck : trucks) {
                 if (tryPlaceParcel(truck, parcel)) {
                     placed = true;
                     logger.info("Parcel placed in existing truck");
@@ -34,9 +35,9 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
             }
 
             if (!placed) {
-                TruckService newTruck = new TruckService();
-                if (tryPlaceParcel(newTruck, parcel)) {
-                    trucks.add(newTruck);
+                Truck truck = new Truck();
+                if (tryPlaceParcel(truck, parcel)) {
+                    trucks.add(truck);
                 } else {
                     logger.error("Failed to place parcel even in an empty truck");
                 }
@@ -47,11 +48,12 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
         return trucks;
     }
 
-    private boolean tryPlaceParcel(TruckService truck, ParcelService parcel) {
-        for (var row = TruckService.HEIGHT - parcel.getData().length; row >= 0; row--) {
-            for (var col = 0; col <= TruckService.WIDTH - parcel.getData()[0].length; col++) {
-                if (truck.canPlace(parcel, row, col) && isSupported(truck, parcel, row, col)) {
-                    truck.place(parcel, row, col);
+    private boolean tryPlaceParcel(Truck truck, ParcelService parcel) {
+        TruckService truckService = new TruckService(truck);
+        for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
+            for (var col = 0; col <= truck.getWidth() - parcel.getData()[0].length; col++) {
+                if (truckService.canPlace(parcel, row, col) && isSupported(truck, parcel, row, col)) {
+                    truckService.place(parcel, row, col);
                     return true;
                 }
             }
@@ -59,12 +61,12 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
         return false;
     }
 
-    private boolean isSupported(TruckService truck, ParcelService parcel, int row, int col) {
+    private boolean isSupported(Truck truck, ParcelService parcel, int row, int col) {
         var width = parcel.getData()[0].length;
         var requiredSupport = (int) Math.ceil(width / HALF_PARCEL_SUPPORT);
         var supportCount = 0;
 
-        if (row == TruckService.HEIGHT - parcel.getData().length) {
+        if (row == truck.getHeight() - parcel.getData().length) {
             return true;
         }
 

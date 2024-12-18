@@ -1,19 +1,14 @@
 package com.deliverysystem.service;
 
-import java.util.Arrays;
+import com.deliverysystem.model.Truck;
+
+import static com.deliverysystem.util.Constants.EMPTY_CELL;
 
 public class TruckService {
-    public static final int WIDTH = 6;
-    public static final int HEIGHT = 6;
-    public static final char EMPTY_CELL = ' ';
+    private final Truck truck;
 
-    private final char[][] grid;
-
-    public TruckService() {
-        this.grid = new char[HEIGHT][WIDTH];
-        for (char[] row : grid) {
-            Arrays.fill(row, EMPTY_CELL);
-        }
+    public TruckService(Truck truck) {
+        this.truck = truck;
     }
 
     public boolean canPlace(ParcelService parcel, int row, int col) {
@@ -21,13 +16,13 @@ public class TruckService {
         var parcelHeight = parcelData.length;
         var parcelWidth = parcelData[0].length;
 
-        if (row + parcelHeight > HEIGHT || col + parcelWidth > WIDTH) {
+        if (row + parcelHeight > truck.getHeight() || col + parcelWidth > truck.getWidth()) {
             return false;
         }
 
         for (var i = 0; i < parcelHeight; i++) {
             for (var j = 0; j < parcelWidth; j++) {
-                if (parcelData[i][j] != EMPTY_CELL && grid[row + i][col + j] != EMPTY_CELL) {
+                if (parcelData[i][j] != EMPTY_CELL && truck.getGrid()[row + i][col + j] != EMPTY_CELL) {
                     return false;
                 }
             }
@@ -40,20 +35,16 @@ public class TruckService {
         for (int i = 0; i < parcelData.length; i++) {
             for (int j = 0; j < parcelData[0].length; j++) {
                 if (parcelData[i][j] != EMPTY_CELL) {
-                    grid[row + i][col + j] = parcelData[i][j];
+                    truck.insertIntoGrid(row + i, col + j,parcelData[i][j]);
                 }
             }
         }
     }
 
-    public char[][] getGrid() {
-        return grid;
-    }
-
     public void printTruck(int truckNumber) {
         System.out.println("Truck " + truckNumber + ":");
         System.out.println("+      +");
-        for (char[] row : grid) {
+        for (char[] row : truck.getGrid()) {
             System.out.print("+");
             for (char cell : row) {
                 System.out.print(cell);
@@ -62,4 +53,5 @@ public class TruckService {
         }
         System.out.println("++++++++");
     }
+
 }
