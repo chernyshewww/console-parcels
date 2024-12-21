@@ -14,7 +14,7 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(OneParcelPerTruckStrategy.class);
 
     @Override
-    public List<Truck> loadParcels(List<char[][]> parcels) {
+    public List<Truck> loadParcels(List<char[][]> parcels, int availableTrucks) {
         logger.info("Executing OneParcelPerTruckStrategy");
         List<Truck> trucks = new ArrayList<>();
 
@@ -27,6 +27,11 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
             } else {
                 logger.warn("Failed to place parcel in a new truck");
             }
+        }
+
+        if (trucks.size() > availableTrucks) {
+            logger.error("Not enough trucks available to load all parcels");
+            return new ArrayList<>();
         }
 
         logger.info("Total trucks used in OneParcelPerTruckStrategy: {}", trucks.size());

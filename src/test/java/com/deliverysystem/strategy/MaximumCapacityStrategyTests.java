@@ -21,7 +21,7 @@ class MaximumCapacityStrategyTests {
                 {'3', '3', '3'}
         });
 
-        List<Truck> trucks = strategy.loadParcels(parcels);
+        List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
         assertEquals(1, trucks.size(), "Expected all parcels to fit in one truck.");
     }
@@ -40,7 +40,7 @@ class MaximumCapacityStrategyTests {
                 {'3', '3', '3'}
         });
 
-        List<Truck> trucks = strategy.loadParcels(parcels);
+        List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
         assertNotNull(trucks, "Check that truck list should not be null");
     }
@@ -50,7 +50,7 @@ class MaximumCapacityStrategyTests {
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
 
-        List<Truck> trucks = strategy.loadParcels(parcels);
+        List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
         assertTrue(trucks.isEmpty(), "Expected no trucks when input is empty.");
     }
@@ -72,7 +72,7 @@ class MaximumCapacityStrategyTests {
                 {'6', '6'}
         });
 
-        List<Truck> trucks = strategy.loadParcels(parcels);
+        List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
         assertEquals(1, trucks.size(), "Expected all parcels to fit into one truck.");
     }

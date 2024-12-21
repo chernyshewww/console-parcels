@@ -26,7 +26,17 @@ public class ParcelService {
             char[] row = lines.get(i).toCharArray();
             System.arraycopy(row, 0, matrix[i], 0, row.length);
         }
-        return matrix;
+        return clearCharArray(matrix);
     }
 
+    public char[][] clearCharArray(char[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (matrix[i][j] == '\u0000') {
+                    matrix[i][j] = ' ';
+                }
+            }
+        }
+        return matrix;
+    }
 }
