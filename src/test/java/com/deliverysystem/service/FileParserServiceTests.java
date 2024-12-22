@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FileParserServiceTests {
 
     @Test
-    void testReadParcelsFromFile_ValidParcels() {
+    void readParcelsFromFile_GivenValidParcelsFile_ExpectedTwoParcels() {
         String fileName = "src/test/resources/test_parcels.txt";
 
         List<char[][]> parcels = FileParserService.readParcelsFromFile(fileName);
@@ -28,7 +28,7 @@ class FileParserServiceTests {
     }
 
     @Test
-    void testReadParcelsFromFile_InvalidParcelSkipped() {
+    void readParcelsFromFile_GivenInvalidParcelFile_ExpectedInvalidParcelsSkipped() {
         String fileName = "src/test/resources/test_parcels.txt";
 
         List<char[][]> parcels = FileParserService.readParcelsFromFile(fileName);
@@ -37,7 +37,7 @@ class FileParserServiceTests {
     }
 
     @Test
-    void testReadParcelsFromFile_FileNotFound() {
+    void readParcelsFromFile_GivenNonExistentFile_ExpectedEmptyParcelList() {
         String invalidFileName = "src/test/resources/non_existent.txt";
 
         List<char[][]> parcels = FileParserService.readParcelsFromFile(invalidFileName);
@@ -45,7 +45,7 @@ class FileParserServiceTests {
     }
 
     @Test
-    void testReadParcelsFromFile_EmptyFile() throws Exception {
+    void readParcelsFromFile_GivenEmptyFile_ExpectedNoParcelsRead() throws Exception {
         File emptyFile = File.createTempFile("empty", ".txt");
         String fileName = emptyFile.getAbsolutePath();
 

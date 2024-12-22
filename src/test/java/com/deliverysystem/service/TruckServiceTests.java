@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TruckServiceTests {
 
     @Test
-    void testCanPlace_ValidPosition() {
+    void canPlace_GivenValidPosition_ExpectedTrue() {
         TruckService truckService = new TruckService(new Truck());
         ParcelService parcel = new ParcelService(List.of(
                 "66",
@@ -23,7 +23,7 @@ class TruckServiceTests {
     }
 
     @Test
-    void testCanPlace_OutOfBounds() {
+    void canPlace_GivenOutOfBoundsPosition_ExpectedFalse() {
         TruckService truckService = new TruckService(new Truck());
         ParcelService parcel = new ParcelService(List.of(
                 "66",
@@ -36,7 +36,7 @@ class TruckServiceTests {
     }
 
     @Test
-    void testCanPlace_OccupiedSpace() {
+    void canPlace_GivenOccupiedSpace_ExpectedFalse() {
         TruckService truckService = new TruckService(new Truck());
         ParcelService parcel1 = new ParcelService(List.of(
                 "66",

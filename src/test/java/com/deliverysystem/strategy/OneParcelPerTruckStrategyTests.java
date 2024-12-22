@@ -13,7 +13,7 @@ class OneParcelPerTruckStrategyTests {
     private final OneParcelPerTruckStrategy strategy = new OneParcelPerTruckStrategy();
 
     @Test
-    void shouldLoadOneParcelPerTruck() {
+    void loadParcels_GivenTwoParcelsAndThreeTrucks_LoadsOneParcelPerTruck() {
         List<char[][]> parcels = List.of(
                 new char[][] {{'1', '1'}, {'1', '1'}},
                 new char[][] {{'2', '2'}, {'2', '2'}}
@@ -28,7 +28,7 @@ class OneParcelPerTruckStrategyTests {
     }
 
     @Test
-    void shouldReturnEmptyListWhenNotEnoughTrucks() {
+    void loadParcels_GivenTwoParcelsAndOneTruck_ReturnsEmptyList() {
         List<char[][]> parcels = List.of(
                 new char[][] {{'P', 'P'}, {'P', 'P'}},
                 new char[][] {{'Q', 'Q'}, {'Q', 'Q'}}
@@ -41,7 +41,7 @@ class OneParcelPerTruckStrategyTests {
     }
 
     @Test
-    void shouldHandleEmptyParcelList() {
+    void loadParcels_GivenEmptyParcelList_ReturnsEmptyList() {
         List<char[][]> parcels = List.of();
 
         int availableTrucks = 2;

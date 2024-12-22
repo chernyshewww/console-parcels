@@ -13,7 +13,7 @@ class ParcelServiceTests {
     private static final Logger logger = LoggerFactory.getLogger(ParcelService.class);
 
     @Test
-    void shouldConvertLinesToMatrix() {
+    void convertLinesToMatrix_GivenValidLines_ExpectedCorrectMatrix() {
         List<String> lines = List.of(
                 "55555",
                 "4444",
@@ -33,7 +33,7 @@ class ParcelServiceTests {
     }
 
     @Test
-    void shouldHandleEmptyList() {
+    void handleEmptyList_GivenEmptyList_ExpectedEmptyMatrix() {
         List<String> lines = List.of();
 
         ParcelService parcelService = new ParcelService(lines);
@@ -43,7 +43,7 @@ class ParcelServiceTests {
     }
 
     @Test
-    void shouldHandleUnevenRowLengths() {
+    void handleUnevenRowLengths_GivenUnevenRows_ExpectedMatrixWithPadding() {
         List<String> lines = List.of(
                 "ABCDE",
                 "12",

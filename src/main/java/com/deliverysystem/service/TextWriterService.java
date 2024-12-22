@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class TextWriterService {
 
     public static void writeTrucksToTextFromJson(String inputJsonFile, String outputTextFile) {

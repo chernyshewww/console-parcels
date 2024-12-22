@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MaximumCapacityStrategyTests {
 
     @Test
-    void testLoadParcels_OneParcelPerTruck() {
+    void loadParcels_GivenOneParcel_FitsInOneTruck() {
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
@@ -29,7 +29,7 @@ class MaximumCapacityStrategyTests {
     }
 
     @Test
-    void testLoadParcels_MultipleTrucksNeeded() {
+    void loadParcels_GivenMultipleParcels_NeedsMultipleTrucks() {
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
@@ -48,7 +48,7 @@ class MaximumCapacityStrategyTests {
     }
 
     @Test
-    void testLoadParcels_EmptyInput() {
+    void loadParcels_GivenEmptyParcelList_ReturnsNoTrucks() {
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
 
@@ -58,7 +58,7 @@ class MaximumCapacityStrategyTests {
     }
 
     @Test
-    void testLoadParcels_FullTruckUtilization() {
+    void loadParcels_GivenFullTruckUtilization_AllParcelsFitInOneTruck() {
         MaximumCapacityStrategy strategy = new MaximumCapacityStrategy();
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{

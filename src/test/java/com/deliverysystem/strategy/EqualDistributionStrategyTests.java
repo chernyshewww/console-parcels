@@ -19,9 +19,8 @@ public class EqualDistributionStrategyTests {
         strategy = new EqualDistributionStrategy();
     }
 
-
     @Test
-    void shouldSortParcelsByAreaBeforeLoading() {
+    void loadParcels_GivenParcels_SortedByAreaBeforeLoading() {
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
                 {'5', '5', '5', '5', '5'}
@@ -41,7 +40,7 @@ public class EqualDistributionStrategyTests {
     }
 
     @Test
-    void shouldUseOnlyAvailableTrucks() {
+    void loadParcels_GivenAvailableTrucks_UsesOnlyAvailableTrucks() {
         List<char[][]> parcels = new ArrayList<>();
         parcels.add(new char[][]{
                 {'5', '5', '5', '5', '5'}
@@ -59,7 +58,7 @@ public class EqualDistributionStrategyTests {
     }
 
     @Test
-    void shouldHandleEmptyParcelList() {
+    void loadParcels_GivenEmptyParcelList_HandlesCorrectly() {
         List<char[][]> parcels = new ArrayList<>();
 
         int availableTrucks = 2;

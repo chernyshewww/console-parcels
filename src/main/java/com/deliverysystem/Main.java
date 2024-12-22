@@ -70,7 +70,6 @@ public class Main {
                         }
                     }
 
-
                     ParcelLoaderService loaderService = new ParcelLoaderService();
                     var parcels = FileParserService.readParcelsFromFile(fileName);
 

@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 class ResultWriterServiceTests {
 
     @Test
-    void testWriteTrucksToJson() throws IOException {
+    void writeTrucksToJson_GivenValidTrucks_ExpectedCorrectJsonFile() throws IOException {
         char[][] grid1 = {
                 {'5', '5', '5', '5', '5'},
                 {'6', '6', '6'},
@@ -71,7 +71,7 @@ class ResultWriterServiceTests {
     }
 
     @Test
-    void testWriteTrucksToJson_withIOException() {
+    void writeTrucksToJson_GivenInvalidFilePath_ExpectedIOException() {
         char[][] grid1 = {
                 {'1', ' ', ' '},
                 {' ', ' ', ' '},
@@ -81,7 +81,7 @@ class ResultWriterServiceTests {
         truck1.setGrid(grid1);
         List<Truck> trucks = List.of(truck1);
 
-        // Making an invalidPath
+        // Making an invalid path
         File tempFile = new File("/invalid.json");
         String fileName = tempFile.getAbsolutePath();
 
@@ -90,7 +90,7 @@ class ResultWriterServiceTests {
     }
 
     @Test
-    void testWriteCustomFormattedTrucks() throws IOException {
+    void writeTrucksToJson_GivenCustomFormattedTrucks_ExpectedCustomJsonFile() throws IOException {
         char[][] grid1 = {
                 {'1', ' ', ' '},
                 {' ', ' ', ' '},

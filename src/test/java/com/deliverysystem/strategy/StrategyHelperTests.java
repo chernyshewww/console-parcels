@@ -16,7 +16,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategy_MaximumCapacity() {
+    void getStrategy_GivenMaximumCapacityStrategyType_ReturnsMaximumCapacityStrategy() {
         StrategyType strategyType = StrategyType.MAXIMUM_CAPACITY;
 
         var strategy = strategyHelper.getStrategy(strategyType);
@@ -25,7 +25,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategy_OneToOne() {
+    void getStrategy_GivenOneToOneStrategyType_ReturnsOneParcelPerTruckStrategy() {
         StrategyType strategyType = StrategyType.ONE_TO_ONE;
 
         var strategy = strategyHelper.getStrategy(strategyType);
@@ -34,7 +34,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategy_EqualDistribution() {
+    void getStrategy_GivenEqualDistributionStrategyType_ReturnsEqualDistributionStrategy() {
         StrategyType strategyType = StrategyType.EQUAL_DISTRIBUTION;
 
         var strategy = strategyHelper.getStrategy(strategyType);
@@ -43,7 +43,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategyByChoice_1() {
+    void getStrategyByChoice_GivenChoice1_ReturnsMaximumCapacityStrategyType() {
         int choice = 1;
 
         StrategyType strategyType = strategyHelper.getStrategyByChoice(choice);
@@ -52,7 +52,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategyByChoice_2() {
+    void getStrategyByChoice_GivenChoice2_ReturnsOneToOneStrategyType() {
         int choice = 2;
 
         StrategyType strategyType = strategyHelper.getStrategyByChoice(choice);
@@ -61,7 +61,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategyByChoice_3() {
+    void getStrategyByChoice_GivenChoice3_ReturnsEqualDistributionStrategyType() {
         int choice = 3;
 
         StrategyType strategyType = strategyHelper.getStrategyByChoice(choice);
@@ -70,7 +70,7 @@ public class StrategyHelperTests {
     }
 
     @Test
-    void testGetStrategyByChoice_InvalidChoice() {
+    void getStrategyByChoice_GivenInvalidChoice_ReturnsNull() {
         int choice = 99;
 
         StrategyType strategyType = strategyHelper.getStrategyByChoice(choice);
