@@ -6,8 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ParcelServiceTests {
 

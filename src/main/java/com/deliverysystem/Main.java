@@ -1,9 +1,9 @@
 package com.deliverysystem;
 
+import com.deliverysystem.service.*;
 import com.deliverysystem.strategy.StrategyHelper;
 import com.deliverysystem.enums.StrategyType;
 import com.deliverysystem.model.Truck;
-import com.deliverysystem.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

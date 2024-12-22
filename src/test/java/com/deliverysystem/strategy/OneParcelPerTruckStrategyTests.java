@@ -14,47 +14,40 @@ class OneParcelPerTruckStrategyTests {
 
     @Test
     void shouldLoadOneParcelPerTruck() {
-        // Given: A list of parcels and available trucks
         List<char[][]> parcels = List.of(
-                new char[][] {{'1', '1'}, {'1', '1'}}, // 2x2 parcel
-                new char[][] {{'2', '2'}, {'2', '2'}}  // 2x2 parcel
+                new char[][] {{'1', '1'}, {'1', '1'}},
+                new char[][] {{'2', '2'}, {'2', '2'}}
         );
-        int availableTrucks = 3; // Three trucks available
+        int availableTrucks = 3;
 
         List<Truck> trucks = strategy.loadParcels(parcels, availableTrucks);
 
-        assertThat(trucks).hasSize(2); // Two trucks used for two parcels
+        assertThat(trucks).hasSize(2);
 
-        assertThat(trucks.get(0).getGrid()).contains(new char[]{'1', '1', ' ', ' ', ' ', ' '}, Index.atIndex(5));
+        assertThat(trucks.getFirst().getGrid()).contains(new char[]{'1', '1', ' ', ' ', ' ', ' '}, Index.atIndex(5));
     }
 
     @Test
     void shouldReturnEmptyListWhenNotEnoughTrucks() {
-        // Given: A list of parcels and available trucks
         List<char[][]> parcels = List.of(
-                new char[][] {{'P', 'P'}, {'P', 'P'}}, // 2x2 parcel
-                new char[][] {{'Q', 'Q'}, {'Q', 'Q'}}  // 2x2 parcel
+                new char[][] {{'P', 'P'}, {'P', 'P'}},
+                new char[][] {{'Q', 'Q'}, {'Q', 'Q'}}
         );
-        int availableTrucks = 1; // Only one truck available
+        int availableTrucks = 1;
 
-        // When: We load parcels using the OneParcelPerTruckStrategy
         List<Truck> trucks = strategy.loadParcels(parcels, availableTrucks);
 
-        // Then: An empty list is returned because there are not enough trucks
         assertThat(trucks).isEmpty();
     }
 
     @Test
     void shouldHandleEmptyParcelList() {
-        // Given: An empty list of parcels
         List<char[][]> parcels = List.of();
 
-        int availableTrucks = 2; // Two trucks available
+        int availableTrucks = 2;
 
-        // When: We load parcels using the OneParcelPerTruckStrategy
         List<Truck> trucks = strategy.loadParcels(parcels, availableTrucks);
 
-        // Then: No trucks should be used as there are no parcels
         assertThat(trucks).isEmpty();
     }
 }
