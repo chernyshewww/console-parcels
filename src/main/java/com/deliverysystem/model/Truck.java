@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 @Getter
 @Setter
-public class Truck {
+public class Truck{
     public static final int TRUCK_WIDTH = 6;
     public static final int TRUCK_HEIGHT = 6;
     public static final char EMPTY_CELL = ' ';
