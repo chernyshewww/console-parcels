@@ -11,26 +11,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class StrategyHelper {
 
-    private final StrategyHelper strategyHelper;
     private final TruckGenerator truckGenerator;
     private final TruckService truckService;
 
     private final double HALF_PARCEL_SUPPORT = 2.0;
 
     @Autowired
-    public StrategyHelper(StrategyHelper strategyHelper,
-                          TruckGenerator truckGenerator,
+    public StrategyHelper(TruckGenerator truckGenerator,
                           TruckService truckService) {
-        this.strategyHelper = strategyHelper;
         this.truckGenerator = truckGenerator;
         this.truckService = truckService;
     }
 
     public LoadingStrategy getStrategy(StrategyType strategyType) {
         return switch (strategyType) {
-            case MAXIMUM_CAPACITY -> new MaximumCapacityStrategy(strategyHelper);
+            case MAXIMUM_CAPACITY -> new MaximumCapacityStrategy(this);
             case ONE_TO_ONE -> new OneParcelPerTruckStrategy(truckService);
-            case EQUAL_DISTRIBUTION -> new EqualDistributionStrategy(strategyHelper, truckGenerator);
+            case EQUAL_DISTRIBUTION -> new EqualDistributionStrategy(this, truckGenerator);
         };
     }
 

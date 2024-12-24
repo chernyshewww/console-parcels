@@ -51,7 +51,7 @@ public class ResultWriterService {
 
                 customJson.append("      \"").append(rowString).append("\"");
 
-                if (j < truck.getGrid().length - 1) {
+                if (j < truck.getGrid().length) {
                     customJson.append(",");
                 }
                 customJson.append("\n");
