@@ -1,19 +1,21 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Parcel;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class FileParserServiceTests {
 
     @Mock
@@ -21,11 +23,6 @@ class FileParserServiceTests {
 
     @InjectMocks
     private FileParserService fileParserService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void readParcelsFromFile_GivenValidParcelsFile_ExpectedTwoParcels() {
@@ -44,14 +41,14 @@ class FileParserServiceTests {
 
         assertThat(parcels).hasSize(2);
 
-        char[][] firstParcelData = parcels.get(0).getData();
+        char[][] firstParcelData = parcels.getFirst().data();
         char[][] expectedFirstParcel = {
                 {'6', '6', '6'},
                 {'6', '6', '6'}
         };
         assertThat(firstParcelData).isDeepEqualTo(expectedFirstParcel);
 
-        char[][] secondParcelData = parcels.get(1).getData();
+        char[][] secondParcelData = parcels.get(1).data();
         assertThat(secondParcelData).isDeepEqualTo(expectedFirstParcel);
     }
 
@@ -73,7 +70,7 @@ class FileParserServiceTests {
 
         assertThat(parcels)
                 .hasSize(1)
-                .extracting(Parcel::getData)
+                .extracting(Parcel::data)
                 .first()
                 .isEqualTo(new char[][]{
                         {'6', '6', '6'},
@@ -93,7 +90,7 @@ class FileParserServiceTests {
     }
 
     @Test
-    void readParcelsFromFile_GivenEmptyFile_ExpectedNoParcelsRead() throws Exception {
+    void readParcelsFromFile_GivenEmptyFile_ExpectedNoParcelsRead() throws IOException {
         File emptyFile = File.createTempFile("empty", ".txt");
         String fileName = emptyFile.getAbsolutePath();
 

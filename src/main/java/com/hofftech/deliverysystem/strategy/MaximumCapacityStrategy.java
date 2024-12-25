@@ -3,6 +3,7 @@ package com.hofftech.deliverysystem.strategy;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.service.ParcelFormatter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -10,25 +11,22 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Slf4j
 public class MaximumCapacityStrategy implements LoadingStrategy {
 
     private final StrategyHelper strategyHelper;
-
-    public MaximumCapacityStrategy(StrategyHelper strategyHelper){
-        this.strategyHelper = strategyHelper;
-    }
 
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
         log.info("Executing MaximumCapacityStrategy");
         List<Truck> trucks = new ArrayList<>();
 
-        parcels.sort(Comparator.comparingInt(parcel -> -parcel.getData().length * parcel.getData()[0].length));
+        parcels.sort(Comparator.comparingInt(parcel -> -parcel.data().length * parcel.data()[0].length));
         log.info("Parcels sorted by area in descending order");
 
         for (Parcel parcelData : parcels) {
-            ParcelFormatter parcel = new ParcelFormatter(Arrays.stream(parcelData.getData()).map(String::new).toList());
+            ParcelFormatter parcel = new ParcelFormatter(Arrays.stream(parcelData.data()).map(String::new).toList());
             boolean placed = false;
 
             for (Truck truck : trucks) {

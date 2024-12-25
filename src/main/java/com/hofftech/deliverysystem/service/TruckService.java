@@ -1,11 +1,9 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Truck;
-import org.springframework.stereotype.Service;
 
 import static com.hofftech.deliverysystem.constants.Constant.EMPTY_CELL;
 
-@Service
 public class TruckService {
 
     public boolean canPlace(ParcelFormatter parcel, Truck truck, int row, int col) {

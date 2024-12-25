@@ -1,10 +1,12 @@
 package com.hofftech.deliverysystem.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hofftech.deliverysystem.model.Truck;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,15 +18,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@ExtendWith(MockitoExtension.class)
 class ResultWriterServiceTests {
 
     @InjectMocks
     private ResultWriterService resultWriterService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Mock
+    private ObjectMapper objectMapper;
 
     @Test
     void writeTrucksToJson_GivenValidTrucks_ExpectedCorrectJsonFile() throws IOException {
@@ -53,7 +54,7 @@ class ResultWriterServiceTests {
         resultWriterService.writeTrucksToJson(trucks, fileName);
 
         File writtenFile = new File(fileName);
-        assertThat(writtenFile.exists()).isTrue();
+        assertThat(writtenFile).exists();
 
         String jsonContent = new String(Files.readAllBytes(Paths.get(fileName)));
 
@@ -103,7 +104,7 @@ class ResultWriterServiceTests {
     }
 
     @Test
-    void writeTrucksToJson_GivenCustomFormattedTrucks_ExpectedCustomJsonFile() throws IOException {
+    void writeTrucksToJson_GivenCustomFormattedTrucks_ExpectedCustomJsonFile() throws IOException{
         char[][] grid1 = {
                 {'1', ' ', ' '},
                 {' ', ' ', ' '},
@@ -120,7 +121,7 @@ class ResultWriterServiceTests {
         resultWriterService.writeTrucksToJson(trucks, fileName);
 
         File writtenFile = new File(fileName);
-        assertThat(writtenFile.exists()).isTrue();
+        assertThat(writtenFile).exists();
 
         String jsonContent = new String(Files.readAllBytes(Paths.get(fileName)));
 

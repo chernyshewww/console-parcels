@@ -2,7 +2,6 @@ package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.exception.FileReaderException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Service
 public class FileReaderService {
 
     public List<String> readFile(String fileName) {

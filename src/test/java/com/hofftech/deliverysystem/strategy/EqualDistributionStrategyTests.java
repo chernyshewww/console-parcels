@@ -2,32 +2,31 @@ package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.util.TruckGenerator;
 import org.assertj.core.data.Index;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EqualDistributionStrategyTests {
+@ExtendWith(MockitoExtension.class)
+class EqualDistributionStrategyTests {
 
     @InjectMocks
     private EqualDistributionStrategy strategy;
 
-    @Mock
-    private StrategyHelper strategyHelper;
-
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        TruckGenerator truckGenerator = new TruckGenerator();
-        strategy = new EqualDistributionStrategy(strategyHelper, truckGenerator);
+        strategy = new EqualDistributionStrategy(
+                new StrategyHelper(new TruckGenerator(), new TruckService()),
+                new TruckGenerator());
     }
 
     @Test

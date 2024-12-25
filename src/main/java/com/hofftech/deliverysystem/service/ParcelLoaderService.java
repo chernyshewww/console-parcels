@@ -5,20 +5,16 @@ import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.strategy.LoadingStrategy;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import com.hofftech.deliverysystem.enums.StrategyType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@RequiredArgsConstructor
 @Slf4j
 public class ParcelLoaderService {
 
     private final StrategyHelper strategyHelper;
-
-    public ParcelLoaderService(StrategyHelper strategyHelper) {
-        this.strategyHelper =  strategyHelper;
-    }
 
     public List<Truck> loadParcels(List<Parcel> parcels, StrategyType strategyType, int availableTrucks) {
         log.info("Loading parcels using strategy {}", strategyType);

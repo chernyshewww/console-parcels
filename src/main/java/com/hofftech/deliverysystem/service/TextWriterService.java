@@ -3,8 +3,8 @@ package com.hofftech.deliverysystem.service;
 import com.hofftech.deliverysystem.exception.FileProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Slf4j
-@Service
 public class TextWriterService {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public void writeTrucksToTextFromJson(String inputJsonFile, String outputTextFile) {
         JsonNode trucksNode;

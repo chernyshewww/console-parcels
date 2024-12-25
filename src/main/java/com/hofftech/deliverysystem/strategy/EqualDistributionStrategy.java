@@ -4,28 +4,25 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.util.TruckGenerator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Slf4j
 public class EqualDistributionStrategy implements LoadingStrategy {
 
     private final StrategyHelper strategyHelper;
     private final TruckGenerator truckGenerator;
 
-    public EqualDistributionStrategy(StrategyHelper strategyHelper, TruckGenerator truckGenerator) {
-        this.strategyHelper = strategyHelper;
-        this.truckGenerator = truckGenerator;
-    }
-
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
         log.info("Executing EqualDistributionStrategy");
 
-        parcels.sort(Comparator.comparingInt(parcel -> -parcel.getData().length * parcel.getData()[0].length));
+        parcels.sort(Comparator.comparingInt(parcel -> -parcel.data().length * parcel.data()[0].length));
         log.info("Parcels sorted by area in descending order");
 
         List<Truck> trucks = truckGenerator.generateTrucks(availableTrucks);
@@ -54,7 +51,7 @@ public class EqualDistributionStrategy implements LoadingStrategy {
     }
 
     private ParcelFormatter createParcelFromData(Parcel parcelData) {
-        return new ParcelFormatter(Arrays.stream(parcelData.getData()).map(String::new).toList());
+        return new ParcelFormatter(Arrays.stream(parcelData.data()).map(String::new).toList());
     }
 
     private boolean tryPlaceParcelInTruck(List<Truck> trucks, int truckIndex, ParcelFormatter parcel) {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class TruckServiceTests {
 
@@ -17,9 +17,11 @@ class TruckServiceTests {
                 "66"
         ));
 
-        boolean result = truckService.canPlace(parcel, new Truck(),0, 0);
+        boolean result = truckService.canPlace(parcel, new Truck(), 0, 0);
 
-        assertTrue(result, "The parcel should be placeable at (0, 0) in an empty truck.");
+        assertThat(result)
+                .isTrue()
+                .withFailMessage("The parcel should be placeable at (0, 0) in an empty truck.");
     }
 
     @Test
@@ -32,7 +34,9 @@ class TruckServiceTests {
 
         boolean result = truckService.canPlace(parcel, new Truck(), 5, 5);
 
-        assertFalse(result, "The parcel should not be placeable out of truck bounds.");
+        assertThat(result)
+                .isFalse()
+                .withFailMessage("The parcel should not be placeable out of truck bounds.");
     }
 
     @Test
@@ -48,10 +52,12 @@ class TruckServiceTests {
         ));
 
         var truck = new Truck();
-        truckService.place(parcel1, truck,0, 0);
+        truckService.place(parcel1, truck, 0, 0);
 
         boolean result = truckService.canPlace(parcel2, truck, 0, 0);
 
-        assertFalse(result, "The parcel should not be placeable on an occupied space.");
+        assertThat(result)
+                .isFalse()
+                .withFailMessage("The parcel should not be placeable on an occupied space.");
     }
 }

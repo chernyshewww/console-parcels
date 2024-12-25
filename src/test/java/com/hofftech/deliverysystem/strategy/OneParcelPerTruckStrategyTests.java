@@ -7,8 +7,6 @@ import org.assertj.core.data.Index;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +18,9 @@ class OneParcelPerTruckStrategyTests {
     @InjectMocks
     private OneParcelPerTruckStrategy strategy;
 
-    @Mock
-    private TruckService truckService;
-
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        truckService = new TruckService();
-        strategy = new OneParcelPerTruckStrategy(truckService);
+        strategy = new OneParcelPerTruckStrategy(new TruckService());
     }
 
     @Test

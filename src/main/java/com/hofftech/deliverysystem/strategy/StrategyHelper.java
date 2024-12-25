@@ -5,23 +5,15 @@ import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.util.TruckGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
-@Service
+@RequiredArgsConstructor
 public class StrategyHelper {
 
     private final TruckGenerator truckGenerator;
     private final TruckService truckService;
 
-    private final double HALF_PARCEL_SUPPORT = 2.0;
-
-    @Autowired
-    public StrategyHelper(TruckGenerator truckGenerator,
-                          TruckService truckService) {
-        this.truckGenerator = truckGenerator;
-        this.truckService = truckService;
-    }
+    private static final double HALF_PARCEL_SUPPORT = 2.0;
 
     public LoadingStrategy getStrategy(StrategyType strategyType) {
         return switch (strategyType) {
@@ -41,7 +33,6 @@ public class StrategyHelper {
     }
 
     public boolean tryPlaceParcel(Truck truck, ParcelFormatter parcel) {
-        TruckService truckService = new TruckService();
         for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
             for (var col = 0; col <= truck.getWidth() - parcel.getData()[0].length; col++) {
                 if (truckService.canPlace(parcel, truck,row, col) && isSupported(truck, parcel, row, col)) {

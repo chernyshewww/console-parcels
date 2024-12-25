@@ -17,7 +17,10 @@ public class ParcelFormatter {
 
     public char[][] convertToMatrix(List<String> lines) {
         var height = lines.size();
-        var width = lines.stream().mapToInt(String::length).max().orElse(0);
+        var width = lines.stream()
+                .mapToInt(String::length)
+                .max()
+                .orElse(0);
 
         log.debug("Converting parcel lines to matrix: {}x{}", height, width);
 

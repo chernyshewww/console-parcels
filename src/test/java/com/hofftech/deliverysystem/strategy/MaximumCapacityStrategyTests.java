@@ -8,14 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MaximumCapacityStrategyTests {
 
@@ -33,10 +30,8 @@ class MaximumCapacityStrategyTests {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        truckGenerator = new TruckGenerator();
         truckService = new TruckService();
-
+        truckGenerator = new TruckGenerator();
         strategyHelper = new StrategyHelper(truckGenerator, truckService);
         strategy = new MaximumCapacityStrategy(strategyHelper);
     }
@@ -51,7 +46,9 @@ class MaximumCapacityStrategyTests {
 
         List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
-        assertEquals(1, trucks.size(), "Expected all parcels to fit in one truck.");
+        assertThat(trucks)
+                .hasSize(1)
+                .withFailMessage("Expected all parcels to fit in one truck.");
     }
 
     @Test
@@ -66,7 +63,8 @@ class MaximumCapacityStrategyTests {
 
         List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
-        assertNotNull(trucks, "Check that truck list should not be null");
+        assertThat(trucks)
+                .isNotNull();
     }
 
     @Test
@@ -75,7 +73,8 @@ class MaximumCapacityStrategyTests {
 
         List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
-        assertTrue(trucks.isEmpty(), "Expected no trucks when input is empty.");
+        assertThat(trucks)
+                .isEmpty();
     }
 
     @Test
@@ -96,6 +95,8 @@ class MaximumCapacityStrategyTests {
 
         List<Truck> trucks = strategy.loadParcels(parcels, 10);
 
-        assertEquals(1, trucks.size(), "Expected all parcels to fit into one truck.");
+        assertThat(trucks)
+                .hasSize(1)
+                .withFailMessage("Expected all parcels to fit into one truck.");
     }
 }

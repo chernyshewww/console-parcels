@@ -4,20 +4,18 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Slf4j
 public class OneParcelPerTruckStrategy implements LoadingStrategy {
 
     private final TruckService truckService;
-
-    public OneParcelPerTruckStrategy(TruckService truckService) {
-        this.truckService = new TruckService();
-    }
 
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
@@ -25,7 +23,7 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
         List<Truck> trucks = new ArrayList<>();
 
         for (Parcel parcel : parcels) {
-            ParcelFormatter parcelFormatter = new ParcelFormatter(Arrays.stream(parcel.getData()).map(String::new).toList());
+            ParcelFormatter parcelFormatter = new ParcelFormatter(Arrays.stream(parcel.data()).map(String::new).toList());
 
             Truck newTruck = new Truck();
             if (placeParcelFromBottom(newTruck, parcelFormatter)) {

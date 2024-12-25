@@ -1,15 +1,15 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Parcel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Slf4j
-@Service
 public class FileParserService {
 
     private final FileReaderService fileReaderService;
@@ -25,10 +25,6 @@ public class FileParserService {
             "8888\n8888",
             "999\n999\n999"
     );
-
-    public FileParserService(FileReaderService fileReaderService) {
-        this.fileReaderService = fileReaderService;
-    }
 
     public List<Parcel> readParcelsFromFile(String fileName) {
         List<Parcel> parcels = new ArrayList<>();
@@ -61,7 +57,7 @@ public class FileParserService {
 
     private char[][] convertLinesToCharArray(List<String> lines) {
         int rows = lines.size();
-        int cols = lines.get(0).length();
+        int cols = lines.getFirst().length();
         char[][] grid = new char[rows][cols];
 
         for (int i = 0; i < rows; i++) {

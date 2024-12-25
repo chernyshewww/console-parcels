@@ -4,19 +4,19 @@ import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.exception.FileProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-@Service
+@RequiredArgsConstructor
 @Slf4j
 public class ResultWriterService {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public void writeTrucksToJson(List<Truck> trucks, String fileName) {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -26,11 +26,11 @@ public class ResultWriterService {
             log.info("Trucks written to JSON file with custom formatting: {}", fileName);
         } catch (FileProcessingException e) {
             log.error("Error while writing trucks to JSON: {}", e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new FileProcessingException("Error writing to file: " + fileName, e);
         }
     }
 
-    private void writeCustomFormattedTrucks(String fileName, List<Truck> trucks) throws FileProcessingException {
+    private void writeCustomFormattedTrucks(String fileName, List<Truck> trucks){
         StringBuilder customJson = new StringBuilder();
         customJson.append("[\n");
 
