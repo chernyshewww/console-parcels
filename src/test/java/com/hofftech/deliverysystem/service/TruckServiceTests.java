@@ -1,7 +1,10 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.util.List;
 
@@ -9,10 +12,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TruckServiceTests {
 
+    @Mock
+    private ParcelFormatter parcelFormatter;
+
+    @BeforeEach
+    void setUp() {
+        parcelFormatter = new ParcelFormatter();
+    }
+
     @Test
     void canPlace_GivenValidPosition_ExpectedTrue() {
         TruckService truckService = new TruckService();
-        ParcelFormatter parcel = new ParcelFormatter(List.of(
+
+        Parcel parcel= parcelFormatter.convertToMatrix(List.of(
                 "66",
                 "66"
         ));
@@ -27,7 +39,7 @@ class TruckServiceTests {
     @Test
     void canPlace_GivenOutOfBoundsPosition_ExpectedFalse() {
         TruckService truckService = new TruckService();
-        ParcelFormatter parcel = new ParcelFormatter(List.of(
+        Parcel parcel= parcelFormatter.convertToMatrix(List.of(
                 "66",
                 "66"
         ));
@@ -42,11 +54,11 @@ class TruckServiceTests {
     @Test
     void canPlace_GivenOccupiedSpace_ExpectedFalse() {
         TruckService truckService = new TruckService();
-        ParcelFormatter parcel1 = new ParcelFormatter(List.of(
+        Parcel parcel1= parcelFormatter.convertToMatrix(List.of(
                 "66",
                 "66"
         ));
-        ParcelFormatter parcel2 = new ParcelFormatter(List.of(
+        Parcel parcel2 = parcelFormatter.convertToMatrix(List.of(
                 "77",
                 "77"
         ));

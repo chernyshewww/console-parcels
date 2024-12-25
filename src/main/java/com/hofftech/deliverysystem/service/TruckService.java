@@ -1,13 +1,14 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 
 import static com.hofftech.deliverysystem.constants.Constant.EMPTY_CELL;
 
 public class TruckService {
 
-    public boolean canPlace(ParcelFormatter parcel, Truck truck, int row, int col) {
-        char[][] parcelData = parcel.getData();
+    public boolean canPlace(Parcel parcel, Truck truck, int row, int col) {
+        char[][] parcelData = parcel.data();
         var parcelHeight = parcelData.length;
         var parcelWidth = parcelData[0].length;
 
@@ -25,8 +26,8 @@ public class TruckService {
         return true;
     }
 
-    public void place(ParcelFormatter parcel, Truck truck, int row, int col) {
-        char[][] parcelData = parcel.getData();
+    public void place(Parcel parcel, Truck truck, int row, int col) {
+        char[][] parcelData = parcel.data();
         for (int i = 0; i < parcelData.length; i++) {
             for (int j = 0; j < parcelData[0].length; j++) {
                 if (parcelData[i][j] != EMPTY_CELL) {

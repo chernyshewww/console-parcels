@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.util.TruckGenerator;
 import org.assertj.core.data.Index;
@@ -23,7 +24,8 @@ class EqualDistributionStrategyTests {
     void setUp() {
         strategy = new EqualDistributionStrategy(
                 new StrategyHelper(new TruckGenerator(), new TruckService()),
-                new TruckGenerator());
+                new TruckGenerator(),
+                new ParcelFormatter());
     }
 
     @Test

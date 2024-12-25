@@ -16,17 +16,18 @@ import java.util.List;
 public class OneParcelPerTruckStrategy implements LoadingStrategy {
 
     private final TruckService truckService;
+    private final ParcelFormatter parcelFormatter;
 
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
         log.info("Executing OneParcelPerTruckStrategy");
         List<Truck> trucks = new ArrayList<>();
 
-        for (Parcel parcel : parcels) {
-            ParcelFormatter parcelFormatter = new ParcelFormatter(Arrays.stream(parcel.data()).map(String::new).toList());
+        for (Parcel parcelData : parcels) {
+            Parcel parcel = parcelFormatter.convertToMatrix(Arrays.stream(parcelData.data()).map(String::new).toList());
 
             Truck newTruck = new Truck();
-            if (placeParcelFromBottom(newTruck, parcelFormatter)) {
+            if (placeParcelFromBottom(newTruck, parcel)) {
                 trucks.add(newTruck);
             } else {
                 log.warn("Failed to place parcel in a new truck");
@@ -42,8 +43,8 @@ public class OneParcelPerTruckStrategy implements LoadingStrategy {
         return trucks;
     }
 
-    private boolean placeParcelFromBottom(Truck truck, ParcelFormatter parcel) {
-        for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
+    private boolean placeParcelFromBottom(Truck truck, Parcel parcel) {
+        for (var row = truck.getHeight() - parcel.data().length; row >= 0; row--) {
             if (truckService.canPlace(parcel, truck, row, 0)) {
                 truckService.place(parcel, truck, row, 0);
                 return true;

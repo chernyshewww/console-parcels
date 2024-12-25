@@ -17,6 +17,7 @@ public class EqualDistributionStrategy implements LoadingStrategy {
 
     private final StrategyHelper strategyHelper;
     private final TruckGenerator truckGenerator;
+    private final ParcelFormatter parcelFormatter;
 
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
@@ -38,7 +39,7 @@ public class EqualDistributionStrategy implements LoadingStrategy {
         int totalTrucks = trucks.size();
 
         for (Parcel parcelData : parcels) {
-            ParcelFormatter parcel = createParcelFromData(parcelData);
+            Parcel parcel = parcelFormatter.convertToMatrix(Arrays.stream(parcelData.data()).map(String::new).toList());
 
             boolean placed = tryPlaceParcelInTruck(trucks, truckIndex, parcel);
 
@@ -50,11 +51,7 @@ public class EqualDistributionStrategy implements LoadingStrategy {
         }
     }
 
-    private ParcelFormatter createParcelFromData(Parcel parcelData) {
-        return new ParcelFormatter(Arrays.stream(parcelData.data()).map(String::new).toList());
-    }
-
-    private boolean tryPlaceParcelInTruck(List<Truck> trucks, int truckIndex, ParcelFormatter parcel) {
+    private boolean tryPlaceParcelInTruck(List<Truck> trucks, int truckIndex, Parcel parcel) {
         Truck truck = trucks.get(truckIndex);
         boolean placed = strategyHelper.tryPlaceParcel(truck, parcel);
 

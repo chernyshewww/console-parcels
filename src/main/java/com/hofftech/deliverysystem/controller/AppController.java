@@ -21,7 +21,7 @@ public class AppController {
 
     private static final String FILE_NAME = "src/main/resources/parcels.txt";
     private static final String OUTPUT_JSON_FILE_NAME = "truck_state.json";
-    private static final String OUTPUT_TXT_FILE_NAME = "truck_state.json";
+    private static final String OUTPUT_TXT_FILE_NAME = "output.txt";
 
     private final StrategyHelper strategyHelper;
     private final ParcelLoaderService loaderService;
@@ -115,7 +115,7 @@ public class AppController {
     }
 
     private void processParcelsForStrategy(List<Parcel> parcels, StrategyType type, int availableTrucks) {
-        log.info("Loading parcels using strategy: " + type);
+        log.info("Loading parcels using strategy: {}", type);
 
         List<Truck> trucks = loaderService.loadParcels(parcels, type, availableTrucks);
         System.out.println("Number of trucks used for " + type + " strategy: " + trucks.size());

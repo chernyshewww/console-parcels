@@ -1,6 +1,7 @@
 package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.enums.StrategyType;
+import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
@@ -17,9 +18,9 @@ public class StrategyHelper {
 
     public LoadingStrategy getStrategy(StrategyType strategyType) {
         return switch (strategyType) {
-            case MAXIMUM_CAPACITY -> new MaximumCapacityStrategy(this);
-            case ONE_TO_ONE -> new OneParcelPerTruckStrategy(truckService);
-            case EQUAL_DISTRIBUTION -> new EqualDistributionStrategy(this, truckGenerator);
+            case MAXIMUM_CAPACITY -> new MaximumCapacityStrategy(this, new ParcelFormatter());
+            case ONE_TO_ONE -> new OneParcelPerTruckStrategy(truckService, new ParcelFormatter());
+            case EQUAL_DISTRIBUTION -> new EqualDistributionStrategy(this, truckGenerator, new ParcelFormatter());
         };
     }
 
@@ -32,9 +33,9 @@ public class StrategyHelper {
         };
     }
 
-    public boolean tryPlaceParcel(Truck truck, ParcelFormatter parcel) {
-        for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
-            for (var col = 0; col <= truck.getWidth() - parcel.getData()[0].length; col++) {
+    public boolean tryPlaceParcel(Truck truck, Parcel parcel) {
+        for (var row = truck.getHeight() - parcel.data().length; row >= 0; row--) {
+            for (var col = 0; col <= truck.getWidth() - parcel.data()[0].length; col++) {
                 if (truckService.canPlace(parcel, truck,row, col) && isSupported(truck, parcel, row, col)) {
                     truckService.place(parcel,truck, row, col);
                     return true;
@@ -44,17 +45,17 @@ public class StrategyHelper {
         return false;
     }
 
-    private boolean isSupported(Truck truck, ParcelFormatter parcel, int row, int col) {
-        var width = parcel.getData()[0].length;
+    private boolean isSupported(Truck truck, Parcel parcel, int row, int col) {
+        var width = parcel.data()[0].length;
         var requiredSupport = (int) Math.ceil(width / HALF_PARCEL_SUPPORT);
         var supportCount = 0;
 
-        if (row == truck.getHeight() - parcel.getData().length) {
+        if (row == truck.getHeight() - parcel.data().length) {
             return true;
         }
 
         for (var i = 0; i < width; i++) {
-            if (truck.getGrid()[row + parcel.getData().length][col + i] != ' ') {
+            if (truck.getGrid()[row + parcel.data().length][col + i] != ' ') {
                 supportCount++;
             }
         }

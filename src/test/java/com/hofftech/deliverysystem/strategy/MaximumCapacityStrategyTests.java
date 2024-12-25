@@ -2,12 +2,12 @@ package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.util.TruckGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +19,9 @@ class MaximumCapacityStrategyTests {
     @InjectMocks
     private MaximumCapacityStrategy strategy;
 
-    @Mock
-    private TruckGenerator truckGenerator;
-
-    @Mock
-    private TruckService truckService;
-
-    @Mock
-    private StrategyHelper strategyHelper;
-
     @BeforeEach
     void setUp() {
-        truckService = new TruckService();
-        truckGenerator = new TruckGenerator();
-        strategyHelper = new StrategyHelper(truckGenerator, truckService);
-        strategy = new MaximumCapacityStrategy(strategyHelper);
+        strategy = new MaximumCapacityStrategy( new StrategyHelper(new TruckGenerator(), new TruckService()), new ParcelFormatter());
     }
 
     @Test

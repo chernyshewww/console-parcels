@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.ParcelFormatter;
 import com.hofftech.deliverysystem.service.TruckService;
 import org.assertj.core.data.Index;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ class OneParcelPerTruckStrategyTests {
 
     @BeforeEach
     void setUp() {
-        strategy = new OneParcelPerTruckStrategy(new TruckService());
+        strategy = new OneParcelPerTruckStrategy(new TruckService(), new ParcelFormatter());
     }
 
     @Test

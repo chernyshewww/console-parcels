@@ -16,6 +16,7 @@ import java.util.List;
 public class MaximumCapacityStrategy implements LoadingStrategy {
 
     private final StrategyHelper strategyHelper;
+    private final ParcelFormatter parcelFormatter;
 
     @Override
     public List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks) {
@@ -26,7 +27,7 @@ public class MaximumCapacityStrategy implements LoadingStrategy {
         log.info("Parcels sorted by area in descending order");
 
         for (Parcel parcelData : parcels) {
-            ParcelFormatter parcel = new ParcelFormatter(Arrays.stream(parcelData.data()).map(String::new).toList());
+            Parcel parcel = parcelFormatter.convertToMatrix(Arrays.stream(parcelData.data()).map(String::new).toList());
             boolean placed = false;
 
             for (Truck truck : trucks) {

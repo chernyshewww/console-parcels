@@ -1,5 +1,6 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.model.Parcel;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,9 +17,10 @@ class ParcelFormatterTests {
                 "333"
         );
 
-        ParcelFormatter parcelFormatter = new ParcelFormatter(lines);
+        ParcelFormatter parcelFormatter = new ParcelFormatter();
 
-        char[][] data = parcelFormatter.getData();
+        Parcel parcel = parcelFormatter.convertToMatrix(lines);
+        char[][] data = parcel.data();
 
         assertThat(data.length).isEqualTo(3);
         assertThat(data[0].length).isEqualTo(5);
@@ -32,9 +34,11 @@ class ParcelFormatterTests {
     void handleEmptyList_GivenEmptyList_ExpectedEmptyMatrix() {
         List<String> lines = List.of();
 
-        ParcelFormatter parcelFormatter = new ParcelFormatter(lines);
+        ParcelFormatter parcelFormatter = new ParcelFormatter();
+        Parcel parcel = parcelFormatter.convertToMatrix(lines);
 
-        char[][] data = parcelFormatter.getData();
+
+        char[][] data = parcel.data();
         assertThat(data).isEmpty();
     }
 
@@ -46,9 +50,10 @@ class ParcelFormatterTests {
                 "!!@"
         );
 
-        ParcelFormatter parcelFormatter = new ParcelFormatter(lines);
+        ParcelFormatter parcelFormatter = new ParcelFormatter();
+        Parcel parcel = parcelFormatter.convertToMatrix(lines);
 
-        char[][] data = parcelFormatter.getData();
+        char[][] data = parcel.data();
 
         assertThat(data).hasNumberOfRows(3);
         assertThat(data[0]).hasSize(5);

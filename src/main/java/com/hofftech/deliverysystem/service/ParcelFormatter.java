@@ -1,21 +1,14 @@
 package com.hofftech.deliverysystem.service;
 
-import lombok.Getter;
+import com.hofftech.deliverysystem.model.Parcel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Slf4j
-@Getter
 public class ParcelFormatter {
 
-    private final char[][] data;
-
-    public ParcelFormatter(List<String> lines) {
-        this.data = convertToMatrix(lines);
-    }
-
-    public char[][] convertToMatrix(List<String> lines) {
+    public Parcel convertToMatrix(List<String> lines) {
         var height = lines.size();
         var width = lines.stream()
                 .mapToInt(String::length)
@@ -32,7 +25,7 @@ public class ParcelFormatter {
         return clearCharArray(matrix);
     }
 
-    private char[][] clearCharArray(char[][] matrix) {
+    private Parcel clearCharArray(char[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == '\u0000') {
@@ -40,6 +33,6 @@ public class ParcelFormatter {
                 }
             }
         }
-        return matrix;
+        return new Parcel(matrix);
     }
 }
