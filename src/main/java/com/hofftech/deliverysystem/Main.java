@@ -16,7 +16,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-
         StrategyHelper strategyHelper = new StrategyHelper(new TruckGenerator(), new TruckService());
         ParcelLoaderService loaderService = new ParcelLoaderService(strategyHelper);
         FileParserService fileParserService = new FileParserService(new FileReaderService());
