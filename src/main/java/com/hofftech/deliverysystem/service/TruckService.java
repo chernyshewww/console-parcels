@@ -1,18 +1,14 @@
-package com.deliverysystem.service;
+package com.hofftech.deliverysystem.service;
 
-import com.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.model.Parcel;
+import com.hofftech.deliverysystem.model.Truck;
+
+import static com.hofftech.deliverysystem.constants.Constant.EMPTY_CELL;
 
 public class TruckService {
-    public static final char EMPTY_CELL = ' ';
 
-    private final Truck truck;
-
-    public TruckService(Truck truck) {
-        this.truck = truck;
-    }
-
-    public boolean canPlace(ParcelService parcel, int row, int col) {
-        char[][] parcelData = parcel.getData();
+    public boolean canPlace(Parcel parcel, Truck truck, int row, int col) {
+        char[][] parcelData = parcel.data();
         var parcelHeight = parcelData.length;
         var parcelWidth = parcelData[0].length;
 
@@ -30,8 +26,8 @@ public class TruckService {
         return true;
     }
 
-    public void place(ParcelService parcel, int row, int col) {
-        char[][] parcelData = parcel.getData();
+    public void place(Parcel parcel, Truck truck, int row, int col) {
+        char[][] parcelData = parcel.data();
         for (int i = 0; i < parcelData.length; i++) {
             for (int j = 0; j < parcelData[0].length; j++) {
                 if (parcelData[i][j] != EMPTY_CELL) {
@@ -41,7 +37,7 @@ public class TruckService {
         }
     }
 
-    public void printTruck(int truckNumber) {
+    public void printTruck(Truck truck, int truckNumber) {
         System.out.println("Truck " + truckNumber + ":");
         System.out.println("+      +");
         for (char[] row : truck.getGrid()) {
