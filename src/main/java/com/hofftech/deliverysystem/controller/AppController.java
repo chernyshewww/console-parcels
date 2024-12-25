@@ -62,7 +62,7 @@ public class AppController {
             System.out.println("2: Read from JSON file and create a text file");
             Scanner scanner = new Scanner(System.in);
             mode = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character after nextInt()
+            scanner.nextLine();
 
             if (mode != 1 && mode != 2) {
                 System.out.println("Invalid mode. Please choose either 1 or 2.");

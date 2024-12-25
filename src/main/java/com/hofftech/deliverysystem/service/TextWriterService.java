@@ -3,8 +3,7 @@ package com.hofftech.deliverysystem.service;
 import com.hofftech.deliverysystem.exception.FileProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -16,34 +15,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class TextWriterService {
 
-    private static final Logger logger = LoggerFactory.getLogger(TextWriterService.class);
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Constructor to inject the ObjectMapper
-    public TextWriterService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    // Method to write trucks to a text file from JSON, throws a custom exception
     public void writeTrucksToTextFromJson(String inputJsonFile, String outputTextFile) {
         JsonNode trucksNode;
         try {
             trucksNode = objectMapper.readTree(new File(inputJsonFile));
         } catch (IOException e) {
-            logger.error("Error while reading JSON file: {}", inputJsonFile, e);
+            log.error("Error while reading JSON file: {}", inputJsonFile, e);
             throw new FileProcessingException("Error reading JSON file: " + inputJsonFile, e);
         }
 
         String result = processTrucks(trucksNode);
         writeToFile(outputTextFile, result);
 
-        logger.info("Successfully wrote trucks to text file: {}", outputTextFile);
+        log.info("Successfully wrote trucks to text file: {}", outputTextFile);
     }
 
-    // Process trucks and generate the result
     private String processTrucks(JsonNode trucksNode) {
         StringBuilder result = new StringBuilder();
 
@@ -58,14 +50,12 @@ public class TextWriterService {
         return result.toString();
     }
 
-    // Extract grid data from the JSON node
     private List<String> extractGridData(JsonNode gridNode) {
         List<String> grid = new ArrayList<>();
         gridNode.forEach(node -> grid.add(node.asText()));
         return grid;
     }
 
-    // Calculate character frequency in the grid
     private Map<Integer, Integer> calculateCharFrequency(List<String> grid) {
         Map<Integer, Integer> numberFrequency = new HashMap<>();
 
@@ -82,7 +72,6 @@ public class TextWriterService {
         return numberFrequency;
     }
 
-    // Generate frequency output based on the frequency map
     private String generateFrequencyOutput(Map<Integer, Integer> numberFrequency) {
         StringBuilder result = new StringBuilder();
 
@@ -105,19 +94,17 @@ public class TextWriterService {
         return result.toString();
     }
 
-    // Check if a new line should be added
     private boolean shouldAddNewLine(int index, int value) {
         return (index == 4 && value % 5 != 0 && value % 4 != 0) ||
                 (index == 7 && value % 7 != 0 && value % 8 != 0) ||
                 (index == 5 && value % 8 == 0);
     }
 
-    // Write content to file, throws custom exception
     private void writeToFile(String filePath, String content) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(content);
         } catch (IOException e) {
-            logger.error("Error while writing content to file: {}", filePath, e);
+            log.error("Error while writing content to file: {}", filePath, e);
             throw new FileProcessingException("Error writing content to file: " + filePath, e);
         }
     }

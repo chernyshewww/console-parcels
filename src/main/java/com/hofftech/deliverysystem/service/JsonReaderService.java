@@ -16,9 +16,10 @@ import java.util.List;
 @Slf4j
 public class JsonReaderService {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     public List<Truck> readTrucksFromJson(String fileName) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(new File(fileName));
             List<Truck> trucks = new ArrayList<>();
 

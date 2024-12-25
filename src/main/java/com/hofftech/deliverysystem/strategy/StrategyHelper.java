@@ -40,6 +40,19 @@ public class StrategyHelper {
         };
     }
 
+    public boolean tryPlaceParcel(Truck truck, ParcelFormatter parcel) {
+        TruckService truckService = new TruckService();
+        for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
+            for (var col = 0; col <= truck.getWidth() - parcel.getData()[0].length; col++) {
+                if (truckService.canPlace(parcel, truck,row, col) && isSupported(truck, parcel, row, col)) {
+                    truckService.place(parcel,truck, row, col);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private boolean isSupported(Truck truck, ParcelFormatter parcel, int row, int col) {
         var width = parcel.getData()[0].length;
         var requiredSupport = (int) Math.ceil(width / HALF_PARCEL_SUPPORT);
@@ -55,18 +68,5 @@ public class StrategyHelper {
             }
         }
         return supportCount >= requiredSupport;
-    }
-
-    public boolean tryPlaceParcel(Truck truck, ParcelFormatter parcel) {
-        TruckService truckService = new TruckService();
-        for (var row = truck.getHeight() - parcel.getData().length; row >= 0; row--) {
-            for (var col = 0; col <= truck.getWidth() - parcel.getData()[0].length; col++) {
-                if (truckService.canPlace(parcel, truck,row, col) && isSupported(truck, parcel, row, col)) {
-                    truckService.place(parcel,truck, row, col);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

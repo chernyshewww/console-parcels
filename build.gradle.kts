@@ -28,6 +28,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.mockito:mockito-inline:4.7.0")
+    testImplementation("org.mockito:mockito-core:4.7.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:4.7.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 }
 
 spotless {

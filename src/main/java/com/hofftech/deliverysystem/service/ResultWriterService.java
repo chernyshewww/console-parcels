@@ -16,11 +16,7 @@ import java.util.List;
 @Slf4j
 public class ResultWriterService {
 
-    private final ObjectMapper objectMapper;
-
-    public ResultWriterService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void writeTrucksToJson(List<Truck> trucks, String fileName) {
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -30,7 +26,7 @@ public class ResultWriterService {
             log.info("Trucks written to JSON file with custom formatting: {}", fileName);
         } catch (FileProcessingException e) {
             log.error("Error while writing trucks to JSON: {}", e.getMessage(), e);
-            throw new RuntimeException(e);  // Re-throwing the custom exception
+            throw new RuntimeException(e);
         }
     }
 
