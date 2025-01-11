@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface LoadingStrategy {
 
-    List<Truck> loadParcels(List<Parcel> parcels, int availableTrucks);
+    List<Truck> loadParcels(List<Parcel> parcels, List<Truck> trucks);
 }

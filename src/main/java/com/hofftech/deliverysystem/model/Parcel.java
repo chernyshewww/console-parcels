@@ -1,24 +1,55 @@
 package com.hofftech.deliverysystem.model;
 
-import java.util.Arrays;
-import java.util.Objects;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record Parcel(char[][] data) {
+import java.util.List;
 
-    @Override
-    public String toString() {
-        return Arrays.deepToString(data);
+@Getter
+@Setter
+@NoArgsConstructor
+public class Parcel {
+    private String name;
+    private char symbol;
+    private char[][] form;
+    private List<int[]> coordinates;
+    private int placedX;
+    private int placedY;
+    private boolean isPlaced;
+
+    public Parcel(String name, char symbol, char[][] form) {
+        this.name = name;
+        this.symbol = symbol;
+        this.form = form;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Parcel parcel = (Parcel) o;
-        return Objects.deepEquals(data, parcel.data);
+    public Parcel(String name, char[][] form) {
+        this.name = name;
+        this.form = form;
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(data);
+    public String getPlacedCoordinates() {
+        if (!isPlaced) {
+            return "Посылка не размещена.";
+        }
+
+        if (symbol == '\0') {
+            return "Символ посылки не установлен.";
+        }
+
+        StringBuilder innerCoordinates = new StringBuilder();
+        for (int i = 0; i < form.length; i++) {
+            for (int j = 0; j < form[i].length; j++) {
+                if (form[i][j] != 0) {
+                    innerCoordinates.append(String.format("(%d, %d)", placedX + i, placedY + j)).append(", ");
+                }
+            }
+        }
+
+        if (innerCoordinates.length() > 2) {
+            innerCoordinates.setLength(innerCoordinates.length() - 2);
+        }
+        return innerCoordinates.toString();
     }
 }

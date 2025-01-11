@@ -19,6 +19,9 @@ dependencies {
     implementation("net.bytebuddy:byte-buddy:1.14.7")
     implementation("org.springframework.boot:spring-boot-starter:3.1.4")
     implementation("org.ow2.asm:asm:9.5")
+    implementation("org.telegram:telegrambots:6.5.0")
+    implementation("com.beust:jcommander:1.78")
+
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
