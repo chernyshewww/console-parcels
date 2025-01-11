@@ -1,26 +1,30 @@
 package com.hofftech.deliverysystem.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import static com.hofftech.deliverysystem.constants.Constant.TRUCK_HEIGHT;
-import static com.hofftech.deliverysystem.constants.Constant.TRUCK_WIDTH;
 import static com.hofftech.deliverysystem.constants.Constant.EMPTY_CELL;
 
 @Getter
 @Setter
 public class Truck {
 
-    private final int height;
-    private final int width;
+    private List<Parcel> parcels = new ArrayList<>();
+    private String truckType;
+    private int height;
+    private int width;
     private char[][] grid;
 
-    public Truck() {
-        this.height = TRUCK_HEIGHT;
-        this.width = TRUCK_WIDTH;
-        this.grid = new char[TRUCK_HEIGHT][TRUCK_WIDTH];
+    public Truck(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.grid = new char[height][width];
         fillGridWithEmptyCells();
     }
 
@@ -32,5 +36,11 @@ public class Truck {
         for (char[] row : grid) {
             Arrays.fill(row, EMPTY_CELL);
         }
+    }
+
+    @JsonCreator
+    public Truck(@JsonProperty("truck_type") String truckType, @JsonProperty("parcels") List<Parcel> parcels) {
+        this.truckType = truckType;
+        this.parcels = parcels;
     }
 }
