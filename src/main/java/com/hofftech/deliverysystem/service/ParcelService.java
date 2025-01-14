@@ -91,7 +91,6 @@ public class ParcelService {
         }
     }
 
-
     /**
      * Loads parcels from the file based on the provided command data.
      * The data can either be a list of parcel names or a filename.
@@ -101,11 +100,11 @@ public class ParcelService {
      * @throws ParcelFileReadException If an error occurs while reading the file.
      */
     public List<Parcel> loadParcels(LoadCommand commandData) throws ParcelFileReadException {
-        if (commandData.getParcelsText() != null) {
-            List<String> parcelNames = Arrays.asList(commandData.getParcelsText().split("\\\\n"));
+        if (commandData.parcelsText() != null) {
+            List<String> parcelNames = Arrays.asList(commandData.parcelsText().split("\\\\n"));
             return getParcelsFromFile(parcelNames);
         } else {
-            return getParcelsFromCsv(commandData.getParcelsFileName());
+            return getParcelsFromCsv(commandData.parcelsFileName());
         }
     }
 

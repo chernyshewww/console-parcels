@@ -17,6 +17,30 @@ import java.util.regex.Pattern;
  */
 public class CommandParserService {
 
+    private static final int LOAD_PARCELS_TEXT_GROUP = 2;
+    private static final int LOAD_PARCELS_FILE_GROUP = 3;
+    private static final int LOAD_TRUCKS_GROUP = 4;
+    private static final int LOAD_TYPE_GROUP = 5;
+    private static final int LOAD_OUT_GROUP = 6;
+    private static final int LOAD_OUT_FILENAME_GROUP = 7;
+
+    private static final int CREATE_NAME_GROUP = 1;
+    private static final int CREATE_FORM_GROUP = 2;
+    private static final int CREATE_SYMBOL_GROUP = 3;
+
+    private static final int FIND_NAME_GROUP = 1;
+
+    private static final int EDIT_ID_GROUP = 1;
+    private static final int EDIT_NAME_GROUP = 2;
+    private static final int EDIT_FORM_GROUP = 3;
+    private static final int EDIT_SYMBOL_GROUP = 4;
+
+    private static final int DELETE_NAME_GROUP = 1;
+
+    private static final int UNLOAD_INFILE_GROUP = 1;
+    private static final int UNLOAD_OUTFILE_GROUP = 2;
+    private static final int UNLOAD_WITHCOUNT_GROUP = 3;
+
     /**
      * Parses a "/load" command from the provided input text.
      *
@@ -39,12 +63,12 @@ public class CommandParserService {
         }
 
         return new LoadCommand(
-                matcher.group(2),
-                matcher.group(3),
-                matcher.group(4),
-                matcher.group(5),
-                matcher.group(6),
-                matcher.group(7)
+                matcher.group(LOAD_PARCELS_TEXT_GROUP),
+                matcher.group(LOAD_PARCELS_FILE_GROUP),
+                matcher.group(LOAD_TRUCKS_GROUP),
+                matcher.group(LOAD_TYPE_GROUP),
+                matcher.group(LOAD_OUT_GROUP),
+                matcher.group(LOAD_OUT_FILENAME_GROUP)
         );
     }
 
@@ -60,16 +84,16 @@ public class CommandParserService {
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
+            throw new InvalidCommandException(""" 
                 Ошибка! Пожалуйста, укажите все параметры в правильном формате:
                 /create -name "Название посылки" -form "форма посылки" -symbol "символ"
                 """);
         }
 
         return new CreateCommand(
-                matcher.group(1),
-                matcher.group(2),
-                matcher.group(3).charAt(0)
+                matcher.group(CREATE_NAME_GROUP),
+                matcher.group(CREATE_FORM_GROUP),
+                matcher.group(CREATE_SYMBOL_GROUP).charAt(0)
         );
     }
 
@@ -85,13 +109,13 @@ public class CommandParserService {
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
+            throw new InvalidCommandException(""" 
                 Ошибка! Пожалуйста, укажите имя посылки для поиска.
                 Пример: /find "Название посылки"
                 """);
         }
 
-        return new FindCommand(matcher.group(1));
+        return new FindCommand(matcher.group(FIND_NAME_GROUP));
     }
 
     /**
@@ -114,17 +138,17 @@ public class CommandParserService {
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
+            throw new InvalidCommandException(""" 
             Ошибка! Укажите все параметры команды в правильном формате:
             /edit -id "старое имя" -name "новое имя" -form "новая форма" -symbol "новый символ"
-        """);
+            """);
         }
 
         return new EditCommand(
-                matcher.group(1),
-                matcher.group(2),
-                matcher.group(3),
-                matcher.group(4).charAt(0)
+                matcher.group(EDIT_ID_GROUP),
+                matcher.group(EDIT_NAME_GROUP),
+                matcher.group(EDIT_FORM_GROUP),
+                matcher.group(EDIT_SYMBOL_GROUP).charAt(0)
         );
     }
 
@@ -140,13 +164,13 @@ public class CommandParserService {
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
+            throw new InvalidCommandException(""" 
             Ошибка! Пожалуйста, укажите имя посылки для удаления.
             Пример: /delete "Название посылки"
-        """);
+            """);
         }
 
-        return new DeleteCommand(matcher.group(1));
+        return new DeleteCommand(matcher.group(DELETE_NAME_GROUP));
     }
 
     /**
@@ -162,16 +186,16 @@ public class CommandParserService {
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
+            throw new InvalidCommandException(""" 
             Ошибка! Проверьте формат команды.
             Пример: /unload -infile "trucks.json" -outfile "parcels.csv" --withcount
-        """);
+            """);
         }
 
         return new UnloadCommand(
-                matcher.group(1),
-                matcher.group(2),
-                matcher.group(3) != null
+                matcher.group(UNLOAD_INFILE_GROUP),
+                matcher.group(UNLOAD_OUTFILE_GROUP),
+                matcher.group(UNLOAD_WITHCOUNT_GROUP) != null
         );
     }
 }
