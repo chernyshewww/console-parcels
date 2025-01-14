@@ -67,7 +67,6 @@ public class BotInitializer {
                 outputService,
                 formHelper);
 
-        // Создание и регистрация бота
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
 

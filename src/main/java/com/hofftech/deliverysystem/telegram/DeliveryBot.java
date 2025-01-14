@@ -43,7 +43,7 @@ public class DeliveryBot extends TelegramLongPollingBot {
     private void sendHelpMessage(long chatId) {
         SendMessage responseMessage = new SendMessage();
         responseMessage.setChatId(chatId);
-        responseMessage.setText(HELP_TEXT); // Общий текст из CommandHandler
+        responseMessage.setText(HELP_TEXT);
 
         try {
             execute(responseMessage);
