@@ -1,5 +1,7 @@
 package com.hofftech.deliverysystem.util;
 
+import com.hofftech.deliverysystem.exception.ConfigurationException;
+
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -10,11 +12,11 @@ public class ConfigLoader {
         Properties properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE)) {
             if (input == null) {
-                throw new RuntimeException("Файл " + CONFIG_FILE + " не найден");
+                throw new ConfigurationException("Файл " + CONFIG_FILE + " не найден");
             }
             properties.load(input);
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка чтения конфигурации: " + e.getMessage(), e);
+            throw new ConfigurationException("Ошибка чтения конфигурации: " + e.getMessage(), e);
         }
         return properties;
     }

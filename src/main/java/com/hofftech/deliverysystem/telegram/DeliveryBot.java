@@ -1,5 +1,6 @@
 package com.hofftech.deliverysystem.telegram;
 
+import com.hofftech.deliverysystem.exception.BotProcessingException;
 import com.hofftech.deliverysystem.service.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import static com.hofftech.deliverysystem.constants.Constant.HELP_TEXT;
 @Slf4j
 @RequiredArgsConstructor
 public class DeliveryBot extends TelegramLongPollingBot {
+
+    public static final String HELP_SHORT_TEXT = "/help";
 
     private final CommandHandler commandHandler;
     private final String botToken;
@@ -30,9 +33,17 @@ public class DeliveryBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message message = update.getMessage();
             String text = message.getText();
-            long chatId = message.getChatId();
+            Long chatId = message.getChatId();
 
-            if (text.equals("/help")) {
+            if (text == null || text.isEmpty()) {
+                throw new BotProcessingException("Received null or empty text in the message.");
+            }
+
+            if (chatId == null) {
+                throw new BotProcessingException("Chat ID is null in the received message.");
+            }
+
+            if (text.equals(HELP_SHORT_TEXT)) {
                 sendHelpMessage(chatId);
             } else {
                 handleCommand(chatId, text);
@@ -40,10 +51,10 @@ public class DeliveryBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendHelpMessage(long chatId) {
+    private void sendMessage(long chatId, String text) {
         SendMessage responseMessage = new SendMessage();
         responseMessage.setChatId(chatId);
-        responseMessage.setText(HELP_TEXT);
+        responseMessage.setText(text);
 
         try {
             execute(responseMessage);
@@ -52,18 +63,16 @@ public class DeliveryBot extends TelegramLongPollingBot {
         }
     }
 
+    private void sendHelpMessage(long chatId) {
+        sendMessage(chatId, HELP_TEXT);
+    }
+
     private void handleCommand(long chatId, String text) {
         String responseText = commandHandler.handleCommand(text);
-        SendMessage responseMessage = new SendMessage();
-        responseMessage.setChatId(chatId);
-        responseMessage.setText(responseText);
-
-        try {
-            execute(responseMessage);
-        } catch (TelegramApiException e) {
-            log.error("Ошибка при отправке команды: {}", e.getMessage(), e);
-        }
+        sendMessage(chatId, responseText);
     }
+
+
     /**
      * Returns the username of the bot. This method is required to authenticate the bot.
      *
