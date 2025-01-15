@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static com.hofftech.deliverysystem.constants.Constant.HELP_TEXT;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,11 +42,7 @@ public class DeliveryBot extends TelegramLongPollingBot {
                 throw new BotProcessingException("Chat ID is null in the received message.");
             }
 
-            if (text.equals(HELP_SHORT_TEXT)) {
-                sendHelpMessage(chatId);
-            } else {
-                handleCommand(chatId, text);
-            }
+            handleCommand(chatId, text);
         }
     }
 
@@ -63,15 +58,10 @@ public class DeliveryBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendHelpMessage(long chatId) {
-        sendMessage(chatId, HELP_TEXT);
-    }
-
     private void handleCommand(long chatId, String text) {
         String responseText = commandHandler.handleCommand(text);
         sendMessage(chatId, responseText);
     }
-
 
     /**
      * Returns the username of the bot. This method is required to authenticate the bot.

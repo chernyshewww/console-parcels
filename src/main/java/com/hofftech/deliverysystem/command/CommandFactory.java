@@ -4,6 +4,7 @@ import com.hofftech.deliverysystem.command.handler.CreateCommandHandler;
 import com.hofftech.deliverysystem.command.handler.DeleteCommandHandler;
 import com.hofftech.deliverysystem.command.handler.EditCommandHandler;
 import com.hofftech.deliverysystem.command.handler.FindCommandHandler;
+import com.hofftech.deliverysystem.command.handler.HelpCommandHandler;
 import com.hofftech.deliverysystem.command.handler.LoadCommandHandler;
 import com.hofftech.deliverysystem.command.handler.UnloadCommandHandler;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
@@ -41,6 +42,8 @@ public class CommandFactory {
                 return new LoadCommandHandler(parcelService, truckService, strategyHelper, commandParserService, outputService);
             case "/unload":
                 return new UnloadCommandHandler(parcelService, truckService, commandParserService, outputService, fileService);
+            case "/help":
+                return new HelpCommandHandler();
             default:
                 throw new InvalidCommandException("Unknown command: " + command);
         }
