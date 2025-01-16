@@ -1,7 +1,7 @@
 package com.hofftech.deliverysystem.telegram;
 
 import com.hofftech.deliverysystem.exception.BotProcessingException;
-import com.hofftech.deliverysystem.service.CommandHandler;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
