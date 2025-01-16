@@ -1,8 +1,7 @@
-package com.hofftech.deliverysystem.service;
+package com.hofftech.deliverysystem.telegram;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.exception.BotInitializationException;
-import com.hofftech.deliverysystem.telegram.DeliveryBot;
 import com.hofftech.deliverysystem.util.ConfigLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

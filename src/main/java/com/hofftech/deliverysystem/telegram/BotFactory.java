@@ -1,7 +1,12 @@
-package com.hofftech.deliverysystem.service;
+package com.hofftech.deliverysystem.telegram;
 
 import com.hofftech.deliverysystem.command.CommandFactory;
 import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.service.CommandParserService;
+import com.hofftech.deliverysystem.service.FileService;
+import com.hofftech.deliverysystem.service.OutputService;
+import com.hofftech.deliverysystem.service.ParcelService;
+import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import com.hofftech.deliverysystem.util.FormHelper;
 import com.hofftech.deliverysystem.util.OutputHelper;
