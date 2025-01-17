@@ -27,6 +27,7 @@ public class EditCommandHandlerImpl implements Command {
                     commandData.newSymbol()
             );
         } catch (InvalidCommandException e) {
+            log.error("Invalid command", e);
             return e.getMessage();
         } catch (Exception e) {
             log.error("Error handling /edit command", e);

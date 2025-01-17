@@ -51,6 +51,7 @@ public class LoadCommandHandlerImpl implements Command {
                     return "Ошибка: Неподдерживаемый тип вывода.";
             }
         } catch (InvalidCommandException e) {
+            log.error("Invalid command", e);
             return e.getMessage();
         } catch (IllegalStateException e) {
             log.error("Failed to load parcels: {}", e.getMessage());

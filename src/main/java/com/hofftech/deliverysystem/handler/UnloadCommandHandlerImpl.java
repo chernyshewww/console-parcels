@@ -42,6 +42,7 @@ public class UnloadCommandHandlerImpl implements Command {
 
             return "Выгрузка завершена. Результат сохранён в файл: " + commandData.outputFileName();
         } catch (InvalidCommandException e) {
+            log.error("Invalid command", e);
             return e.getMessage();
         } catch (Exception e) {
             log.error("Error while processing /unload command", e);

@@ -20,8 +20,8 @@ public class FindCommandHandlerImpl implements Command {
         try {
             FindCommand commandData = commandParserService.parseFindCommand(text);
             return parcelService.findParcelInFile(commandData.parcelName());
-        } catch (
-                InvalidCommandException e) {
+        } catch (InvalidCommandException e) {
+            log.error("Invalid command", e);
             return e.getMessage();
         } catch (Exception e) {
             log.error("Error while processing /find command", e);

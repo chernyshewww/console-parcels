@@ -48,7 +48,10 @@ public class DeliveryBot extends TelegramLongPollingBot {
             }
 
             try {
-                handleCommand(chatId, text);
+                var responseText = processCommand(chatId, text);
+
+                sendMessage(chatId, responseText);
+
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 sendMessage(chatId, String.format("Error while delivering: ", e.getMessage()));
@@ -88,8 +91,7 @@ public class DeliveryBot extends TelegramLongPollingBot {
         }
     }
 
-    private void handleCommand(long chatId, String text) {
-        String responseText = commandHandler.handleCommand(text);
-        sendMessage(chatId, responseText);
+    private String processCommand(long chatId, String text) {
+        return commandHandler.handleCommand(text);
     }
 }

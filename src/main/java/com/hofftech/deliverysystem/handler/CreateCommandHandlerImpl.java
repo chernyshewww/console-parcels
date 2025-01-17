@@ -8,7 +8,9 @@ import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
 import com.hofftech.deliverysystem.util.FormHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class CreateCommandHandlerImpl implements Command {
 
@@ -25,6 +27,7 @@ public class CreateCommandHandlerImpl implements Command {
             parcelService.createParcel(commandData.name(), commandData.symbol(), form);
             return outputService.formatCreateResponse(commandData.name(), form);
         } catch (InvalidCommandException e) {
+            log.error("Invalid command", e);
             return e.getMessage();
         }
     }
