@@ -1,5 +1,5 @@
-package com.hofftech.deliverysystem.command.handler;
-import com.hofftech.deliverysystem.command.CreateCommand;
+package com.hofftech.deliverysystem.handler;
+import com.hofftech.deliverysystem.model.record.CreateCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
@@ -24,12 +24,12 @@ class CreateCommandHandlerTest {
     @Mock
     private OutputService outputService;
 
-    private CreateCommandHandler createCommandHandler;
+    private CreateCommandHandlerImpl createCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        createCommandHandler = new CreateCommandHandler(parcelService, commandParserService, formHelper, outputService);
+        createCommandHandler = new CreateCommandHandlerImpl(parcelService, commandParserService, formHelper, outputService);
     }
 
     @Test

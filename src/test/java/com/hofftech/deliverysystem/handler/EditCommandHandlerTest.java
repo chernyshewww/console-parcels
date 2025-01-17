@@ -1,6 +1,6 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.EditCommand;
+import com.hofftech.deliverysystem.model.record.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -20,12 +20,12 @@ class EditCommandHandlerTest {
     @Mock
     private CommandParserService commandParserService;
 
-    private EditCommandHandler editCommandHandler;
+    private EditCommandHandlerImpl editCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        editCommandHandler = new EditCommandHandler(parcelService, commandParserService);
+        editCommandHandler = new EditCommandHandlerImpl(parcelService, commandParserService);
     }
 
     @Test

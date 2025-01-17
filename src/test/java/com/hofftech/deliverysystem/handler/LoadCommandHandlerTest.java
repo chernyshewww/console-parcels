@@ -1,5 +1,5 @@
-package com.hofftech.deliverysystem.command.handler;
-import com.hofftech.deliverysystem.command.LoadCommand;
+package com.hofftech.deliverysystem.handler;
+import com.hofftech.deliverysystem.model.record.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
@@ -38,12 +38,12 @@ class LoadCommandHandlerTest {
     @Mock
     private OutputService outputService;
 
-    private LoadCommandHandler loadCommandHandler;
+    private LoadCommandHandlerImpl loadCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        loadCommandHandler = new LoadCommandHandler(parcelService, truckService, strategyHelper, commandParserService, outputService);
+        loadCommandHandler = new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService);
     }
 
     @Test

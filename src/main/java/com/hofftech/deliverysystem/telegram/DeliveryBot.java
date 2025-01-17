@@ -4,6 +4,8 @@ import com.hofftech.deliverysystem.exception.BotProcessingException;
 import com.hofftech.deliverysystem.command.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.ObjectUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -33,16 +35,24 @@ public class DeliveryBot extends TelegramLongPollingBot {
             Message message = update.getMessage();
             String text = message.getText();
             Long chatId = message.getChatId();
+            log.info("Received message - Chat ID: {}, Text: {}", chatId, text);
 
-            if (text == null || text.isEmpty()) {
+            if (StringUtils.isEmpty(text)) {
+                log.error("Received null or empty text in the message. Chat ID: {}", chatId);
                 throw new BotProcessingException("Received null or empty text in the message.");
             }
 
-            if (chatId == null) {
+            if (ObjectUtils.isEmpty(chatId)) {
+                log.error("Chat ID is null in the received message.");
                 throw new BotProcessingException("Chat ID is null in the received message.");
             }
 
-            handleCommand(chatId, text);
+            try {
+                handleCommand(chatId, text);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                sendMessage(chatId, String.format("Error while delivering: ", e.getMessage()));
+            }
         }
     }
 

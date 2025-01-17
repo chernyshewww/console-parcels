@@ -1,16 +1,16 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.command.DeleteCommand;
+import com.hofftech.deliverysystem.model.record.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
 @Slf4j
-public class DeleteCommandHandler implements Command {
+@RequiredArgsConstructor
+public class FindCommandHandlerImpl implements Command {
 
     private final ParcelService parcelService;
     private final CommandParserService commandParserService;
@@ -18,14 +18,14 @@ public class DeleteCommandHandler implements Command {
     @Override
     public String execute(String text) {
         try {
-            DeleteCommand commandData = commandParserService.parseDeleteCommand(text);
-
-            return parcelService.deleteParcelInFile(commandData.parcelName());
-        } catch (InvalidCommandException e) {
+            FindCommand commandData = commandParserService.parseFindCommand(text);
+            return parcelService.findParcelInFile(commandData.parcelName());
+        } catch (
+                InvalidCommandException e) {
             return e.getMessage();
         } catch (Exception e) {
-            log.error("Error handling /delete command", e);
-            return "Ошибка при удалении посылки: " + e.getMessage();
+            log.error("Error while processing /find command", e);
+            return "Ошибка при поиске посылки: " + e.getMessage();
         }
     }
 }

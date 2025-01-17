@@ -1,7 +1,7 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.command.EditCommand;
+import com.hofftech.deliverysystem.model.record.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-public class EditCommandHandler implements Command {
+public class EditCommandHandlerImpl implements Command {
 
     private final ParcelService parcelService;
     private final CommandParserService commandParserService;

@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.telegram;
 
-import com.hofftech.deliverysystem.command.CommandFactory;
+import com.hofftech.deliverysystem.service.CommandFactory;
 import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;

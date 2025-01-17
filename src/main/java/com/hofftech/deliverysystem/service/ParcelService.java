@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.command.LoadCommand;
+import com.hofftech.deliverysystem.model.record.LoadCommand;
 import com.hofftech.deliverysystem.exception.ParcelFileException;
 import com.hofftech.deliverysystem.exception.ParcelFileReadException;
 import com.hofftech.deliverysystem.model.Parcel;

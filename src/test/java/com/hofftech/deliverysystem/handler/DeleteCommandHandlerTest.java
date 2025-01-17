@@ -1,6 +1,6 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.DeleteCommand;
+import com.hofftech.deliverysystem.model.record.DeleteCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -19,12 +19,12 @@ class DeleteCommandHandlerTest {
     @Mock
     private CommandParserService commandParserService;
 
-    private DeleteCommandHandler deleteCommandHandler;
+    private DeleteCommandHandlerImpl deleteCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        deleteCommandHandler = new DeleteCommandHandler(parcelService, commandParserService);
+        deleteCommandHandler = new DeleteCommandHandlerImpl(parcelService, commandParserService);
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.hofftech.deliverysystem.exception.BotInitializationException;
 import com.hofftech.deliverysystem.util.ConfigLoader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -47,11 +48,11 @@ public class BotInitializer {
         String botToken = properties.getProperty("bot.token");
         String botUsername = properties.getProperty("bot.username");
 
-        if (botToken == null || botToken.isEmpty()) {
+        if (StringUtils.isEmpty(botToken)) {
             throw new BotInitializationException("Bot token is missing or empty in configuration");
         }
 
-        if (botUsername == null || botUsername.isEmpty()) {
+        if (StringUtils.isEmpty(botUsername)){
             throw new BotInitializationException("Bot username is missing or empty in configuration");
         }
 

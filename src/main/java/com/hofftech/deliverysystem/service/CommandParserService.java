@@ -1,11 +1,11 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.command.CreateCommand;
-import com.hofftech.deliverysystem.command.DeleteCommand;
-import com.hofftech.deliverysystem.command.EditCommand;
-import com.hofftech.deliverysystem.command.FindCommand;
-import com.hofftech.deliverysystem.command.LoadCommand;
-import com.hofftech.deliverysystem.command.UnloadCommand;
+import com.hofftech.deliverysystem.model.record.CreateCommand;
+import com.hofftech.deliverysystem.model.record.DeleteCommand;
+import com.hofftech.deliverysystem.model.record.EditCommand;
+import com.hofftech.deliverysystem.model.record.FindCommand;
+import com.hofftech.deliverysystem.model.record.LoadCommand;
+import com.hofftech.deliverysystem.model.record.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 
 import java.util.regex.Matcher;

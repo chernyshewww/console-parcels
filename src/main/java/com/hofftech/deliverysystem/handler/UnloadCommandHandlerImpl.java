@@ -1,7 +1,7 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.command.UnloadCommand;
+import com.hofftech.deliverysystem.model.record.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class UnloadCommandHandler implements Command {
+public class UnloadCommandHandlerImpl implements Command {
 
     private final ParcelService parcelService;
     private final TruckService truckService;

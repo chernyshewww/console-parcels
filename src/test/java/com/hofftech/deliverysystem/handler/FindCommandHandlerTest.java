@@ -1,6 +1,6 @@
-package com.hofftech.deliverysystem.command.handler;
+package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.FindCommand;
+import com.hofftech.deliverysystem.model.record.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -20,12 +20,12 @@ class FindCommandHandlerTest {
     @Mock
     private CommandParserService commandParserService;
 
-    private FindCommandHandler findCommandHandler;
+    private FindCommandHandlerImpl findCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        findCommandHandler = new FindCommandHandler(parcelService, commandParserService);
+        findCommandHandler = new FindCommandHandlerImpl(parcelService, commandParserService);
     }
 
     @Test
