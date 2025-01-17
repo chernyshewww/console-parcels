@@ -28,7 +28,7 @@ public class EditCommandHandlerImpl implements Command {
             );
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
-            return e.getMessage();
+            throw e;
         } catch (Exception e) {
             log.error("Error handling /edit command", e);
             return "Ошибка при редактировании посылки: " + e.getMessage();

@@ -22,7 +22,7 @@ public class FindCommandHandlerImpl implements Command {
             return parcelService.findParcelInFile(commandData.parcelName());
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
-            return e.getMessage();
+            throw e;
         } catch (Exception e) {
             log.error("Error while processing /find command", e);
             return "Ошибка при поиске посылки: " + e.getMessage();

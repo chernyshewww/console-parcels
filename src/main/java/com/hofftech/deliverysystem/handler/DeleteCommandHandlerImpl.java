@@ -23,7 +23,7 @@ public class DeleteCommandHandlerImpl implements Command {
             return parcelService.deleteParcelInFile(commandData.parcelName());
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
-            return e.getMessage();
+            throw e;
         } catch (Exception e) {
             log.error("Error handling /delete command", e);
             return "Ошибка при удалении посылки: " + e.getMessage();

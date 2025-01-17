@@ -25,23 +25,27 @@ public class CommandFactory {
     private final FormHelper formHelper;
 
     public Command getCommandHandler(String command) {
-        switch (command) {
-            case "/create":
-                return new CreateCommandHandlerImpl(parcelService, commandParserService, formHelper, outputService);
-            case "/find":
-                return new FindCommandHandlerImpl(parcelService, commandParserService);
-            case "/edit":
-                return new EditCommandHandlerImpl(parcelService, commandParserService);
-            case "/delete":
-                return new DeleteCommandHandlerImpl(parcelService, commandParserService);
-            case "/load":
-                return new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService);
-            case "/unload":
-                return new UnloadCommandHandlerImpl(parcelService, truckService, commandParserService, outputService, fileService);
-            case "/help":
-                return new HelpCommandHandlerImpl();
-            default:
-                throw new InvalidCommandException("Unknown command: " + command);
+        try {
+            switch (command) {
+                case "/create":
+                    return new CreateCommandHandlerImpl(parcelService, commandParserService, formHelper, outputService);
+                case "/find":
+                    return new FindCommandHandlerImpl(parcelService, commandParserService);
+                case "/edit":
+                    return new EditCommandHandlerImpl(parcelService, commandParserService);
+                case "/delete":
+                    return new DeleteCommandHandlerImpl(parcelService, commandParserService);
+                case "/load":
+                    return new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService);
+                case "/unload":
+                    return new UnloadCommandHandlerImpl(parcelService, truckService, commandParserService, outputService, fileService);
+                case "/help":
+                    return new HelpCommandHandlerImpl();
+                default:
+                    throw new InvalidCommandException("Unknown command: " + command);
+            }
+        } catch(InvalidCommandException e){
+            throw e;
         }
     }
 }

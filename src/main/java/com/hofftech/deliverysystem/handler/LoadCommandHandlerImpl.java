@@ -52,7 +52,7 @@ public class LoadCommandHandlerImpl implements Command {
             }
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
-            return e.getMessage();
+            throw e;
         } catch (IllegalStateException e) {
             log.error("Failed to load parcels: {}", e.getMessage());
             return "Ошибка! Не удалось разместить все посылки в грузовиках. Проверьте размеры и количество.";
