@@ -28,7 +28,7 @@ public class CreateCommandHandlerImpl implements Command {
             return outputService.formatCreateResponse(commandData.name(), form);
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
-           throw e;
+            throw e;
         }
     }
 }
