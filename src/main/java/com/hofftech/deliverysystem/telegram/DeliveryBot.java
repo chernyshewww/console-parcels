@@ -56,23 +56,6 @@ public class DeliveryBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(long chatId, String text) {
-        SendMessage responseMessage = new SendMessage();
-        responseMessage.setChatId(chatId);
-        responseMessage.setText(text);
-
-        try {
-            execute(responseMessage);
-        } catch (TelegramApiException e) {
-            log.error("Ошибка при отправке сообщения: {}", e.getMessage(), e);
-        }
-    }
-
-    private void handleCommand(long chatId, String text) {
-        String responseText = commandHandler.handleCommand(text);
-        sendMessage(chatId, responseText);
-    }
-
     /**
      * Returns the username of the bot. This method is required to authenticate the bot.
      *
@@ -91,5 +74,22 @@ public class DeliveryBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return botToken;
+    }
+
+    private void sendMessage(long chatId, String text) {
+        SendMessage responseMessage = new SendMessage();
+        responseMessage.setChatId(chatId);
+        responseMessage.setText(text);
+
+        try {
+            execute(responseMessage);
+        } catch (TelegramApiException e) {
+            log.error("Ошибка при отправке сообщения: {}", e.getMessage(), e);
+        }
+    }
+
+    private void handleCommand(long chatId, String text) {
+        String responseText = commandHandler.handleCommand(text);
+        sendMessage(chatId, responseText);
     }
 }
