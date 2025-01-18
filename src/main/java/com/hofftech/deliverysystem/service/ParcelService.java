@@ -8,6 +8,7 @@ import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.util.FormHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class ParcelService {
 

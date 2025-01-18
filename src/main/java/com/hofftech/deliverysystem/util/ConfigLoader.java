@@ -1,10 +1,12 @@
 package com.hofftech.deliverysystem.util;
 
 import com.hofftech.deliverysystem.exception.ConfigurationException;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.Properties;
 
+@Service
 public class ConfigLoader {
 
     private static final String CONFIG_FILE = "application.properties";

@@ -12,8 +12,10 @@ import com.hofftech.deliverysystem.handler.UnloadCommandHandlerImpl;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import com.hofftech.deliverysystem.util.FormHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class CommandFactory {
 
     private final ParcelService parcelService;

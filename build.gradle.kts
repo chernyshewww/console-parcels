@@ -16,6 +16,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
     implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+    implementation("org.springframework.shell:spring-shell-starter:3.1.4")
     implementation("net.bytebuddy:byte-buddy:1.14.7")
     implementation("org.springframework.boot:spring-boot-starter:3.1.4")
     implementation("org.ow2.asm:asm:9.5")

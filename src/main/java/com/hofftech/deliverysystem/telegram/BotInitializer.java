@@ -3,9 +3,11 @@ package com.hofftech.deliverysystem.telegram;
 import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.exception.BotInitializationException;
 import com.hofftech.deliverysystem.util.ConfigLoader;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -22,6 +24,7 @@ import java.util.Properties;
  */
 @RequiredArgsConstructor
 @Slf4j
+@Component
 public class BotInitializer {
 
     private final ConfigLoader configLoader;
@@ -42,6 +45,8 @@ public class BotInitializer {
      *
      * @throws RuntimeException If the bot registration fails.
      */
+
+    @PostConstruct
     public void registerBot() {
         Properties properties = configLoader.loadConfig();
 

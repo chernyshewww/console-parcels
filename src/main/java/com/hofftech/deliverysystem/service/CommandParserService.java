@@ -7,6 +7,7 @@ import com.hofftech.deliverysystem.model.record.FindCommand;
 import com.hofftech.deliverysystem.model.record.LoadCommand;
 import com.hofftech.deliverysystem.model.record.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
  * Service class for parsing various commands from input text.
  * This class parses commands such as /load, /create, /find, /edit, /delete, and /unload.
  */
+@Service
 public class CommandParserService {
 
     private static final int LOAD_PARCELS_TEXT_GROUP = 2;

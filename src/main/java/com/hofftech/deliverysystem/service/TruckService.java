@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hofftech.deliverysystem.exception.TruckFileReadException;
 import com.hofftech.deliverysystem.model.Truck;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.List;
  * parsing truck sizes from a text, and loading trucks from a file.
  */
 @Slf4j
+@Service
 public class TruckService {
 
     /**

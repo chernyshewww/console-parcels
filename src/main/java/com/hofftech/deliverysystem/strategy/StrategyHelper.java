@@ -2,12 +2,14 @@ package com.hofftech.deliverysystem.strategy;
 
 import com.hofftech.deliverysystem.service.ParcelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  * Helper class to determine the appropriate loading strategy based on the strategy type.
  * It creates instances of different loading strategies depending on the strategy type provided.
  */
 @RequiredArgsConstructor
+@Component
 public class StrategyHelper {
 
     private final ParcelService parcelService;

@@ -7,6 +7,7 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.util.OutputHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Map;
  * for parcels and trucks, and saving the output to files.
  */
 @RequiredArgsConstructor
+@Service
 public class OutputService {
 
     private static final String PARCEL = "Посылка: ";

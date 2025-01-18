@@ -4,9 +4,11 @@ import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class CommandHandler {
 
     private final CommandFactory commandFactory;
