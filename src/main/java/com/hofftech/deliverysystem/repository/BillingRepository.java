@@ -30,33 +30,10 @@ public class BillingRepository {
         this.billings = loadBillingsFromFile();
     }
 
-    private List<BillingRecord> loadBillingsFromFile() {
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            log.info("Billing records file not found. Starting with an empty list.");
-            return new ArrayList<>();
-        }
-
-        try {
-            return objectMapper.readValue(file, new TypeReference<List<BillingRecord>>() {});
-        } catch (IOException e) {
-            log.error("Error reading billing records from file: {}", e.getMessage(), e);
-            return new ArrayList<>();
-        }
-    }
-
     public void save(BillingRecord billing) {
         billings.add(billing);
         saveRecordsToFile();
         log.info("Billing record saved: {}", billing);
-    }
-
-    private void saveRecordsToFile() {
-        try {
-            objectMapper.writeValue(new File(FILE_PATH), billings);
-        } catch (IOException e) {
-            log.error("Error saving billing records to file: {}", e.getMessage(), e);
-        }
     }
 
     public List<BillingSummary> findSummaryByUserAndPeriod(String user, LocalDate from, LocalDate to) {
@@ -73,5 +50,32 @@ public class BillingRepository {
                 ))
                 .sorted((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()))
                 .toList();
+    }
+
+    private List<BillingRecord> loadBillingsFromFile() {
+        File file = new File(FILE_PATH);
+        if (!file.exists()) {
+            log.info("Billing records file not found. Starting with an empty list.");
+            return new ArrayList<>();
+        }
+
+        try {
+            List<BillingRecord> billingsFromFile = objectMapper.readValue(file, new TypeReference<List<BillingRecord>>() {});
+            if (billingsFromFile.isEmpty()) {
+                log.info("Billing records file is empty. Starting with an empty list.");
+            }
+            return billingsFromFile;
+        } catch (IOException e) {
+            log.warn("Something went wrong while reading the file. Perhaps it is empty. The empty list was created.");
+            return new ArrayList<>();
+        }
+    }
+
+    private void saveRecordsToFile() {
+        try {
+            objectMapper.writeValue(new File(FILE_PATH), billings);
+        } catch (IOException e) {
+            log.error("Error saving billing records to file: {}", e.getMessage(), e);
+        }
     }
 }
