@@ -1,8 +1,9 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.model.record.UnloadCommand;
+import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;
 import com.hofftech.deliverysystem.service.OutputService;
@@ -37,12 +38,15 @@ class UnloadCommandHandlerTest {
     @Mock
     private FileService fileService;
 
+    @Mock
+    private BillingService billingService;
+
     private UnloadCommandHandlerImpl unloadCommandHandler;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        unloadCommandHandler = new UnloadCommandHandlerImpl(parcelService, truckService, commandParserService, outputService, fileService);
+        unloadCommandHandler = new UnloadCommandHandlerImpl(parcelService, truckService, commandParserService, outputService, fileService, billingService);
     }
 
     @Test

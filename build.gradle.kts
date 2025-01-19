@@ -22,6 +22,7 @@ dependencies {
     implementation("org.ow2.asm:asm:9.5")
     implementation("org.telegram:telegrambots:6.5.0")
     implementation("com.beust:jcommander:1.78")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")

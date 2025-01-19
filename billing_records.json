@@ -1,0 +1,36 @@
+[ {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 19, 5, 34, 40, 744346800 ],
+  "operationType" : "Погрузка",
+  "segments" : 2,
+  "parcels" : 2,
+  "cost" : 500
+}, {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 19, 5, 34, 47, 619998600 ],
+  "operationType" : "Погрузка",
+  "segments" : 1,
+  "parcels" : 2,
+  "cost" : 300
+}, {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 19, 5, 34, 55, 356049900 ],
+  "operationType" : "Погрузка",
+  "segments" : 2,
+  "parcels" : 2,
+  "cost" : 500
+}, {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 19, 5, 35, 8, 815462900 ],
+  "operationType" : "Разгрузка",
+  "segments" : 2,
+  "parcels" : 2,
+  "cost" : 560
+}, {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 19, 5, 35, 18, 650295400 ],
+  "operationType" : "Разгрузка",
+  "segments" : 2,
+  "parcels" : 2,
+  "cost" : 560
+} ]

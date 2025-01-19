@@ -5,15 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hofftech.deliverysystem.exception.JsonGenerationException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
 import com.hofftech.deliverysystem.util.OutputHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service class for generating various output formats, such as text and JSON,
@@ -111,7 +112,7 @@ public class OutputService {
             formBuilder.append(new String(row)).append("\n");
         }
 
-        if (formBuilder.length() > 0) {
+        if (!formBuilder.isEmpty()) {
             formBuilder.setLength(formBuilder.length() - 1);
         }
 
@@ -123,17 +124,15 @@ public class OutputService {
      *
      * @param outputFileName The name of the output file where the JSON will be saved.
      * @param loadedTrucks The list of trucks to be included in the JSON output.
-     * @param responseMessage The message to be sent to the user with the result.
      */
-    public void saveJsonOutput(String outputFileName, List<Truck> loadedTrucks, SendMessage responseMessage){
+    public String saveJsonOutput(String outputFileName, List<Truck> loadedTrucks){
         if (outputFileName == null || outputFileName.isBlank()) {
-            responseMessage.setText("Ошибка! Для вывода в файл JSON укажите имя файла через -out-filename.");
-            return;
+            return "Ошибка! Для вывода в файл JSON укажите имя файла через -out-filename.";
         }
 
         String jsonOutput = generateJsonOutput(loadedTrucks);
         fileService.saveToFile(outputFileName, jsonOutput);
-        responseMessage.setText("Успешно! Результат сохранен в файл: " + outputFileName);
+        return "Результат сохранён в файл: " + outputFileName;
     }
 
     /**
@@ -157,5 +156,30 @@ public class OutputService {
         } catch (JsonProcessingException e) {
             throw new JsonGenerationException("Ошибка при генерации JSON", e);
         }
+    }
+
+    /**
+     * Форматирует список деталей биллинга в строку.
+     *
+     * @param billingSummaries Список деталей биллинга.
+     * @return Строка с отформатированными результатами.
+     */
+    public String formatBillingResponse(List<BillingSummary> billingSummaries) {
+        return billingSummaries.stream()
+                .map(summary -> String.format("%s; %s; %d машин; %d посылок; %d рублей",
+                        summary.getTimestamp(),
+                        mapOperationType(summary.getOperationType()),
+                        summary.getSegments(),
+                        summary.getParcels(),
+                        summary.getCost()))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String mapOperationType(String operationType) {
+        return switch (operationType) {
+            case "UNLOAD" -> "Разгрузка";
+            case "LOAD" -> "Погрузка";
+            default -> operationType;
+        };
     }
 }

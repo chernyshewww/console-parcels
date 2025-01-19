@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.model.record.FindCommand;
+import com.hofftech.deliverysystem.model.record.command.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 class FindCommandHandlerTest {
@@ -42,13 +43,15 @@ class FindCommandHandlerTest {
     }
 
     @Test
-    void execute_ShouldReturnErrorMessage_WhenCommandIsInvalid() {
+    void execute_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/find";
-        when(commandParserService.parseFindCommand(inputText)).thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        String result = findCommandHandler.execute(inputText);
+        when(commandParserService.parseFindCommand(inputText))
+                .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThat(result).isEqualTo("Неверный формат команды");
+        assertThatThrownBy(() -> findCommandHandler.execute(inputText))
+                .isInstanceOf(InvalidCommandException.class)
+                .hasMessage("Неверный формат команды");
     }
 
     @Test

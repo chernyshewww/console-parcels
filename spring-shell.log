@@ -1,0 +1,2 @@
+1737255123696:create --name "ТестПосылка" --form "xxxx\\\\nxxxx\\\\nxxxx" --symbol "0"
+1737255145413:edit --id "ТестПосылка" --name "КУБ22" --form "xxxxx\\\\nxxxxx\\\\nxxxx" --symbol "l"

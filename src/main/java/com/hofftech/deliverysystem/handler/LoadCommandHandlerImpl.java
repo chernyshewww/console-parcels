@@ -1,10 +1,11 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.model.record.LoadCommand;
+import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -25,6 +26,7 @@ public class LoadCommandHandlerImpl implements Command {
     private final StrategyHelper strategyHelper;
     private final CommandParserService commandParserService;
     private final OutputService outputService;
+    private final BillingService billingService;
 
     @Override
     public String execute(String text) {
@@ -41,15 +43,18 @@ public class LoadCommandHandlerImpl implements Command {
             List<Truck> loadedTrucks = strategy.loadParcels(parcels, trucks);
             log.info("Successfully loaded parcels.");
 
-            switch (commandData.outputType()) {
-                case "text":
-                    return outputService.generateLoadOutput(loadedTrucks);
-                case "json-file":
-                    outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks, null);
-                    return "Результат сохранён в файл: " + commandData.outputFileName();
-                default:
-                    return "Ошибка: Неподдерживаемый тип вывода.";
-            }
+            billingService.recordLoadOperation(
+                    commandData.user(),
+                    loadedTrucks.size(),
+                    parcels.size()
+            );
+
+            return switch (commandData.outputType()) {
+                case "text" -> outputService.generateLoadOutput(loadedTrucks);
+                case "json-file" -> outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks);
+                default -> "Ошибка: Неподдерживаемый тип вывода.";
+            };
+
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
             throw e;

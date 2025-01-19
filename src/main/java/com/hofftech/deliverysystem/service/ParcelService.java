@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.model.record.LoadCommand;
+import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.ParcelFileException;
 import com.hofftech.deliverysystem.exception.ParcelFileReadException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -64,7 +64,6 @@ public class ParcelService {
             String line;
             String parcelName = null;
             StringBuilder formString = new StringBuilder();
-            char symbol = '\0';
             boolean isFound = false;
 
             while ((line = reader.readLine()) != null) {
@@ -101,7 +100,7 @@ public class ParcelService {
      * @return A list of parcels.
      * @throws ParcelFileReadException If an error occurs while reading the file.
      */
-    public List<Parcel> loadParcels(LoadCommand commandData) throws ParcelFileReadException {
+    public List<Parcel> loadParcels(LoadCommand commandData) {
         if (commandData.parcelsText() != null) {
             List<String> parcelNames = Arrays.asList(commandData.parcelsText().split("\\\\n"));
             return getParcelsFromFile(parcelNames);
@@ -188,9 +187,7 @@ public class ParcelService {
             boolean isFormSection = false;
             boolean isSymbolSection = false;
 
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-
+            for (String line : lines) {
                 if (line.startsWith(NAME) && line.contains(id)) {
                     isParcelFound = true;
                     updatedContent.append(NAME + " ").append(newName).append("\n");
@@ -249,9 +246,7 @@ public class ParcelService {
             boolean isParcelFound = false;
             boolean isDeleting = false;
 
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i);
-
+            for (String line : lines) {
                 if (line.startsWith(NAME) && line.contains(parcelName)) {
                     isParcelFound = true;
                     isDeleting = true;
@@ -278,7 +273,7 @@ public class ParcelService {
             if (isParcelFound) {
                 return "\"" + parcelName + "\" удалена.";
             } else {
-                return "Посылка с именем \"" + parcelName + "\" не найдена.";
+                return PARCEL_WITH_NAME + parcelName + NOT_FOUND;
             }
 
         } catch (IOException e) {
@@ -459,10 +454,6 @@ public class ParcelService {
         while ((line = reader.readLine()) != null && !line.startsWith(SYMBOL)) {
             formString.append(line).append("\n");
         }
-    }
-
-    private char processSymbol(String line) {
-        return line.length() > 8 ? line.charAt(8) : '\0';
     }
 
     private String buildResponse(boolean isFound, String name, String formContent) {

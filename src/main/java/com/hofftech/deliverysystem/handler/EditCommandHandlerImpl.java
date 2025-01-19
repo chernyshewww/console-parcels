@@ -1,7 +1,7 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.model.record.EditCommand;
+import com.hofftech.deliverysystem.model.record.command.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;

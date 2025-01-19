@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.model.record.DeleteCommand;
+import com.hofftech.deliverysystem.model.record.command.DeleteCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 class DeleteCommandHandlerTest {
@@ -59,11 +60,12 @@ class DeleteCommandHandlerTest {
     void execute_ShouldReturnError_WhenInvalidCommandFormat() {
         String inputText = "/delete";
 
-        when(commandParserService.parseDeleteCommand(inputText)).thenThrow(new InvalidCommandException("Неверный формат команды"));
+        when(commandParserService.parseDeleteCommand(inputText))
+                .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        String result = deleteCommandHandler.execute(inputText);
-
-        assertThat(result).isEqualTo("Неверный формат команды");
+        assertThatThrownBy(() -> deleteCommandHandler.execute(inputText))
+                .isInstanceOf(InvalidCommandException.class)
+                .hasMessage("Неверный формат команды");
     }
 
     @Test

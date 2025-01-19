@@ -1,4 +1,4 @@
-package com.hofftech.deliverysystem.telegram;
+package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.exception.BotProcessingException;
 import com.hofftech.deliverysystem.command.CommandHandler;
@@ -12,12 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-
 @Slf4j
 @RequiredArgsConstructor
-public class DeliveryBot extends TelegramLongPollingBot {
-
-    public static final String HELP_SHORT_TEXT = "/help";
+public class DeliveryBotService extends TelegramLongPollingBot {
 
     private final CommandHandler commandHandler;
     private final String botToken;
@@ -55,7 +52,7 @@ public class DeliveryBot extends TelegramLongPollingBot {
 
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                sendMessage(chatId, String.format("Error while delivering: ", e.getMessage()));
+                sendMessage(chatId, String.format("Error while delivering: %s", e.getMessage()));
             }
         }
     }
