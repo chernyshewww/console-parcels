@@ -40,6 +40,10 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:4.7.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+
+    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
+
 }
 
 spotless {

@@ -60,7 +60,7 @@ class PricingServiceTest {
 
         int result = pricingService.calculateLoadCost(trucksCount, parcelsCount);
 
-        assertThat(result).isEqualTo(0);
+        assertThat(result).isZero();
     }
 
     @Test
@@ -75,7 +75,7 @@ class PricingServiceTest {
 
         int result = pricingService.calculateUnloadCost(trucksCount, parcelsCount);
 
-        assertThat(result).isEqualTo(0);
+        assertThat(result).isZero();
     }
 
     @Test
