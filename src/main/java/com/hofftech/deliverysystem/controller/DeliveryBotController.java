@@ -1,10 +1,11 @@
 package com.hofftech.deliverysystem.controller;
 
+import com.hofftech.deliverysystem.config.TelegramConfig;
 import com.hofftech.deliverysystem.exception.BotProcessingException;
 import com.hofftech.deliverysystem.command.CommandHandler;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,12 +14,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
-@RequiredArgsConstructor
+@Controller
 public class DeliveryBotController extends TelegramLongPollingBot {
 
     private final CommandHandler commandHandler;
-    private final String botToken;
-    private final String botUsername;
+    private final TelegramConfig telegramConfig;
+
+    public DeliveryBotController(TelegramConfig telegramConfig,
+                                 CommandHandler commandHandler) {
+        super(telegramConfig.getToken());
+        this.telegramConfig = telegramConfig;
+        this.commandHandler = commandHandler;
+    }
 
     /**
      * Processes incoming updates (messages) from users. Based on the message text, the bot determines
@@ -55,6 +62,9 @@ public class DeliveryBotController extends TelegramLongPollingBot {
                 sendMessage(chatId, String.format("Error while delivering: %s", e.getMessage()));
             }
         }
+        else {
+            throw new BotProcessingException("Received null or empty text in the message.");
+        }
     }
 
     /**
@@ -64,7 +74,7 @@ public class DeliveryBotController extends TelegramLongPollingBot {
      */
     @Override
     public String getBotUsername() {
-        return botUsername;
+        return telegramConfig.getUsername();
     }
 
     /**
@@ -74,10 +84,10 @@ public class DeliveryBotController extends TelegramLongPollingBot {
      */
     @Override
     public String getBotToken() {
-        return botToken;
+        return telegramConfig.getToken();
     }
 
-    private void sendMessage(long chatId, String text) {
+     void sendMessage(long chatId, String text) {
         SendMessage responseMessage = new SendMessage();
         responseMessage.setChatId(chatId);
         responseMessage.setText(text);
@@ -88,4 +98,4 @@ public class DeliveryBotController extends TelegramLongPollingBot {
             log.error("Ошибка при отправке сообщения: {}", e.getMessage(), e);
         }
     }
-    }
+}

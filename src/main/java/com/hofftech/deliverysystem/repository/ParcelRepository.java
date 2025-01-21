@@ -32,7 +32,7 @@ public class ParcelRepository {
     private static final String NOT_FOUND = "\" не найдена.";
 
     private final FormHelper formHelper;
-    private final List<Parcel> parcelList = new ArrayList<>();
+
     /**
      * Finds a parcel in the file by name and returns its details.
      *
@@ -288,7 +288,6 @@ public class ParcelRepository {
      */
     public void createParcel(String name, char symbol, char[][] form) {
         Parcel parcel = new Parcel(name, symbol, form);
-        parcelList.add(parcel);
         log.info("Создана посылка: {}", parcel.getName());
 
         writeParcelToFile(parcel);

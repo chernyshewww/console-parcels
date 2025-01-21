@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id ("com.diffplug.spotless")      version "6.19.0"
+    id("org.springframework.boot") version "3.1.4"
 }
 
 group = "com.deliverysystem"
@@ -27,6 +28,8 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.4")
+
     testCompileOnly("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
@@ -36,6 +39,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.7.0")
     testImplementation("org.mockito:mockito-junit-jupiter:4.7.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+
 }
 
 spotless {
