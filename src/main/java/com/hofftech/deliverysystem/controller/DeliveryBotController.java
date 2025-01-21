@@ -1,4 +1,4 @@
-package com.hofftech.deliverysystem.service;
+package com.hofftech.deliverysystem.controller;
 
 import com.hofftech.deliverysystem.exception.BotProcessingException;
 import com.hofftech.deliverysystem.command.CommandHandler;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class DeliveryBotService extends TelegramLongPollingBot {
+public class DeliveryBotController extends TelegramLongPollingBot {
 
     private final CommandHandler commandHandler;
     private final String botToken;

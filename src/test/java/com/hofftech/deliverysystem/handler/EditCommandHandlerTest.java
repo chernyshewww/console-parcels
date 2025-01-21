@@ -2,8 +2,8 @@ package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.model.record.command.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
+import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
-import com.hofftech.deliverysystem.service.ParcelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 class EditCommandHandlerTest {
 
     @Mock
-    private ParcelService parcelService;
+    private ParcelRepository parcelRepository;
 
     @Mock
     private CommandParserService commandParserService;
@@ -26,7 +26,7 @@ class EditCommandHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        editCommandHandler = new EditCommandHandlerImpl(parcelService, commandParserService);
+        editCommandHandler = new EditCommandHandlerImpl(parcelRepository, commandParserService);
     }
 
     @Test
@@ -35,7 +35,7 @@ class EditCommandHandlerTest {
         EditCommand commandData = new EditCommand("OldParcel", "NewParcel", "xx\nxx", '2');
 
         when(commandParserService.parseEditCommand(inputText)).thenReturn(commandData);
-        when(parcelService.editParcelInFile(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
+        when(parcelRepository.editParcelInFile(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
                 .thenReturn("Посылка успешно отредактирована");
 
         String result = editCommandHandler.execute(inputText);
@@ -62,7 +62,7 @@ class EditCommandHandlerTest {
         EditCommand commandData = new EditCommand("OldParcel", "NewParcel", "xx\nxx", '2');
 
         when(commandParserService.parseEditCommand(inputText)).thenReturn(commandData);
-        when(parcelService.editParcelInFile(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
+        when(parcelRepository.editParcelInFile(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
                 .thenThrow(new IllegalArgumentException("Ошибка при редактировании посылки"));
 
         String result = editCommandHandler.execute(inputText);

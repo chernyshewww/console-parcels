@@ -2,8 +2,8 @@ package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.model.record.command.DeleteCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
+import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
-import com.hofftech.deliverysystem.service.ParcelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 class DeleteCommandHandlerTest {
 
     @Mock
-    private ParcelService parcelService;
+    private ParcelRepository parcelRepository;
     @Mock
     private CommandParserService commandParserService;
 
@@ -25,7 +25,7 @@ class DeleteCommandHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        deleteCommandHandler = new DeleteCommandHandlerImpl(parcelService, commandParserService);
+        deleteCommandHandler = new DeleteCommandHandlerImpl(parcelRepository, commandParserService);
     }
 
     @Test
@@ -35,7 +35,7 @@ class DeleteCommandHandlerTest {
 
         when(commandParserService.parseDeleteCommand(inputText)).thenReturn(commandData);
 
-        when(parcelService.deleteParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel123 удалена успешно");
+        when(parcelRepository.deleteParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel123 удалена успешно");
 
         String result = deleteCommandHandler.execute(inputText);
 
@@ -49,7 +49,7 @@ class DeleteCommandHandlerTest {
 
         when(commandParserService.parseDeleteCommand(inputText)).thenReturn(commandData);
 
-        when(parcelService.deleteParcelInFile(commandData.parcelName())).thenReturn("Посылка ParcelXYZ не найдена");
+        when(parcelRepository.deleteParcelInFile(commandData.parcelName())).thenReturn("Посылка ParcelXYZ не найдена");
 
         String result = deleteCommandHandler.execute(inputText);
 
@@ -75,7 +75,7 @@ class DeleteCommandHandlerTest {
 
         when(commandParserService.parseDeleteCommand(inputText)).thenReturn(commandData);
 
-        when(parcelService.deleteParcelInFile(commandData.parcelName())).thenThrow(new IllegalArgumentException("Ошибка при удалении посылки"));
+        when(parcelRepository.deleteParcelInFile(commandData.parcelName())).thenThrow(new IllegalArgumentException("Ошибка при удалении посылки"));
 
         String result = deleteCommandHandler.execute(inputText);
 

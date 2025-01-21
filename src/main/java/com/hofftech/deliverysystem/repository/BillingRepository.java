@@ -2,7 +2,7 @@ package com.hofftech.deliverysystem.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.hofftech.deliverysystem.exception.BillingException;
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +22,20 @@ public class BillingRepository {
     private final ObjectMapper objectMapper;
     private final List<BillingRecord> billings;
 
-    public BillingRepository() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.findAndRegisterModules();
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
+    public BillingRepository(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
         this.billings = loadBillingsFromFile();
     }
 
     public void save(BillingRecord billing) {
-        billings.add(billing);
-        saveRecordsToFile();
-        log.info("Billing record saved: {}", billing);
+        try {
+            billings.add(billing);
+            saveRecordsToFile();
+            log.info("Billing record saved: {}", billing);
+        }
+        catch (BillingException e){
+            log.error("Error saving billing records to file: {}", e.getMessage(), e);
+        }
     }
 
     public List<BillingSummary> findSummaryByUserAndPeriod(String user, LocalDate from, LocalDate to) {
@@ -71,11 +73,11 @@ public class BillingRepository {
         }
     }
 
-    private void saveRecordsToFile() {
+    private void saveRecordsToFile() throws BillingException {
         try {
             objectMapper.writeValue(new File(FILE_PATH), billings);
         } catch (IOException e) {
-            log.error("Error saving billing records to file: {}", e.getMessage(), e);
+            throw new BillingException("Failed to save billing records to file.", e);
         }
     }
 }

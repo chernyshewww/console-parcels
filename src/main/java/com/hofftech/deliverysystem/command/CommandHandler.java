@@ -14,15 +14,15 @@ public class CommandHandler {
     private final CommandFactory commandFactory;
 
     public String handleCommand(String text) {
-        String command = text.split(" ")[0];
-        Command commandHandler;
+        String commandText = text.split(" ")[0];
+        Command command;
 
         try {
-            commandHandler = commandFactory.getCommandHandler(command);
+            command = commandFactory.getCommand(commandText);
         } catch (InvalidCommandException e) {
             return e.getMessage();
         }
 
-        return commandHandler.execute(text);
+        return command.execute(text);
     }
 }

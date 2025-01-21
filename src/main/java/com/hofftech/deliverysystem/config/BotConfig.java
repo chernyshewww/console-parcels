@@ -1,9 +1,8 @@
-package com.hofftech.deliverysystem.controller;
+package com.hofftech.deliverysystem.config;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
-import com.hofftech.deliverysystem.config.TelegramConfig;
 import com.hofftech.deliverysystem.exception.BotInitializationException;
-import com.hofftech.deliverysystem.service.DeliveryBotService;
+import com.hofftech.deliverysystem.controller.DeliveryBotController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +18,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @RequiredArgsConstructor
 @Slf4j
 @Configuration
-public class BotController {
+public class BotConfig {
 
     private final CommandHandler commandHandler;
     private final TelegramConfig telegramConfig;
@@ -30,7 +29,7 @@ public class BotController {
      * @return the registered DeliveryBot instance.
      */
     @Bean
-    public DeliveryBotService deliveryBot() {
+    public DeliveryBotController deliveryBot() {
         String botToken = telegramConfig.getToken();
         String botUsername = telegramConfig.getUsername();
 
@@ -45,7 +44,7 @@ public class BotController {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
 
-            DeliveryBotService deliveryBot = new DeliveryBotService(
+            DeliveryBotController deliveryBot = new DeliveryBotController(
                     commandHandler,
                     botToken,
                     botUsername

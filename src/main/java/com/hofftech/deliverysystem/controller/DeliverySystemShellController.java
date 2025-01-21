@@ -1,6 +1,7 @@
 package com.hofftech.deliverysystem.controller;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.service.LoadCommandService;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -8,10 +9,11 @@ import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
 @AllArgsConstructor
-public class DeliverySystemShell {
+public class DeliverySystemShellController {
 
     private static final String USER_SHORT_COMMAND = " -u \"";
     private final CommandHandler commandHandler;
+    private final LoadCommandService loadCommandService;
 
     @ShellMethod(key = "create", value = "Create a new parcel. Usage: create <name> <symbol> <form>")
     public String create(
@@ -56,31 +58,8 @@ public class DeliverySystemShell {
             @ShellOption(help = "Inline text description of parcels (e.g., 'Куб\\nПосылка тип 2')", defaultValue = ShellOption.NULL) String parcels,
             @ShellOption(help = "Output filename for saving results (e.g., 'trucks.json')", defaultValue = ShellOption.NULL) String output) {
 
-        StringBuilder commandBuilder = new StringBuilder("/load");
-
-        commandBuilder.append(USER_SHORT_COMMAND).append(user).append("\"");
-
-        if (parcels != null) {
-            commandBuilder.append(" -parcels-text \"").append(parcels.replace("\n", "\\n")).append("\"");
-        }
-
-        if (file != null) {
-            commandBuilder.append(" -parcels-file \"").append(file).append("\"");
-        }
-
-        if (trucks != null) {
-            commandBuilder.append(" -trucks \"").append(trucks.replace("\n", "\\n")).append("\"");
-        }
-
-        commandBuilder.append(" -type \"").append(type).append("\"");
-
-        commandBuilder.append(" -out ").append(out);
-
-        if (output != null) {
-            commandBuilder.append(" -out-filename \"").append(output).append("\"");
-        }
-
-        return commandHandler.handleCommand(commandBuilder.toString());
+        String command = loadCommandService.buildLoadCommand(user, file, trucks, type, out, parcels, output);
+        return commandHandler.handleCommand(command);
     }
 
     @ShellMethod(key = "unload", value = "Unload parcels from trucks.")

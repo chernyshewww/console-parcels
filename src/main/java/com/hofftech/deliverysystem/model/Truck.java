@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hofftech.deliverysystem.constants.Constant;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.hofftech.deliverysystem.constants.Constant.EMPTY_CELL;
 
 @Getter
 @Setter
@@ -34,7 +34,7 @@ public class Truck {
 
     private void fillGridWithEmptyCells() {
         for (char[] row : grid) {
-            Arrays.fill(row, EMPTY_CELL);
+            Arrays.fill(row, (char) Constant.EMPTY_CELL.getValue());
         }
     }
 

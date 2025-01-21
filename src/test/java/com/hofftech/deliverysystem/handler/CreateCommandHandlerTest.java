@@ -1,9 +1,9 @@
 package com.hofftech.deliverysystem.handler;
 import com.hofftech.deliverysystem.model.record.command.CreateCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
+import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
-import com.hofftech.deliverysystem.service.ParcelService;
 import com.hofftech.deliverysystem.util.FormHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 class CreateCommandHandlerTest {
 
     @Mock
-    private ParcelService parcelService;
+    private ParcelRepository parcelRepository;
     @Mock
     private CommandParserService commandParserService;
     @Mock
@@ -30,7 +30,7 @@ class CreateCommandHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        createCommandHandler = new CreateCommandHandlerImpl(parcelService, commandParserService, formHelper, outputService);
+        createCommandHandler = new CreateCommandHandlerImpl(parcelRepository, commandParserService, formHelper, outputService);
     }
 
     @Test

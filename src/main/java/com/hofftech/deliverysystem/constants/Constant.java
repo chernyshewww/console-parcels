@@ -1,11 +1,8 @@
 package com.hofftech.deliverysystem.constants;
 
-public final class Constant {
-
-    private Constant() {}
-
-    public static final char EMPTY_CELL = ' ';
-    public static final String HELP_TEXT = """
+public enum Constant {
+    EMPTY_CELL(' '),
+    HELP_TEXT("""
             Привет! Я бот для работы с посылками. Вот список доступных команд:
             
             /start - Приветственное сообщение и информация о боте.
@@ -53,5 +50,15 @@ public final class Constant {
             
             Примечание: Все команды следует вводить в точности, как указано, с учётом пробелов и кавычек.
             
-        """;
+        """);
+
+    private final Object value;
+
+    Constant(Object value) {
+        this.value = value;
+    }
+
+    public Object getValue() {
+        return value;
+    }
 }

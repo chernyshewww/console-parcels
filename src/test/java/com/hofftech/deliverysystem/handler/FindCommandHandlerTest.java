@@ -2,8 +2,8 @@ package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.model.record.command.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
+import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
-import com.hofftech.deliverysystem.service.ParcelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 class FindCommandHandlerTest {
 
     @Mock
-    private ParcelService parcelService;
+    private ParcelRepository parcelRepository;
 
     @Mock
     private CommandParserService commandParserService;
@@ -26,7 +26,7 @@ class FindCommandHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        findCommandHandler = new FindCommandHandlerImpl(parcelService, commandParserService);
+        findCommandHandler = new FindCommandHandlerImpl(parcelRepository, commandParserService);
     }
 
     @Test
@@ -35,7 +35,7 @@ class FindCommandHandlerTest {
         FindCommand commandData = new FindCommand("Parcel1");
 
         when(commandParserService.parseFindCommand(inputText)).thenReturn(commandData);
-        when(parcelService.findParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel1 найдена");
+        when(parcelRepository.findParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel1 найдена");
 
         String result = findCommandHandler.execute(inputText);
 
@@ -60,7 +60,7 @@ class FindCommandHandlerTest {
         FindCommand commandData = new FindCommand("Parcel1");
 
         when(commandParserService.parseFindCommand(inputText)).thenReturn(commandData);
-        when(parcelService.findParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel1 не найдена");
+        when(parcelRepository.findParcelInFile(commandData.parcelName())).thenReturn("Посылка Parcel1 не найдена");
 
         String result = findCommandHandler.execute(inputText);
 

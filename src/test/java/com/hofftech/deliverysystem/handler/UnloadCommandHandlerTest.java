@@ -3,12 +3,12 @@ package com.hofftech.deliverysystem.handler;
 import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.repository.TruckRepository;
 import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
-import com.hofftech.deliverysystem.service.TruckService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,7 +27,7 @@ class UnloadCommandHandlerTest {
     private ParcelService parcelService;
 
     @Mock
-    private TruckService truckService;
+    private TruckRepository truckRepository;
 
     @Mock
     private CommandParserService commandParserService;
@@ -46,7 +46,7 @@ class UnloadCommandHandlerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        unloadCommandHandler = new UnloadCommandHandlerImpl(parcelService, truckService, commandParserService, outputService, fileService, billingService);
+        unloadCommandHandler = new UnloadCommandHandlerImpl(parcelService, truckRepository, commandParserService, outputService, fileService, billingService);
     }
 
     @Test
@@ -66,7 +66,7 @@ class UnloadCommandHandlerTest {
         UnloadCommand commandData = mock(UnloadCommand.class);
 
         when(commandParserService.parseUnloadCommand(inputText)).thenReturn(commandData);
-        when(truckService.loadTrucksFromFile(commandData.inputFileName())).thenThrow(new RuntimeException("Файл не найден"));
+        when(truckRepository.loadTrucksFromFile(commandData.inputFileName())).thenThrow(new RuntimeException("Файл не найден"));
 
         String result = unloadCommandHandler.execute(inputText);
 
@@ -80,7 +80,7 @@ class UnloadCommandHandlerTest {
         List<Truck> trucks = new ArrayList<>();
 
         when(commandParserService.parseUnloadCommand(inputText)).thenReturn(commandData);
-        when(truckService.loadTrucksFromFile(commandData.inputFileName())).thenReturn(trucks);
+        when(truckRepository.loadTrucksFromFile(commandData.inputFileName())).thenReturn(trucks);
         when(parcelService.unloadParcelsFromTrucks(trucks)).thenThrow(new RuntimeException("Ошибка при выгрузке"));
 
         String result = unloadCommandHandler.execute(inputText);
