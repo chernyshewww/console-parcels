@@ -1,8 +1,9 @@
-package com.hofftech.deliverysystem.repository;
+package com.hofftech.deliverysystem.repository.impl;
 
 import com.hofftech.deliverysystem.exception.ParcelFileException;
 import com.hofftech.deliverysystem.exception.ParcelFileReadException;
 import com.hofftech.deliverysystem.model.Parcel;
+import com.hofftech.deliverysystem.repository.ParcelRepositoryInterface;
 import com.hofftech.deliverysystem.util.FormHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class ParcelRepository {
+public class ParcelRepositoryImpl implements ParcelRepositoryInterface {
 
     private static final String FILE_PATH = "parcels.csv";
     private static final String NAME = "Name:";
@@ -33,13 +34,8 @@ public class ParcelRepository {
 
     private final FormHelper formHelper;
 
-    /**
-     * Finds a parcel in the file by name and returns its details.
-     *
-     * @param name The name of the parcel to find.
-     * @return A string representing the parcel details or an error message if not found.
-     */
-    public String findParcelInFile(String name) {
+    @Override
+    public String findByName(String name) {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             String parcelName = null;
@@ -72,13 +68,8 @@ public class ParcelRepository {
         }
     }
 
-    /**
-     * Finds a parcel in the file by its name and returns the parcel object if found.
-     *
-     * @param name The name of the parcel to find.
-     * @return The found Parcel object or null if not found.
-     */
-    public Parcel findParcelInFileByName(String name) {
+    @Override
+    public Parcel findByNameAsObject(String name) {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             String currentName = null;
@@ -115,16 +106,8 @@ public class ParcelRepository {
         return null;
     }
 
-    /**
-     * Edits the details of a parcel in the file (name, form, symbol) based on the given ID.
-     *
-     * @param id The ID (name) of the parcel to edit.
-     * @param newName The new name for the parcel.
-     * @param newForm The new form of the parcel.
-     * @param newSymbol The new symbol for the parcel.
-     * @return A string indicating the result of the update (success or error).
-     */
-    public String editParcelInFile(String id, String newName, String newForm, char newSymbol) {
+    @Override
+    public String update(String id, String newName, String newForm, char newSymbol) {
         try {
 
             Path path = Paths.get(FILE_PATH);
@@ -179,13 +162,8 @@ public class ParcelRepository {
         }
     }
 
-    /**
-     * Deletes a parcel from the file based on the parcel's name.
-     *
-     * @param parcelName The name of the parcel to delete.
-     * @return A string indicating whether the parcel was deleted successfully or not found.
-     */
-    public String deleteParcelInFile(String parcelName) {
+    @Override
+    public String deleteByName(String parcelName) throws ParcelFileException {
         try {
             Path path = Paths.get(FILE_PATH);
             List<String> lines = Files.readAllLines(path);
@@ -229,15 +207,8 @@ public class ParcelRepository {
         }
     }
 
-    /**
-     * Reads parcels from a CSV file and returns them as a list of Parcel objects.
-     * Each parcel is created with a name, form (as a matrix), and a symbol.
-     *
-     * @param fileName The name of the CSV file to read the parcels from.
-     * @return A list of parcels loaded from the CSV file.
-     * @throws ParcelFileReadException If an error occurs while reading the file.
-     */
-    public List<Parcel> getParcelsFromCsv(String fileName) throws ParcelFileReadException {
+    @Override
+    public List<Parcel> findAllFromCsv(String fileName) throws ParcelFileReadException {
         List<Parcel> parcels = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -278,15 +249,8 @@ public class ParcelRepository {
         return parcels;
     }
 
-    /**
-     * Creates a new parcel and adds it to the list of parcels.
-     * Writes the parcel information to a file.
-     *
-     * @param name The name of the parcel.
-     * @param symbol The symbol representing the parcel.
-     * @param form The form of the parcel represented as a 2D array.
-     */
-    public void createParcel(String name, char symbol, char[][] form) {
+    @Override
+    public void create(String name, char symbol, char[][] form) {
         Parcel parcel = new Parcel(name, symbol, form);
         log.info("Создана посылка: {}", parcel.getName());
 
@@ -356,5 +320,4 @@ public class ParcelRepository {
         }
         return matrix;
     }
-
 }

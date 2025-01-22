@@ -1,22 +1,21 @@
 package com.hofftech.deliverysystem.service;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class LoadCommandServiceTest {
 
+    @InjectMocks
     private LoadCommandService loadCommandService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        loadCommandService = new LoadCommandService();
-    }
-
     @Test
+    @DisplayName("Должен построить команду с полными параметрами")
     void buildLoadCommand_ShouldBuildCommandWithAllParameters() {
         String user = "TestUser";
         String file = "parcels.csv";
@@ -34,6 +33,7 @@ class LoadCommandServiceTest {
     }
 
     @Test
+    @DisplayName("Должен построить команду без параметра parcelsText")
     void buildLoadCommand_ShouldBuildCommandWithoutParcelsText() {
         String user = "TestUser";
         String file = "parcels.csv";
@@ -51,6 +51,7 @@ class LoadCommandServiceTest {
     }
 
     @Test
+    @DisplayName("Должен построить команду без параметра parcelsFile")
     void buildLoadCommand_ShouldBuildCommandWithoutParcelsFile() {
         String user = "TestUser";
         String file = null;
@@ -68,6 +69,7 @@ class LoadCommandServiceTest {
     }
 
     @Test
+    @DisplayName("Должен построить команду без параметра outputFilename")
     void buildLoadCommand_ShouldBuildCommandWithoutOutputFilename() {
         String user = "TestUser";
         String file = "parcels.csv";
@@ -85,6 +87,7 @@ class LoadCommandServiceTest {
     }
 
     @Test
+    @DisplayName("Должен построить минимальную команду")
     void buildLoadCommand_ShouldBuildMinimalCommand() {
         String user = "MinimalUser";
         String file = null;

@@ -4,6 +4,7 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.util.OutputHelper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OutputServiceTest {
+class OutputServiceTest {
 
     @Mock
     private TruckService truckService;
@@ -39,6 +40,7 @@ public class OutputServiceTest {
     }
 
     @Test
+    @DisplayName("Должен генерировать вывод для посылок")
     void testGenerateParcelOutput() {
         Parcel parcel1 = new Parcel("Parcel1", 'P', new char[][]{{'P', 'P'}, {'P', 'P'}});
         Parcel parcel2 = new Parcel("Parcel2", 'Q', new char[][]{{'Q', 'Q'}, {'Q', 'Q'}});
@@ -50,6 +52,7 @@ public class OutputServiceTest {
     }
 
     @Test
+    @DisplayName("Должен генерировать вывод для загрузки")
     void testGenerateLoadOutput() {
         Truck truck = new Truck(5, 5);
         Parcel parcel = new Parcel("Parcel1", 'P', new char[][]{{'P', 'P'}, {'P', 'P'}});
@@ -65,6 +68,7 @@ public class OutputServiceTest {
     }
 
     @Test
+    @DisplayName("Должен генерировать вывод для количества посылок")
     void testGenerateParcelCountOutput() {
         Parcel parcel1 = new Parcel("Parcel1", 'P', new char[][]{{'P', 'P'}, {'P', 'P'}});
         Parcel parcel2 = new Parcel("Parcel1", 'P', new char[][]{{'P', 'P'}, {'P', 'P'}});
@@ -78,6 +82,7 @@ public class OutputServiceTest {
     }
 
     @Test
+    @DisplayName("Должен форматировать ответ для создания посылки")
     void testFormatCreateResponse() {
         String name = "TestParcel";
         char[][] form = {{'T', 'T'}, {'T', 'T'}};

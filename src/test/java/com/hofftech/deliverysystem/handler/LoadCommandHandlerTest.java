@@ -1,4 +1,5 @@
 package com.hofftech.deliverysystem.handler;
+
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -10,10 +11,12 @@ import com.hofftech.deliverysystem.service.ParcelService;
 import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.strategy.LoadingStrategy;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class LoadCommandHandlerTest {
 
     @Mock
@@ -43,16 +47,11 @@ class LoadCommandHandlerTest {
     @Mock
     private BillingService billingService;
 
+    @InjectMocks
     private LoadCommandHandlerImpl loadCommandHandler;
 
-    @BeforeEach
-    void setUp() {
-
-        MockitoAnnotations.openMocks(this);
-        loadCommandHandler = new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService, billingService);
-    }
-
     @Test
+    @DisplayName("Должен вернуть ошибку, если указана неизвестная стратегия")
     void execute_ShouldReturnError_WhenUnknownStrategy() {
         String inputText = "/load -parcels-file \"parcels.csv\" -trucks \"3x3\\n10x10\" -type \"Равномерное распределение\" -out text";
         LoadCommand commandData = mock(LoadCommand.class);
@@ -66,6 +65,7 @@ class LoadCommandHandlerTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение InvalidCommandException, если формат команды неверный")
     void execute_ShouldThrowInvalidCommandException_WhenInvalidCommandFormat() {
         String inputText = "/load";
 
@@ -78,6 +78,7 @@ class LoadCommandHandlerTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть ошибку, если загрузка не удалась")
     void execute_ShouldReturnError_WhenLoadingFails() {
         String inputText = "/load -parcels-file \"parcels.csv\" -trucks \"3x3\\n10x10\" -type \"Равномерное распределение\" -out text";
         LoadCommand commandData = mock(LoadCommand.class);

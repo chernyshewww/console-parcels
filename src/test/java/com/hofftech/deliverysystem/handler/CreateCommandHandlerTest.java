@@ -1,23 +1,27 @@
 package com.hofftech.deliverysystem.handler;
+
 import com.hofftech.deliverysystem.model.record.command.CreateCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.repository.ParcelRepository;
+import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.util.FormHelper;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CreateCommandHandlerTest {
 
     @Mock
-    private ParcelRepository parcelRepository;
+    private ParcelRepositoryImpl parcelRepository;
     @Mock
     private CommandParserService commandParserService;
     @Mock
@@ -25,15 +29,11 @@ class CreateCommandHandlerTest {
     @Mock
     private OutputService outputService;
 
+    @InjectMocks
     private CreateCommandHandlerImpl createCommandHandler;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        createCommandHandler = new CreateCommandHandlerImpl(parcelRepository, commandParserService, formHelper, outputService);
-    }
-
     @Test
+    @DisplayName("Должен вернуть успешный ответ при корректной команде")
     void execute_ShouldReturnSuccessResponse_WhenCommandIsValid() {
         String inputText = "/create -name \"Посылка Тип 0\" -form \"xxx\\nxxx\\nxxx\" -symbol \"0\"";
         CreateCommand commandData = new CreateCommand("Посылка Тип 0", "xxx\\nxxx\\nxxx", '0');
@@ -49,6 +49,7 @@ class CreateCommandHandlerTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть ошибку при некорректном формате команды")
     void execute_ShouldReturnError_WhenInvalidCommandFormat() {
         String inputText = "/create";
 

@@ -5,7 +5,7 @@ import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
-import com.hofftech.deliverysystem.repository.TruckRepository;
+import com.hofftech.deliverysystem.repository.impl.TruckRepositoryImpl;
 import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;
@@ -21,7 +21,7 @@ import java.util.List;
 public class UnloadCommandHandlerImpl implements Command {
 
     private final ParcelService parcelService;
-    private final TruckRepository truckRepository;
+    private final TruckRepositoryImpl truckRepository;
     private final CommandParserService commandParserService;
     private final OutputService outputService;
     private final FileService fileService;
@@ -32,7 +32,7 @@ public class UnloadCommandHandlerImpl implements Command {
         try {
             UnloadCommand commandData = commandParserService.parseUnloadCommand(text);
 
-            List<Truck> trucks = truckRepository.loadTrucksFromFile(commandData.inputFileName());
+            List<Truck> trucks = truckRepository.loadFromFile(commandData.inputFileName());
 
             List<Parcel> parcels = parcelService.unloadParcelsFromTrucks(trucks);
 

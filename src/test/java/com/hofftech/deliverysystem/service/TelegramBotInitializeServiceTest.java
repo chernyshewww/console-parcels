@@ -3,7 +3,9 @@ package com.hofftech.deliverysystem.service;
 import com.hofftech.deliverysystem.controller.DeliveryBotController;
 import com.hofftech.deliverysystem.exception.RegisterBotException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -21,6 +23,7 @@ class TelegramBotInitializeServiceTest {
     @Mock
     private ContextRefreshedEvent contextRefreshedEvent;
 
+    @InjectMocks
     private TelegramBotInitializeService telegramBotInitializeService;
 
     @BeforeEach
@@ -30,6 +33,7 @@ class TelegramBotInitializeServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при ошибке регистрации бота")
     void initialize_ShouldThrowRegisterBotException_OnTelegramApiException() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = mock(TelegramBotsApi.class);
         doThrow(new TelegramApiException("Test Exception")).when(telegramBotsApi).registerBot(bot);

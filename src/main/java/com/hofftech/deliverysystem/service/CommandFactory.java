@@ -10,8 +10,8 @@ import com.hofftech.deliverysystem.handler.FindCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.HelpCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.LoadCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.UnloadCommandHandlerImpl;
-import com.hofftech.deliverysystem.repository.ParcelRepository;
-import com.hofftech.deliverysystem.repository.TruckRepository;
+import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
+import com.hofftech.deliverysystem.repository.impl.TruckRepositoryImpl;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import com.hofftech.deliverysystem.util.FormHelper;
 import jakarta.annotation.PostConstruct;
@@ -29,9 +29,9 @@ import java.util.function.Supplier;
 public class CommandFactory {
 
     private final ParcelService parcelService;
-    private final ParcelRepository parcelRepository;
+    private final ParcelRepositoryImpl parcelRepository;
     private final TruckService truckService;
-    private final TruckRepository truckRepository;
+    private final TruckRepositoryImpl truckRepository;
     private final StrategyHelper strategyHelper;
     private final CommandParserService commandParserService;
     private final FileService fileService;

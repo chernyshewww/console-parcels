@@ -2,14 +2,19 @@ package com.hofftech.deliverysystem.command;
 
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.service.CommandFactory;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CommandHandlerTest {
 
     @Mock
@@ -18,15 +23,11 @@ class CommandHandlerTest {
     @Mock
     private Command command;
 
+    @InjectMocks
     private CommandHandler commandHandler;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        commandHandler = new CommandHandler(commandFactory);
-    }
-
     @Test
+    @DisplayName("Должен вернуть результат выполнения команды, когда команда валидна")
     void shouldReturnCommandExecutionResult_whenCommandIsValid() {
         String commandText = "test";
         String inputText = "test argument";
@@ -43,6 +44,7 @@ class CommandHandlerTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть сообщение об ошибке, когда команда невалидна")
     void shouldReturnErrorMessage_whenCommandIsInvalid() {
         String commandText = "invalid";
         String inputText = "invalid argument";
@@ -57,4 +59,3 @@ class CommandHandlerTest {
         verifyNoInteractions(command);
     }
 }
-

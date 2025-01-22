@@ -2,7 +2,7 @@ package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
-import com.hofftech.deliverysystem.repository.BillingRepository;
+import com.hofftech.deliverysystem.repository.impl.BillingRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class BillingService {
     private static final String LOAD = "Погрузка";
     private static final String UNLOAD = "Разгрузка";
 
-    private final BillingRepository billingRepository;
+    private final BillingRepositoryImpl billingRepository;
     private final PricingService pricingService;
 
     /**

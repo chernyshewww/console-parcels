@@ -2,31 +2,36 @@ package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
-import com.hofftech.deliverysystem.repository.BillingRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.hofftech.deliverysystem.repository.impl.BillingRepositoryImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class BillingServiceTest {
 
-    private BillingRepository billingRepository;
+    @Mock
+    private BillingRepositoryImpl billingRepository;
+
+    @Mock
     private PricingService pricingService;
+
+    @InjectMocks
     private BillingService billingService;
 
-    @BeforeEach
-    void setUp() {
-        billingRepository = mock(BillingRepository.class);
-        pricingService = mock(PricingService.class);
-        billingService = new BillingService(billingRepository, pricingService);
-    }
-
     @Test
+    @DisplayName("Должен сохранить запись о операции погрузки при вызове метода")
     void recordLoadOperation_ShouldSaveBillingRecord_WhenCalled() {
         String user = "test@example.com";
         int trucksCount = 2;
@@ -41,15 +46,13 @@ class BillingServiceTest {
         verify(billingRepository).save(captor.capture());
 
         BillingRecord savedRecord = captor.getValue();
-        assertThat(savedRecord.getUser()).isEqualTo(user);
-        assertThat(savedRecord.getOperationType()).isEqualTo("Погрузка");
-        assertThat(savedRecord.getSegments()).isEqualTo(trucksCount);
-        assertThat(savedRecord.getParcels()).isEqualTo(parcelsCount);
-        assertThat(savedRecord.getCost()).isEqualTo(expectedCost);
-        assertThat(savedRecord.getTimestamp()).isNotNull();
+        assertThat(savedRecord)
+                .extracting("user", "operationType", "segments", "parcels", "cost", "timestamp")
+                .containsExactly(user, "Погрузка", trucksCount, parcelsCount, expectedCost, savedRecord.getTimestamp());
     }
 
     @Test
+    @DisplayName("Должен сохранить запись о операции разгрузки при вызове метода")
     void recordUnloadOperation_ShouldSaveBillingRecord_WhenCalled() {
         String user = "test@example.com";
         int trucksCount = 3;
@@ -64,15 +67,13 @@ class BillingServiceTest {
         verify(billingRepository).save(captor.capture());
 
         BillingRecord savedRecord = captor.getValue();
-        assertThat(savedRecord.getUser()).isEqualTo(user);
-        assertThat(savedRecord.getOperationType()).isEqualTo("Разгрузка");
-        assertThat(savedRecord.getSegments()).isEqualTo(trucksCount);
-        assertThat(savedRecord.getParcels()).isEqualTo(parcelsCount);
-        assertThat(savedRecord.getCost()).isEqualTo(expectedCost);
-        assertThat(savedRecord.getTimestamp()).isNotNull();
+        assertThat(savedRecord)
+                .extracting("user", "operationType", "segments", "parcels", "cost", "timestamp")
+                .containsExactly(user, "Разгрузка", trucksCount, parcelsCount, expectedCost, savedRecord.getTimestamp());
     }
 
     @Test
+    @DisplayName("Должен вернуть сводки по операциям, если они есть")
     void getBillingSummaries_ShouldReturnBillingSummaries_WhenCalled() {
         String user = "test@example.com";
         LocalDate fromDate = LocalDate.of(2023, 1, 1);

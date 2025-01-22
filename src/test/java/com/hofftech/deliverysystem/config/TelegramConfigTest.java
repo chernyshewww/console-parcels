@@ -1,5 +1,6 @@
 package com.hofftech.deliverysystem.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -7,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TelegramConfigTest {
 
     @Test
+    @DisplayName("Метод setToken и getToken должны работать корректно")
     void testSetAndGetToken() {
         TelegramConfig telegramConfig = new TelegramConfig();
 
@@ -16,6 +18,7 @@ class TelegramConfigTest {
     }
 
     @Test
+    @DisplayName("Метод setUsername и getUsername должны работать корректно")
     void testSetAndGetUsername() {
         TelegramConfig telegramConfig = new TelegramConfig();
 
@@ -25,6 +28,7 @@ class TelegramConfigTest {
     }
 
     @Test
+    @DisplayName("Проверка значений по умолчанию")
     void testDefaultValues() {
         TelegramConfig telegramConfig = new TelegramConfig();
 

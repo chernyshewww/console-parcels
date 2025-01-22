@@ -4,7 +4,7 @@ import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.ParcelFileReadException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
-import com.hofftech.deliverysystem.repository.ParcelRepository;
+import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParcelService {
 
-    private final ParcelRepository parcelRepository;
+    private final ParcelRepositoryImpl parcelRepository;
 
     /**
      * Loads parcels from the file based on the provided command data.
@@ -33,7 +33,7 @@ public class ParcelService {
             List<String> parcelNames = Arrays.asList(commandData.parcelsText().split("\\\\n"));
             return getParcelsFromFile(parcelNames);
         } else {
-            return parcelRepository.getParcelsFromCsv(commandData.parcelsFileName());
+            return parcelRepository.findAllFromCsv(commandData.parcelsFileName());
         }
     }
 
@@ -61,7 +61,7 @@ public class ParcelService {
     public List<Parcel> getParcelsFromFile(List<String> parcelNames) {
         List<Parcel> parcels = new ArrayList<>();
         for (String name : parcelNames) {
-            Parcel parcel = parcelRepository.findParcelInFileByName(name);
+            Parcel parcel = parcelRepository.findByNameAsObject(name);
             if (parcel != null) {
                 parcels.add(parcel);
             }

@@ -1,27 +1,32 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.model.record.command.*;
-import org.junit.jupiter.api.BeforeEach;
+import com.hofftech.deliverysystem.model.record.command.BillingCommand;
+import com.hofftech.deliverysystem.model.record.command.CreateCommand;
+import com.hofftech.deliverysystem.model.record.command.DeleteCommand;
+import com.hofftech.deliverysystem.model.record.command.EditCommand;
+import com.hofftech.deliverysystem.model.record.command.FindCommand;
+import com.hofftech.deliverysystem.model.record.command.LoadCommand;
+import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@ExtendWith(MockitoExtension.class)
 class CommandParserServiceTest {
 
+    @InjectMocks
     private CommandParserService commandParserService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        commandParserService = new CommandParserService();
-    }
-
     @Test
+    @DisplayName("Должен вернуть команду погрузки при правильном формате команды")
     void parseLoadCommand_ShouldReturnLoadCommand_WhenCommandIsValid() {
         String inputText = "/load -u \"UserTest\" -parcels-text \"Посылка Тип 1\\nКУБ\" -trucks \"3x3\n6x2\" -type \"Одна машина - Одна посылка\" -out text";
 
@@ -34,6 +39,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде погрузки")
     void parseLoadCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/load -u \"UserTest\" -invalid-command";
 
@@ -43,6 +49,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду создания при правильном формате команды")
     void parseCreateCommand_ShouldReturnCreateCommand_WhenCommandIsValid() {
         String inputText = "/create -name \"NewParcel\" -form \"Square\" -symbol \"X\"";
 
@@ -55,6 +62,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде создания")
     void parseCreateCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/create -name \"NewParcel\" -form \"Square\"";
 
@@ -64,6 +72,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду поиска при правильном формате команды")
     void parseFindCommand_ShouldReturnFindCommand_WhenCommandIsValid() {
         String inputText = "/find \"Parcel1\"";
 
@@ -74,6 +83,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде поиска")
     void parseFindCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/find";
 
@@ -83,6 +93,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду редактирования при правильном формате команды")
     void parseEditCommand_ShouldReturnEditCommand_WhenCommandIsValid() {
         String inputText = "/edit -id \"123\" -name \"Parcel123\" -form \"Rectangular\" -symbol \"O\"";
 
@@ -96,6 +107,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде редактирования")
     void parseEditCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/edit -id \"123\" -name \"Parcel123\" -form \"Rectangular\"";
 
@@ -105,6 +117,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду удаления при правильном формате команды")
     void parseDeleteCommand_ShouldReturnDeleteCommand_WhenCommandIsValid() {
         String inputText = "/delete \"Parcel123\"";
 
@@ -115,6 +128,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде удаления")
     void parseDeleteCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/delete";
 
@@ -124,6 +138,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду разгрузки при правильном формате команды")
     void parseUnloadCommand_ShouldReturnUnloadCommand_WhenCommandIsValid() {
         String inputText = "/unload -u \"UserTest\" -infile \"trucks.json\" -outfile \"parcels.csv\" --withcount";
 
@@ -136,6 +151,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде разгрузки")
     void parseUnloadCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/unload -u \"UserTest\" -infile \"trucks.json\"";
 
@@ -145,6 +161,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть команду для выставления счета при правильном формате команды")
     void parseBillingCommand_ShouldReturnBillingCommand_WhenCommandIsValid() {
         String inputText = "/billing -u \"user@example.com\" -from \"01.01.2023\" -to \"31.12.2023\"";
 
@@ -157,6 +174,7 @@ class CommandParserServiceTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение при неправильной команде для выставления счета")
     void parseBillingCommand_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/billing -u \"user@example.com\" -from \"01-01-2023\" -to \"31-12-2023\"";
 

@@ -1,7 +1,7 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Truck;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,12 +17,8 @@ class TruckServiceTest {
     @InjectMocks
     private TruckService truckService;
 
-    @BeforeEach
-    void setUp() {
-        truckService = new TruckService();
-    }
-
     @Test
+    @DisplayName("Должен корректно генерировать представление для кузова грузовика")
     void testGenerateTruckView() {
         char[][] grid = {
                 {'A', '\0', 'B'},
@@ -39,6 +35,7 @@ class TruckServiceTest {
     }
 
     @Test
+    @DisplayName("Должен корректно парсить размеры грузовиков из строки")
     void testParseTruckSizes_ValidInput() {
         String trucksText = "3x2\\n4x5\\n2x2";
 
@@ -54,6 +51,7 @@ class TruckServiceTest {
     }
 
     @Test
+    @DisplayName("Должен корректно парсить размеры грузовиков с некорректными значениями")
     void testParseTruckSizes_InvalidInput() {
         String trucksText = "3x2\\ninvalid\\n4x5";
 
@@ -65,6 +63,4 @@ class TruckServiceTest {
         assertThat(trucks.get(1).getWidth()).isEqualTo(4);
         assertThat(trucks.get(1).getHeight()).isEqualTo(5);
     }
-
-
 }

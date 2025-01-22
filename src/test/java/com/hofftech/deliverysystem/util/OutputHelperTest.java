@@ -2,24 +2,25 @@ package com.hofftech.deliverysystem.util;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class OutputHelperTest {
 
+    @InjectMocks
     private OutputHelper outputHelper;
 
-    @BeforeEach
-    void setUp() {
-        outputHelper = new OutputHelper();
-    }
-
     @Test
+    @DisplayName("Должен корректно создавать данные о грузовике")
     void testCreateTruckData() {
         Parcel parcel1 = createParcel("Parcel1", 0, 0, new char[][]{
                 {'1', '0'},

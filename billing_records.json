@@ -1,0 +1,8 @@
+[ {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 22, 18, 35, 47, 615266600 ],
+  "operationType" : "Погрузка",
+  "segments" : 2,
+  "parcels" : 1,
+  "cost" : 450
+} ]

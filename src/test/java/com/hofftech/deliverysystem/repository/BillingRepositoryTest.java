@@ -1,40 +1,47 @@
 package com.hofftech.deliverysystem.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hofftech.deliverysystem.config.BillingConfig;
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
+import com.hofftech.deliverysystem.repository.impl.BillingRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class BillingRepositoryTest {
-
-    @InjectMocks
-    private BillingRepository billingRepository;
 
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private BillingConfig billingConfig;
+
+    @InjectMocks
+    private BillingRepositoryImpl billingRepository;
+
+
     @BeforeEach
     void setUp() {
-        objectMapper = new ObjectMapper();
-        billingRepository = new BillingRepository(objectMapper);
+        when(billingConfig.getFilePath()).thenReturn("test_billing_records.json");
 
-        File file = new File("billing_records.json");
-        if (file.exists()) {
-            file.delete();
-        }
+        this.billingRepository.init();
     }
 
     @Test
+    @DisplayName("Должен сохранить запись и вернуть сводку с правильными данными")
     void testSaveBillingRecord(){
         BillingRecord billingRecord = new BillingRecord(
                 "user123",
@@ -59,6 +66,7 @@ class BillingRepositoryTest {
     }
 
     @Test
+    @DisplayName("Должен вернуть пустой результат при отсутствии данных за указанный период")
     void testFindSummaryByUserAndPeriod_EmptyResults() {
         LocalDate from = LocalDate.now().minusDays(10);
         LocalDate to = LocalDate.now().minusDays(1);

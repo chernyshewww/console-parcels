@@ -3,7 +3,7 @@ package com.hofftech.deliverysystem.handler;
 import com.hofftech.deliverysystem.command.Command;
 import com.hofftech.deliverysystem.model.record.command.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.repository.ParcelRepository;
+import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EditCommandHandlerImpl implements Command {
 
-    private final ParcelRepository parcelRepository;
+    private final ParcelRepositoryImpl parcelRepository;
     private final CommandParserService commandParserService;
 
     @Override
@@ -20,7 +20,7 @@ public class EditCommandHandlerImpl implements Command {
         try {
             EditCommand commandData = commandParserService.parseEditCommand(text);
 
-            return parcelRepository.editParcelInFile(
+            return parcelRepository.update(
                     commandData.id(),
                     commandData.newName(),
                     commandData.newForm(),

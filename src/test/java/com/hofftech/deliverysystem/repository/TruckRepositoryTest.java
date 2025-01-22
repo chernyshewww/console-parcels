@@ -2,6 +2,8 @@ package com.hofftech.deliverysystem.repository;
 
 import com.hofftech.deliverysystem.exception.TruckFileReadException;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.repository.impl.TruckRepositoryImpl;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,16 +20,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class TruckRepositoryTest {
 
     @InjectMocks
-    private TruckRepository truckRepository;
+    private TruckRepositoryImpl truckRepository;
 
     @Test
+    @DisplayName("Должен загрузить грузовики из файла с корректными данными")
     void testLoadTrucksFromFile_ValidFile() throws IOException, TruckFileReadException {
         File tempFile = File.createTempFile("trucks", ".json");
         tempFile.deleteOnExit();
         String jsonContent = "[{\"width\":3,\"height\":2},{\"width\":4,\"height\":5}]";
         java.nio.file.Files.write(tempFile.toPath(), jsonContent.getBytes());
 
-        List<Truck> trucks = truckRepository.loadTrucksFromFile(tempFile.getAbsolutePath());
+        List<Truck> trucks = truckRepository.loadFromFile(tempFile.getAbsolutePath());
 
         assertThat(trucks).hasSize(2);
         assertThat(trucks.get(0).getWidth()).isEqualTo(3);
@@ -37,10 +40,11 @@ class TruckRepositoryTest {
     }
 
     @Test
+    @DisplayName("Должен выбросить исключение, если файл грузовиков не найден")
     void testLoadTrucksFromFile_InvalidFile() {
         String invalidFileName = "nonexistent_file.json";
 
-        assertThatThrownBy(() -> truckRepository.loadTrucksFromFile(invalidFileName))
+        assertThatThrownBy(() -> truckRepository.loadFromFile(invalidFileName))
                 .isInstanceOf(TruckFileReadException.class)
                 .hasMessageContaining("Ошибка при чтении файла грузовиков: " + invalidFileName);
     }

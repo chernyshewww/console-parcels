@@ -1,12 +1,16 @@
-package com.hofftech.deliverysystem.repository;
+package com.hofftech.deliverysystem.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hofftech.deliverysystem.config.BillingConfig;
 import com.hofftech.deliverysystem.exception.BillingException;
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
+import com.hofftech.deliverysystem.repository.BillingRepositoryInterface;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,30 +18,32 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Repository
 @Slf4j
-public class BillingRepository {
+@RequiredArgsConstructor
+public class BillingRepositoryImpl implements BillingRepositoryInterface {
 
-    private static final String FILE_PATH = "billing_records.json";
+    private final BillingConfig billingConfig;
     private final ObjectMapper objectMapper;
-    private final List<BillingRecord> billings;
+    private List<BillingRecord> billings;
 
-    public BillingRepository(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    @PostConstruct
+    public void init() {
         this.billings = loadBillingsFromFile();
     }
 
+    @Override
     public void save(BillingRecord billing) {
         try {
             billings.add(billing);
             saveRecordsToFile();
             log.info("Billing record saved: {}", billing);
-        }
-        catch (BillingException e){
+        } catch (BillingException e) {
             log.error("Error saving billing records to file: {}", e.getMessage(), e);
         }
     }
 
+    @Override
     public List<BillingSummary> findSummaryByUserAndPeriod(String user, LocalDate from, LocalDate to) {
         return billings.stream()
                 .filter(billing -> billing.getUser().equals(user) &&
@@ -54,8 +60,13 @@ public class BillingRepository {
                 .toList();
     }
 
+    @Override
+    public List<BillingRecord> findAll() {
+        return new ArrayList<>(billings);
+    }
+
     private List<BillingRecord> loadBillingsFromFile() {
-        File file = new File(FILE_PATH);
+        File file = new File(billingConfig.getFilePath());
         if (!file.exists()) {
             log.info("Billing records file not found. Starting with an empty list.");
             return new ArrayList<>();
@@ -75,7 +86,7 @@ public class BillingRepository {
 
     private void saveRecordsToFile() throws BillingException {
         try {
-            objectMapper.writeValue(new File(FILE_PATH), billings);
+            objectMapper.writeValue(new File(billingConfig.getFilePath()), billings);
         } catch (IOException e) {
             throw new BillingException("Failed to save billing records to file.", e);
         }

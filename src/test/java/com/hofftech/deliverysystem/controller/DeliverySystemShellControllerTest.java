@@ -2,16 +2,18 @@ package com.hofftech.deliverysystem.controller;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.service.LoadCommandService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class DeliverySystemShellControllerTest {
 
     @Mock
@@ -23,12 +25,8 @@ class DeliverySystemShellControllerTest {
     @InjectMocks
     private DeliverySystemShellController deliverySystemShellController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
+    @DisplayName("Создание посылки должно вернуть результат выполнения команды")
     void testCreate() {
         String name = "Parcel1";
         String form = "TT\nTT";
@@ -44,6 +42,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Поиск посылки должен вернуть результат выполнения команды")
     void testFind() {
         String name = "Parcel1";
         String expectedCommand = "/find \"Parcel1\"";
@@ -57,6 +56,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Редактирование посылки должно вернуть результат выполнения команды")
     void testEdit() {
         String id = "123";
         String name = "UpdatedParcel";
@@ -73,6 +73,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Удаление посылки должно вернуть результат выполнения команды")
     void testDelete() {
         String name = "Parcel1";
         String expectedCommand = "/delete \"Parcel1\"";
@@ -86,6 +87,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Загрузка данных должна вернуть результат выполнения команды")
     void testLoad() {
         String user = "testuser@example.com";
         String file = "parcels.csv";
@@ -106,6 +108,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Выгрузка данных должна вернуть результат выполнения команды")
     void testUnload() {
         String user = "testuser@example.com";
         String infile = "trucks.json";
@@ -122,6 +125,7 @@ class DeliverySystemShellControllerTest {
     }
 
     @Test
+    @DisplayName("Выставление счета должно вернуть результат выполнения команды")
     void testBilling() {
         String user = "testuser@example.com";
         String from = "2023-01-01";
