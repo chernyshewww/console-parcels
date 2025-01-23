@@ -1,15 +1,16 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.model.record.UnloadCommand;
+import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.repository.impl.TruckRepositoryImpl;
+import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
-import com.hofftech.deliverysystem.service.TruckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,20 +18,21 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class UnloadCommandHandlerImpl implements Command {
+public class UnloadCommandHandlerImpl implements CommandHandler {
 
     private final ParcelService parcelService;
-    private final TruckService truckService;
+    private final TruckRepositoryImpl truckRepository;
     private final CommandParserService commandParserService;
     private final OutputService outputService;
     private final FileService fileService;
+    private final BillingService billingService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             UnloadCommand commandData = commandParserService.parseUnloadCommand(text);
 
-            List<Truck> trucks = truckService.loadTrucksFromFile(commandData.inputFileName());
+            List<Truck> trucks = truckRepository.loadFromFile(commandData.inputFileName());
 
             List<Parcel> parcels = parcelService.unloadParcelsFromTrucks(trucks);
 
@@ -39,6 +41,12 @@ public class UnloadCommandHandlerImpl implements Command {
                     : outputService.generateParcelOutput(parcels);
 
             fileService.saveToFile(commandData.outputFileName(), result);
+
+            billingService.recordUnloadOperation(
+                    commandData.user(),
+                    trucks.size(),
+                    parcels.size()
+            );
 
             return "Выгрузка завершена. Результат сохранён в файл: " + commandData.outputFileName();
         } catch (InvalidCommandException e) {

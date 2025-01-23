@@ -1,10 +1,11 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
-import com.hofftech.deliverysystem.model.record.LoadCommand;
+import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
@@ -18,16 +19,17 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-public class LoadCommandHandlerImpl implements Command {
+public class LoadCommandHandlerImpl implements CommandHandler {
 
     private final ParcelService parcelService;
     private final TruckService truckService;
     private final StrategyHelper strategyHelper;
     private final CommandParserService commandParserService;
     private final OutputService outputService;
+    private final BillingService billingService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             LoadCommand commandData = commandParserService.parseLoadCommand(text);
             List<Parcel> parcels = parcelService.loadParcels(commandData);
@@ -41,15 +43,18 @@ public class LoadCommandHandlerImpl implements Command {
             List<Truck> loadedTrucks = strategy.loadParcels(parcels, trucks);
             log.info("Successfully loaded parcels.");
 
-            switch (commandData.outputType()) {
-                case "text":
-                    return outputService.generateLoadOutput(loadedTrucks);
-                case "json-file":
-                    outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks, null);
-                    return "Результат сохранён в файл: " + commandData.outputFileName();
-                default:
-                    return "Ошибка: Неподдерживаемый тип вывода.";
-            }
+            billingService.recordLoadOperation(
+                    commandData.user(),
+                    loadedTrucks.size(),
+                    parcels.size()
+            );
+
+            return switch (commandData.outputType()) {
+                case "text" -> outputService.generateLoadOutput(loadedTrucks);
+                case "json-file" -> outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks);
+                default -> "Ошибка: Неподдерживаемый тип вывода.";
+            };
+
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
             throw e;

@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.exception.FileSaveException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.IOException;
  * This class provides a method to save content to a specified file.
  */
 @Slf4j
+@Service
 public class FileService {
 
     /**

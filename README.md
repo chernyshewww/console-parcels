@@ -1,6 +1,6 @@
 ## ПЕРЕД ИСПОЛЬЗОВАНИЕМ НЕОБХОДИМО ЗАПОЛНИТЬ bot.token И bot.username в application.properties
 
-# Команды для управления посылками и грузовиками
+# Команды для управления посылками и грузовиками ЧЕРЕЗ ТЕЛЕГРАМ
 
 Этот сервис позволяет управлять посылками, грузовиками и их загрузкой/разгрузкой через команды в Telegram-боте.
 
@@ -126,7 +126,7 @@ Symbol: l
 ### 6. **Погрузка посылок в грузовики (вывод в текст) - другая стратегия**
 **Команда**
 ```text
-/load -parcels-file "parcels.csv" -trucks "3x3\n10x10\n5x5\n5x5" -type "Одна машина - Одна посылка" -out text
+/load -u "user" -parcels-file "parcels.csv" -trucks "3x3\n10x10\n5x5\n5x5" -type "Одна машина - Одна посылка" -out text
 ```
 **Описание**  
 Загружает одну посылку в один грузовик для каждой посылки. Стратегия "Одна машина - Одна посылка" размещает по одной посылке в каждом грузовике.
@@ -185,7 +185,7 @@ Symbol: l
 ### 7. **Погрузка посылок в грузовики (вывод в json)**
 **Команда**
 ```text
-/load -parcels-file "parcels.csv" -trucks "3x3\n3x3\n10x10\n5x5" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
+/load -u "user" -parcels-file "parcels.csv" -trucks "3x3\n3x3\n10x10\n5x5" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
 ```
 
 **Описание**  
@@ -244,7 +244,7 @@ Symbol: l
 **Команда**
 
 ```text
-/unload -infile "trucks.json" -outfile "parcels-with-count.csv" --withcount
+/unload -u "user"-infile "trucks.json" -outfile "parcels-with-count.csv" --withcount
 ````
 
 **Описание**
@@ -265,7 +265,7 @@ parcels-with-count.csv
 **Команда**
 
 ```text
-/unload -infile "trucks.json" -outfile "parcels.csv"
+/unload -u "user" -infile "trucks.json" -outfile "parcels.csv"
 ```
 **Описание**
 
@@ -280,3 +280,39 @@ parcels.csv
 "Посылка Тип 4"  
 "КУБ" 
 ``` 
+
+### 10. Биллинг посылок
+
+**Команда**
+
+```text
+/billing -u "usertest" -from "11.01.2025" -to "19.01.2025"
+```
+**Описание**
+
+Производит расчет биллинга по пользователю
+
+**Пример**
+
+```csv
+2025-01-19; Погрузка; 2 машин; 2 посылок; 500 рублей
+2025-01-19; Погрузка; 1 машин; 2 посылок; 300 рублей
+2025-01-19; Погрузка; 2 машин; 2 посылок; 500 рублей
+2025-01-19; Разгрузка; 2 машин; 2 посылок; 560 рублей
+2025-01-19; Разгрузка; 2 машин; 2 посылок; 560 рублей
+``` 
+
+# Есть возможность писать команды через shell. 
+
+Через shell используется другой синтаксис команд
+
+```bash
+--u = --user
+--parsels-file = --file
+--parsels-text = --parcels
+--out-filename = --output
+--withcount = --count
+```
+
+Для остальных команд надо добавить вместо одной черты перед аргументом две.
+Также все аргументы надо оборачивать в кавычки.

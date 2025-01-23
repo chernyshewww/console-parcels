@@ -1,0 +1,12 @@
+1737255123696:create --name "ТестПосылка" --form "xxxx\\\\nxxxx\\\\nxxxx" --symbol "0"
+1737255145413:edit --id "ТестПосылка" --name "КУБ22" --form "xxxxx\\\\nxxxxx\\\\nxxxx" --symbol "l"
+1737435883119:create --name "ТестПосылка" --form "xxxx\\\\nxxxx\\\\nxxxx" --symbol "0"
+1737553888310:create --name "ТестПосылка" --form "xxxx\\\\nxxxx\\\\nxxxxxxxx" --symbol "0"
+1737553923245:create --name "ТестПосылка" --form "xxxx\\\\nxxxx\\\\nxx" --symbol "0"
+1737553933596:create --name "ТестПосылка" --form "xx\\\\nxx\\\\nxx" --symbol "0"
+1737553945916:billing --user usertest --from 11.01.2025 --to 19.01.2025
+1737553963431:load --user usertest --parcels "КУБ22\\\\nTestParcel" --trucks "10x10\\\\n10x10" --type "Равномерное распределение" --out text
+1737553978444:billing --user usertest --from 20.01.2025 --to 22.01.2025
+1737560147541:load --user usertest --parcels "КУБ22\\\\nTestParcel" --trucks "10x10\\\\n10x10" --type "Равномерное распределение" --out text
+1737560154116:billing --user usertest --from 20.01.2025 --to 22.01.2025
+1737613600940:unload --user usertest --infile "trucks.json" --outfile "parcels-with-count.csv" --count

@@ -1,13 +1,13 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.constants.Constant;
 
-import static com.hofftech.deliverysystem.constants.Constant.HELP_TEXT;
 
-public class HelpCommandHandlerImpl implements Command {
+public class HelpCommandHandlerImpl implements CommandHandler {
 
     @Override
-    public String execute(String text) {
-        return HELP_TEXT;
+    public String handle(String text) {
+        return Constant.HELP_TEXT.getValue().toString();
     }
 }

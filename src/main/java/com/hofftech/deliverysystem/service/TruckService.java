@@ -1,13 +1,9 @@
 package com.hofftech.deliverysystem.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hofftech.deliverysystem.exception.TruckFileReadException;
 import com.hofftech.deliverysystem.model.Truck;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -15,6 +11,7 @@ import java.util.List;
  * parsing truck sizes from a text, and loading trucks from a file.
  */
 @Slf4j
+@Service
 public class TruckService {
 
     /**
@@ -65,22 +62,5 @@ public class TruckService {
         }
 
         return trucks;
-    }
-
-    /**
-     * Loads a list of trucks from a file in JSON format. The trucks are deserialized
-     * into Truck objects using Jackson's ObjectMapper.
-     *
-     * @param inputFileName The name of the input file containing truck data in JSON format.
-     * @return A list of Truck objects loaded from the file.
-     * @throws TruckFileReadException If an error occurs while reading the truck file.
-     */
-    public List<Truck> loadTrucksFromFile(String inputFileName) throws TruckFileReadException {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(new File(inputFileName), new TypeReference<List<Truck>>() {});
-        } catch (IOException e) {
-            throw new TruckFileReadException("Ошибка при чтении файла грузовиков: " + inputFileName, e);
-        }
     }
 }
