@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.record.command.BillingCommand;
 import com.hofftech.deliverysystem.service.BillingService;
@@ -11,14 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BillingCommandHandlerImpl implements Command {
+public class BillingCommandHandlerImpl implements CommandHandler {
 
     private final BillingService billingService;
     private final CommandParserService commandParserService;
     private final OutputService outputService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             BillingCommand commandData = commandParserService.parseBillingCommand(text);
 

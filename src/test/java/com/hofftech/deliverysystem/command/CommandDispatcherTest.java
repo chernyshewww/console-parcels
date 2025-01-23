@@ -15,32 +15,32 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CommandHandlerTest {
+class CommandDispatcherTest {
 
     @Mock
     private CommandFactory commandFactory;
 
     @Mock
-    private Command command;
+    private CommandHandler command;
 
     @InjectMocks
-    private CommandHandler commandHandler;
+    private CommandDispatcher commandDispatcher;
 
     @Test
     @DisplayName("Должен вернуть результат выполнения команды, когда команда валидна")
     void shouldReturnCommandExecutionResult_whenCommandIsValid() {
         String commandText = "test";
         String inputText = "test argument";
-        String expectedResponse = "Command executed";
+        String expectedResponse = "Command handled";
 
         when(commandFactory.getCommand(commandText)).thenReturn(command);
-        when(command.execute(inputText)).thenReturn(expectedResponse);
+        when(command.handle(inputText)).thenReturn(expectedResponse);
 
-        String result = commandHandler.handleCommand(inputText);
+        String result = commandDispatcher.dispatchCommand(inputText);
 
         assertThat(result).isEqualTo(expectedResponse);
         verify(commandFactory).getCommand(commandText);
-        verify(command).execute(inputText);
+        verify(command).handle(inputText);
     }
 
     @Test
@@ -52,7 +52,7 @@ class CommandHandlerTest {
 
         when(commandFactory.getCommand(commandText)).thenThrow(new InvalidCommandException(expectedError));
 
-        String result = commandHandler.handleCommand(inputText);
+        String result = commandDispatcher.dispatchCommand(inputText);
 
         assertThat(result).isEqualTo(expectedError);
         verify(commandFactory).getCommand(commandText);

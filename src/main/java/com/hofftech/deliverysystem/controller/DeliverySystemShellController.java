@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.controller;
 
-import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.command.CommandDispatcher;
 import com.hofftech.deliverysystem.service.LoadCommandService;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -12,7 +12,7 @@ import org.springframework.shell.standard.ShellOption;
 public class DeliverySystemShellController {
 
     private static final String USER_SHORT_COMMAND = " -u \"";
-    private final CommandHandler commandHandler;
+    private final CommandDispatcher commandDispatcher;
     private final LoadCommandService loadCommandService;
 
     @ShellMethod(key = "create", value = "Create a new parcel. Usage: create <name> <symbol> <form>")
@@ -21,14 +21,14 @@ public class DeliverySystemShellController {
             @ShellOption(help = "Form of the parcel (e.g., 'TT\\nTT')") String form,
             @ShellOption(help = "Symbol representing the parcel") char symbol) {
         String command = String.format("/create -name \"%s\" -form \"%s\" -symbol \"%c\"", name, form, symbol );
-        return commandHandler.handleCommand(command);
+        return commandDispatcher.dispatchCommand(command);
     }
 
     @ShellMethod(key = "find", value = "Find a parcel by name. Usage: find <name>")
     public String find(
             @ShellOption(help = "Name of the parcel to find") String name) {
         String command = String.format("/find \"%s\"", name);
-        return commandHandler.handleCommand(command);
+        return commandDispatcher.dispatchCommand(command);
     }
 
     @ShellMethod(key = "edit", value = "Edit a parcel. Usage: edit <id> <newName> <newForm> <newSymbol>")
@@ -38,14 +38,14 @@ public class DeliverySystemShellController {
             @ShellOption(help = "New form for the parcel (e.g., 'UU\\nUU')") String form,
             @ShellOption(help = "New symbol for the parcel") char symbol) {
         String command = String.format("/edit -id \"%s\" -name \"%s\" -form \"%s\" -symbol \"%c\"", id, name, form, symbol);
-        return commandHandler.handleCommand(command);
+        return commandDispatcher.dispatchCommand(command);
     }
 
     @ShellMethod(key = "delete", value = "Delete a parcel by name. Usage: delete <name>")
     public String delete(
             @ShellOption(help = "Name of the parcel to delete") String name) {
         String command = String.format("/delete \"%s\"", name);
-        return commandHandler.handleCommand(command);
+        return commandDispatcher.dispatchCommand(command);
     }
 
     @ShellMethod(key = "load", value = "Load parcels into trucks.")
@@ -59,7 +59,7 @@ public class DeliverySystemShellController {
             @ShellOption(help = "Output filename for saving results (e.g., 'trucks.json')", defaultValue = ShellOption.NULL) String output) {
 
         String command = loadCommandService.buildLoadCommand(user, file, trucks, type, out, parcels, output);
-        return commandHandler.handleCommand(command);
+        return commandDispatcher.dispatchCommand(command);
     }
 
     @ShellMethod(key = "unload", value = "Unload parcels from trucks.")
@@ -80,7 +80,7 @@ public class DeliverySystemShellController {
             commandBuilder.append(" --withcount");
         }
 
-        return commandHandler.handleCommand(commandBuilder.toString());
+        return commandDispatcher.dispatchCommand(commandBuilder.toString());
     }
 
     @ShellMethod(key = "billing", value = "Get billing details. Usage: billing -u <user> -from <start_date> -to <end_date>")
@@ -93,6 +93,6 @@ public class DeliverySystemShellController {
                 " -from \"" + from + "\"" +
                 " -to \"" + to + "\"";
 
-        return commandHandler.handleCommand(commandBuilder);
+        return commandDispatcher.dispatchCommand(commandBuilder);
     }
 }

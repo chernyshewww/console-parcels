@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.handler.BillingCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.CreateCommandHandlerImpl;
@@ -39,7 +39,7 @@ public class CommandFactory {
     private final FormHelper formHelper;
     private final BillingService billingService;
 
-    private final Map<String, Supplier<Command>> commandRegistry = new HashMap<>();
+    private final Map<String, Supplier<CommandHandler>> commandRegistry = new HashMap<>();
 
     @PostConstruct
     private void init() {
@@ -60,8 +60,8 @@ public class CommandFactory {
         commandRegistry.put("/help", HelpCommandHandlerImpl::new);
     }
 
-    public Command getCommand(String command) {
-        Supplier<Command> commandSupplier = commandRegistry.get(command);
+    public CommandHandler getCommand(String command) {
+        Supplier<CommandHandler> commandSupplier = commandRegistry.get(command);
         if (commandSupplier == null) {
             log.error("Unknown command: {}", command);
             throw new InvalidCommandException("Unknown command: " + command);

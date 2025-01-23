@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
-public class LoadCommandHandlerImpl implements Command {
+public class LoadCommandHandlerImpl implements CommandHandler {
 
     private final ParcelService parcelService;
     private final TruckService truckService;
@@ -29,7 +29,7 @@ public class LoadCommandHandlerImpl implements Command {
     private final BillingService billingService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             LoadCommand commandData = commandParserService.parseLoadCommand(text);
             List<Parcel> parcels = parcelService.loadParcels(commandData);

@@ -5,4 +5,11 @@
   "segments" : 2,
   "parcels" : 1,
   "cost" : 450
+}, {
+  "user" : "usertest",
+  "timestamp" : [ 2025, 1, 23, 9, 26, 41, 20378300 ],
+  "operationType" : "Разгрузка",
+  "segments" : 2,
+  "parcels" : 2,
+  "cost" : 560
 } ]

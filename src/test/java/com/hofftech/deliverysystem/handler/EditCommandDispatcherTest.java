@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EditCommandHandlerTest {
+class EditCommandDispatcherTest {
 
     @Mock
     private ParcelRepositoryImpl parcelRepository;
@@ -29,7 +29,7 @@ class EditCommandHandlerTest {
 
     @Test
     @DisplayName("Должен вернуть успешный ответ при успешном редактировании посылки")
-    void execute_ShouldReturnSuccess_WhenCommandIsValid() {
+    void handle_ShouldReturnSuccess_WhenCommandIsValid() {
         String inputText = "/edit 1 NewParcel NewSymbol";
         EditCommand commandData = new EditCommand("OldParcel", "NewParcel", "xx\nxx", '2');
 
@@ -37,27 +37,27 @@ class EditCommandHandlerTest {
         when(parcelRepository.update(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
                 .thenReturn("Посылка успешно отредактирована");
 
-        String result = editCommandHandler.execute(inputText);
+        String result = editCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Посылка успешно отредактирована");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку при некорректном формате команды")
-    void execute_ShouldReturnErrorMessage_WhenCommandIsInvalid() {
+    void handle_ShouldReturnErrorMessage_WhenCommandIsInvalid() {
         String inputText = "/edit";
 
         when(commandParserService.parseEditCommand(inputText))
                 .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThatThrownBy(() -> editCommandHandler.execute(inputText))
+        assertThatThrownBy(() -> editCommandHandler.handle(inputText))
                 .isInstanceOf(InvalidCommandException.class)
                 .hasMessage("Неверный формат команды");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку, если редактирование посылки не удалось")
-    void execute_ShouldReturnErrorMessage_WhenParcelEditFails() {
+    void handle_ShouldReturnErrorMessage_WhenParcelEditFails() {
         String inputText = "/edit 1 NewParcel NewSymbol";
         EditCommand commandData = new EditCommand("OldParcel", "NewParcel", "xx\nxx", '2');
 
@@ -65,7 +65,7 @@ class EditCommandHandlerTest {
         when(parcelRepository.update(commandData.id(), commandData.newName(), commandData.newForm(), commandData.newSymbol()))
                 .thenThrow(new IllegalArgumentException("Ошибка при редактировании посылки"));
 
-        String result = editCommandHandler.execute(inputText);
+        String result = editCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Ошибка при редактировании посылки: Ошибка при редактировании посылки");
     }

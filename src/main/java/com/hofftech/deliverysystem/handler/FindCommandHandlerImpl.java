@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.model.record.command.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.ParcelRepositoryInterface;
@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class FindCommandHandlerImpl implements Command {
+public class FindCommandHandlerImpl implements CommandHandler {
 
     private final ParcelRepositoryInterface parcelRepository;
     private final CommandParserService commandParserService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             FindCommand commandData = commandParserService.parseFindCommand(text);
             return parcelRepository.findByName(commandData.parcelName());

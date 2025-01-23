@@ -27,7 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class LoadCommandHandlerTest {
+class LoadCommandDispatcherTest {
 
     @Mock
     private ParcelService parcelService;
@@ -52,34 +52,34 @@ class LoadCommandHandlerTest {
 
     @Test
     @DisplayName("Должен вернуть ошибку, если указана неизвестная стратегия")
-    void execute_ShouldReturnError_WhenUnknownStrategy() {
+    void handle_ShouldReturnError_WhenUnknownStrategy() {
         String inputText = "/load -parcels-file \"parcels.csv\" -trucks \"3x3\\n10x10\" -type \"Равномерное распределение\" -out text";
         LoadCommand commandData = mock(LoadCommand.class);
 
         when(commandParserService.parseLoadCommand(inputText)).thenReturn(commandData);
         when(strategyHelper.determineStrategy(commandData.strategyType())).thenReturn(null);
 
-        String result = loadCommandHandler.execute(inputText);
+        String result = loadCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Ошибка! Указан неизвестный тип стратегии.");
     }
 
     @Test
     @DisplayName("Должен выбросить исключение InvalidCommandException, если формат команды неверный")
-    void execute_ShouldThrowInvalidCommandException_WhenInvalidCommandFormat() {
+    void handle_ShouldThrowInvalidCommandException_WhenInvalidCommandFormat() {
         String inputText = "/load";
 
         when(commandParserService.parseLoadCommand(inputText))
                 .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThatThrownBy(() -> loadCommandHandler.execute(inputText))
+        assertThatThrownBy(() -> loadCommandHandler.handle(inputText))
                 .isInstanceOf(InvalidCommandException.class)
                 .hasMessage("Неверный формат команды");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку, если загрузка не удалась")
-    void execute_ShouldReturnError_WhenLoadingFails() {
+    void handle_ShouldReturnError_WhenLoadingFails() {
         String inputText = "/load -parcels-file \"parcels.csv\" -trucks \"3x3\\n10x10\" -type \"Равномерное распределение\" -out text";
         LoadCommand commandData = mock(LoadCommand.class);
         List<Parcel> parcels = new ArrayList<>();
@@ -92,7 +92,7 @@ class LoadCommandHandlerTest {
         when(strategyHelper.determineStrategy(commandData.strategyType())).thenReturn(strategy);
         when(strategy.loadParcels(parcels, trucks)).thenThrow(new IllegalStateException("Ошибка при размещении посылок"));
 
-        String result = loadCommandHandler.execute(inputText);
+        String result = loadCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Ошибка! Не удалось разместить все посылки в грузовиках. Проверьте размеры и количество.");
     }

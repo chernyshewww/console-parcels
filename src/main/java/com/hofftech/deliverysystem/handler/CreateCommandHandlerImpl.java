@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.model.record.command.CreateCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CreateCommandHandlerImpl implements Command {
+public class CreateCommandHandlerImpl implements CommandHandler {
 
     private final ParcelRepositoryImpl parcelRepository;
     private final CommandParserService commandParserService;
@@ -20,7 +20,7 @@ public class CreateCommandHandlerImpl implements Command {
     private final OutputService outputService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             CreateCommand commandData = commandParserService.parseCreateCommand(text);
             char[][] form = formHelper.parseForm(commandData.form(), commandData.symbol());

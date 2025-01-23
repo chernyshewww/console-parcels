@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.controller;
 
-import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.command.CommandDispatcher;
 import com.hofftech.deliverysystem.config.TelegramConfig;
 import com.hofftech.deliverysystem.exception.BotProcessingException;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ class DeliveryBotControllerTest {
     private TelegramConfig telegramConfig;
 
     @Mock
-    private CommandHandler commandHandler;
+    private CommandDispatcher commandDispatcher;
 
     @InjectMocks
     private DeliveryBotController deliveryBotController;
@@ -36,7 +36,7 @@ class DeliveryBotControllerTest {
         message.setText(null);
 
         assertThrows(BotProcessingException.class, () -> deliveryBotController.onUpdateReceived(update));
-        verifyNoInteractions(commandHandler);
+        verifyNoInteractions(commandDispatcher);
     }
 
     @Test
@@ -49,6 +49,6 @@ class DeliveryBotControllerTest {
         message.setChat(null);
 
         assertThrows(NullPointerException.class, () -> deliveryBotController.onUpdateReceived(update));
-        verifyNoInteractions(commandHandler);
+        verifyNoInteractions(commandDispatcher);
     }
 }

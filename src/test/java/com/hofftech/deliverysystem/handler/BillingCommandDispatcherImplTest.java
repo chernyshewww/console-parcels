@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BillingCommandHandlerImplTest {
+class BillingCommandDispatcherImplTest {
 
     @Mock
     private BillingService billingService;
@@ -35,20 +35,20 @@ class BillingCommandHandlerImplTest {
 
     @Test
     @DisplayName("Должен вернуть сообщение об ошибке, если команда неверна")
-    void execute_ShouldReturnErrorMessage_WhenCommandIsInvalid() {
+    void handle_ShouldReturnErrorMessage_WhenCommandIsInvalid() {
         String inputText = "/billing";
 
         when(commandParserService.parseBillingCommand(inputText))
                 .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThatThrownBy(() -> billingCommandHandler.execute(inputText))
+        assertThatThrownBy(() -> billingCommandHandler.handle(inputText))
                 .isInstanceOf(InvalidCommandException.class)
                 .hasMessage("Неверный формат команды");
     }
 
     @Test
     @DisplayName("Должен вернуть сообщение об ошибке, если произошла непредвиденная ошибка")
-    void execute_ShouldReturnErrorMessage_WhenUnexpectedErrorOccurs() {
+    void handle_ShouldReturnErrorMessage_WhenUnexpectedErrorOccurs() {
         String inputText = "/billing -u user@example.com -from 2023-01-01 -to 2023-12-31";
         LocalDate fromDate = LocalDate.of(2023, 1, 1);
         LocalDate toDate = LocalDate.of(2023, 12, 31);
@@ -58,7 +58,7 @@ class BillingCommandHandlerImplTest {
         when(billingService.getBillingSummaries(commandData.user(), commandData.fromDate(), commandData.toDate()))
                 .thenThrow(new RuntimeException("Unexpected error"));
 
-        String result = billingCommandHandler.execute(inputText);
+        String result = billingCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Произошла ошибка: Unexpected error");
     }

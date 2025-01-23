@@ -9,3 +9,4 @@
 1737553978444:billing --user usertest --from 20.01.2025 --to 22.01.2025
 1737560147541:load --user usertest --parcels "КУБ22\\\\nTestParcel" --trucks "10x10\\\\n10x10" --type "Равномерное распределение" --out text
 1737560154116:billing --user usertest --from 20.01.2025 --to 22.01.2025
+1737613600940:unload --user usertest --infile "trucks.json" --outfile "parcels-with-count.csv" --count

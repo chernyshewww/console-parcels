@@ -2,7 +2,7 @@ package com.hofftech.deliverysystem.controller;
 
 import com.hofftech.deliverysystem.config.TelegramConfig;
 import com.hofftech.deliverysystem.exception.BotProcessingException;
-import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.command.CommandDispatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -17,14 +17,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Controller
 public class DeliveryBotController extends TelegramLongPollingBot {
 
-    private final CommandHandler commandHandler;
+    private final CommandDispatcher commandDispatcher;
     private final TelegramConfig telegramConfig;
 
     public DeliveryBotController(TelegramConfig telegramConfig,
-                                 CommandHandler commandHandler) {
+                                 CommandDispatcher commandDispatcher) {
         super(telegramConfig.getToken());
         this.telegramConfig = telegramConfig;
-        this.commandHandler = commandHandler;
+        this.commandDispatcher = commandDispatcher;
     }
 
     /**
@@ -53,7 +53,7 @@ public class DeliveryBotController extends TelegramLongPollingBot {
 
             try {
 
-                var responseText = commandHandler.handleCommand(text);
+                var responseText = commandDispatcher.dispatchCommand(text);
 
                 sendMessage(chatId, responseText);
 

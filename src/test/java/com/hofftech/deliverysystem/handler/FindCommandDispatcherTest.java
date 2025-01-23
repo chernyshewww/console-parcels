@@ -16,7 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class FindCommandHandlerTest {
+class FindCommandDispatcherTest {
 
     @Mock
     private ParcelRepositoryImpl parcelRepository;
@@ -29,41 +29,41 @@ class FindCommandHandlerTest {
 
     @Test
     @DisplayName("Должен вернуть посылку при правильном запросе")
-    void execute_ShouldReturnParcel_WhenCommandIsValid() {
+    void handle_ShouldReturnParcel_WhenCommandIsValid() {
         String inputText = "/find Parcel1";
         FindCommand commandData = new FindCommand("Parcel1");
 
         when(commandParserService.parseFindCommand(inputText)).thenReturn(commandData);
         when(parcelRepository.findByName(commandData.parcelName())).thenReturn("Посылка Parcel1 найдена");
 
-        String result = findCommandHandler.execute(inputText);
+        String result = findCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Посылка Parcel1 найдена");
     }
 
     @Test
     @DisplayName("Должен выбросить исключение при некорректной команде")
-    void execute_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
+    void handle_ShouldThrowInvalidCommandException_WhenCommandIsInvalid() {
         String inputText = "/find";
 
         when(commandParserService.parseFindCommand(inputText))
                 .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThatThrownBy(() -> findCommandHandler.execute(inputText))
+        assertThatThrownBy(() -> findCommandHandler.handle(inputText))
                 .isInstanceOf(InvalidCommandException.class)
                 .hasMessage("Неверный формат команды");
     }
 
     @Test
     @DisplayName("Должен вернуть сообщение об ошибке, если посылка не найдена")
-    void execute_ShouldReturnErrorMessage_WhenParcelNotFound() {
+    void handle_ShouldReturnErrorMessage_WhenParcelNotFound() {
         String inputText = "/find Parcel1";
         FindCommand commandData = new FindCommand("Parcel1");
 
         when(commandParserService.parseFindCommand(inputText)).thenReturn(commandData);
         when(parcelRepository.findByName(commandData.parcelName())).thenReturn("Посылка Parcel1 не найдена");
 
-        String result = findCommandHandler.execute(inputText);
+        String result = findCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Посылка Parcel1 не найдена");
     }

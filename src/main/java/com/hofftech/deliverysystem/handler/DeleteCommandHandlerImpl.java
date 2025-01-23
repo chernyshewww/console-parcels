@@ -1,6 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.command.Command;
+import com.hofftech.deliverysystem.command.CommandHandler;
 import com.hofftech.deliverysystem.model.record.command.DeleteCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-public class DeleteCommandHandlerImpl implements Command {
+public class DeleteCommandHandlerImpl implements CommandHandler {
 
     private final ParcelRepositoryImpl parcelRepository;
     private final CommandParserService commandParserService;
 
     @Override
-    public String execute(String text) {
+    public String handle(String text) {
         try {
             DeleteCommand commandData = commandParserService.parseDeleteCommand(text);
 

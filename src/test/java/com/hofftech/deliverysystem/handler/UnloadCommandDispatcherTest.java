@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class UnloadCommandHandlerTest {
+class UnloadCommandDispatcherTest {
 
     @Mock
     private ParcelService parcelService;
@@ -49,33 +49,33 @@ class UnloadCommandHandlerTest {
 
     @Test
     @DisplayName("Должен вернуть ошибку, если формат команды неверный")
-    void execute_ShouldReturnError_WhenInvalidCommandFormat() {
+    void handle_ShouldReturnError_WhenInvalidCommandFormat() {
         String inputText = "/unload";
 
         when(commandParserService.parseUnloadCommand(inputText)).thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        String result = unloadCommandHandler.execute(inputText);
+        String result = unloadCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Неверный формат команды");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку, если файл с грузовиками не найден")
-    void execute_ShouldReturnError_WhenTrucksFileNotFound() {
+    void handle_ShouldReturnError_WhenTrucksFileNotFound() {
         String inputText = "/unload -infile \"trucks.json\" -outfile \"parcels-with-count.csv\" --withcount";
         UnloadCommand commandData = mock(UnloadCommand.class);
 
         when(commandParserService.parseUnloadCommand(inputText)).thenReturn(commandData);
         when(truckRepository.loadFromFile(commandData.inputFileName())).thenThrow(new RuntimeException("Файл не найден"));
 
-        String result = unloadCommandHandler.execute(inputText);
+        String result = unloadCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Произошла ошибка при выгрузке посылок: Файл не найден");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку, если произошла ошибка при выгрузке посылок")
-    void execute_ShouldReturnError_WhenErrorDuringUnload() {
+    void handle_ShouldReturnError_WhenErrorDuringUnload() {
         String inputText = "/unload -infile \"trucks.json\" -outfile \"parcels-with-count.csv\" --withcount";
         UnloadCommand commandData = mock(UnloadCommand.class);
         List<Truck> trucks = new ArrayList<>();
@@ -84,7 +84,7 @@ class UnloadCommandHandlerTest {
         when(truckRepository.loadFromFile(commandData.inputFileName())).thenReturn(trucks);
         when(parcelService.unloadParcelsFromTrucks(trucks)).thenThrow(new RuntimeException("Ошибка при выгрузке"));
 
-        String result = unloadCommandHandler.execute(inputText);
+        String result = unloadCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Произошла ошибка при выгрузке посылок: Ошибка при выгрузке");
     }

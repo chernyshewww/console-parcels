@@ -10,16 +10,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class HelpCommandHandlerImplTest {
+class HelpCommandDispatcherImplTest {
 
     @InjectMocks
     private HelpCommandHandlerImpl helpCommandHandler;
 
     @Test
     @DisplayName("Должен возвращать корректный текст справки")
-    void execute_ShouldReturnHelpText() {
+    void handle_ShouldReturnHelpText() {
         String expectedHelpText = Constant.HELP_TEXT.getValue().toString();
 
-        assertThat(helpCommandHandler.execute("")).isEqualTo(expectedHelpText);
+        assertThat(helpCommandHandler.handle("")).isEqualTo(expectedHelpText);
     }
 }

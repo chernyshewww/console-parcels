@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CreateCommandHandlerTest {
+class CreateCommandDispatcherTest {
 
     @Mock
     private ParcelRepositoryImpl parcelRepository;
@@ -34,7 +34,7 @@ class CreateCommandHandlerTest {
 
     @Test
     @DisplayName("Должен вернуть успешный ответ при корректной команде")
-    void execute_ShouldReturnSuccessResponse_WhenCommandIsValid() {
+    void handle_ShouldReturnSuccessResponse_WhenCommandIsValid() {
         String inputText = "/create -name \"Посылка Тип 0\" -form \"xxx\\nxxx\\nxxx\" -symbol \"0\"";
         CreateCommand commandData = new CreateCommand("Посылка Тип 0", "xxx\\nxxx\\nxxx", '0');
         char[][] form = {{'*'}, {'*'}};
@@ -43,20 +43,20 @@ class CreateCommandHandlerTest {
         when(formHelper.parseForm(commandData.form(), commandData.symbol())).thenReturn(form);
         when(outputService.formatCreateResponse(commandData.name(), form)).thenReturn("Посылка Посылка Тип 0 создана");
 
-        String result = createCommandHandler.execute(inputText);
+        String result = createCommandHandler.handle(inputText);
 
         assertThat(result).isEqualTo("Посылка Посылка Тип 0 создана");
     }
 
     @Test
     @DisplayName("Должен вернуть ошибку при некорректном формате команды")
-    void execute_ShouldReturnError_WhenInvalidCommandFormat() {
+    void handle_ShouldReturnError_WhenInvalidCommandFormat() {
         String inputText = "/create";
 
         when(commandParserService.parseCreateCommand(inputText))
                 .thenThrow(new InvalidCommandException("Неверный формат команды"));
 
-        assertThatThrownBy(() -> createCommandHandler.execute(inputText))
+        assertThatThrownBy(() -> createCommandHandler.handle(inputText))
                 .isInstanceOf(InvalidCommandException.class)
                 .hasMessage("Неверный формат команды");
     }
