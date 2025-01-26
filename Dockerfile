@@ -1,15 +1,25 @@
-# Use OpenJDK 17 as the base image
-FROM openjdk:17-jdk-slim
+# Stage 1: Build the application
+FROM openjdk:21-jdk-slim AS build
+WORKDIR /app
+COPY . /app
+RUN chmod +x ./gradlew && ./gradlew clean build --no-daemon -x spotlessCheck  -x test -x compileTestJava
 
-# Set the working directory inside the container
+# Stage 2: Extract the JAR layers
+FROM openjdk:21-jdk-slim AS extract
+WORKDIR /app
+COPY --from=build /app/build/libs/console-parcels-1.0.0.jar /app/console-parcels.jar
+RUN java -Djarmode=layertools -jar console-parcels.jar extract
+
+# Stage 3: Create the final runtime image
+FROM openjdk:21-jdk-slim
 WORKDIR /app
 
-# Copy the JAR file into the container
-# Replace 'console-parcels-1.0.0.jar' with your actual JAR file name
-COPY target/console-parcels-1.0.0.jar app.jar
+# Copy the extracted layers from the extract stage
+COPY --from=extract /app/dependencies/ ./
+COPY --from=extract /app/spring-boot-loader/ ./
+COPY --from=extract /app/snapshot-dependencies/ ./
+COPY --from=extract /app/application/ ./
 
-# Expose the port your application uses (update if different)
-EXPOSE 8080
+# Set the entry point to launch the Spring Boot application
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]

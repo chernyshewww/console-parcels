@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: openjdk:17-jdk-slim
+    image: openjdk:21-jdk-slim
     container_name: delivery-system-app
     build:
       context: .

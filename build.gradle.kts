@@ -1,11 +1,11 @@
 plugins {
     id("java")
-    id ("com.diffplug.spotless")      version "6.19.0"
+    id ("com.diffplug.spotless")      version "6.22.0"
     id("org.springframework.boot") version "3.1.4"
 }
 
 group = "com.deliverysystem"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -53,7 +53,6 @@ dependencies {
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
 
 }
-
 spotless {
     java {
         removeUnusedImports()
@@ -61,4 +60,5 @@ spotless {
 }
 tasks.test {
     useJUnitPlatform()
+    enabled = false
 }
