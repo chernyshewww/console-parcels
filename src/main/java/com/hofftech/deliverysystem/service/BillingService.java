@@ -1,8 +1,10 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.mapper.BillingRecordMapper;
+import com.hofftech.deliverysystem.model.entity.BillingRecordEntity;
 import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
-import com.hofftech.deliverysystem.repository.impl.BillingRepositoryImpl;
+import com.hofftech.deliverysystem.repository.BillingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,12 @@ public class BillingService {
     private static final String LOAD = "Погрузка";
     private static final String UNLOAD = "Разгрузка";
 
-    private final BillingRepositoryImpl billingRepository;
+    //private final BillingRepositoryImpl billingRepository;
+
+    private final BillingRepository billingRepository;
     private final PricingService pricingService;
+    private final BillingRecordMapper billingRecordMapper;
+
 
     /**
      * Records a load operation for a user, calculating the cost based on the number
@@ -40,7 +46,9 @@ public class BillingService {
     public void recordLoadOperation(String user, int trucksCount, int parcelsCount) {
         int cost = pricingService.calculateLoadCost(trucksCount, parcelsCount);
         BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), LOAD, trucksCount, parcelsCount, cost);
-        billingRepository.save(billing);
+        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
+
+        billingRepository.save(billingEntity);
         log.info("Recorded load operation for user: {}, cost: {}", user, cost);
     }
 
@@ -55,7 +63,8 @@ public class BillingService {
     public void recordUnloadOperation(String user, int trucksCount, int parcelsCount) {
         int cost = pricingService.calculateUnloadCost(trucksCount, parcelsCount);
         BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), UNLOAD, trucksCount, parcelsCount, cost);
-        billingRepository.save(billing);
+        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
+        billingRepository.save(billingEntity);
         log.info("Recorded unload operation for user: {}, cost: {}", user, cost);
     }
 
@@ -68,6 +77,17 @@ public class BillingService {
      * @return A list of billing summaries for the specified period.
      */
     public List<BillingSummary> getBillingSummaries(String user, LocalDate fromDate, LocalDate toDate) {
-        return billingRepository.findSummaryByUserAndPeriod(user, fromDate, toDate);
+
+        LocalDateTime fromDateTime = fromDate.atStartOfDay(); // e.g., 2025-01-24T00:00:00
+        LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
+
+         return billingRepository.findSummaryByUserAndPeriod(user, fromDateTime, toDateTime).stream().map(billing -> new BillingSummary(
+                billing.getTimestamp().toLocalDate(),
+                billing.getOperationType(),
+                billing.getSegments(),
+                billing.getParcels(),
+                billing.getCost()
+        )).sorted((a, b) -> b.getTimestamp().compareTo(a.getTimestamp())).toList();
+
     }
 }

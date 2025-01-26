@@ -285,7 +285,6 @@ public class ParcelRepositoryImpl implements ParcelRepositoryInterface {
         Parcel parcel = new Parcel();
         parcel.setName(name);
 
-
         char[][] formMatrix = new char[form.size()][];
         for (int i = 0; i < form.size(); i++) {
             formMatrix[i] = form.get(i).toCharArray();

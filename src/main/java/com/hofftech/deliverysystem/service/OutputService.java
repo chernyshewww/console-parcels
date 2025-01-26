@@ -6,6 +6,7 @@ import com.hofftech.deliverysystem.exception.JsonGenerationException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
+import com.hofftech.deliverysystem.util.FormHelper;
 import com.hofftech.deliverysystem.util.OutputHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class OutputService {
     private final TruckService truckService;
     private final OutputHelper outputHelper;
     private final FileService fileService;
+    private final FormHelper formHelper;
 
     /**
      * Generates a textual output for a list of parcels, displaying their names.
@@ -116,7 +118,8 @@ public class OutputService {
             formBuilder.setLength(formBuilder.length() - 1);
         }
 
-        return String.format("id(name): \"%s\"\nform:\n%s", name, formBuilder.toString());
+        String processedForm = formHelper.getFormAsString(form);
+        return String.format("id(name): \"%s\"\nform:\n%s", name, processedForm);
     }
 
     /**

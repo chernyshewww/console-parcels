@@ -9,7 +9,6 @@ public class LoadCommandService {
 
     public String buildLoadCommand(
             String user,
-            String file,
             String trucks,
             String type,
             String out,
@@ -19,8 +18,7 @@ public class LoadCommandService {
         StringBuilder commandBuilder = new StringBuilder("/load");
 
         appendUser(commandBuilder, user);
-        appendParcelsText(commandBuilder, parcels);
-        appendParcelsFile(commandBuilder, file);
+        appendParcels(commandBuilder, parcels);
         appendTrucks(commandBuilder, trucks);
         appendType(commandBuilder, type);
         appendOutputFormat(commandBuilder, out);
@@ -33,15 +31,9 @@ public class LoadCommandService {
         commandBuilder.append(USER_SHORT_COMMAND).append(user).append("\"");
     }
 
-    private void appendParcelsText(StringBuilder commandBuilder, String parcels) {
+    private void appendParcels(StringBuilder commandBuilder, String parcels) {
         if (parcels != null) {
-            commandBuilder.append(" -parcels-text \"").append(parcels.replace("\n", "\\n")).append("\"");
-        }
-    }
-
-    private void appendParcelsFile(StringBuilder commandBuilder, String file) {
-        if (file != null) {
-            commandBuilder.append(" -parcels-file \"").append(file).append("\"");
+            commandBuilder.append(" -parcels \"").append(parcels.replace("\n", "\\n")).append("\"");
         }
     }
 

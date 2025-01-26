@@ -5,6 +5,9 @@ import com.hofftech.deliverysystem.model.record.command.EditCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import com.hofftech.deliverysystem.service.CommandParserService;
+import com.hofftech.deliverysystem.service.OutputService;
+import com.hofftech.deliverysystem.service.ParcelService;
+import com.hofftech.deliverysystem.util.FormHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,20 +15,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EditCommandHandlerImpl implements CommandHandler {
 
-    private final ParcelRepositoryImpl parcelRepository;
+    private final ParcelService parcelService;
     private final CommandParserService commandParserService;
+    private final FormHelper formHelper;
+    private final OutputService outputService;
 
     @Override
     public String handle(String text) {
         try {
             EditCommand commandData = commandParserService.parseEditCommand(text);
+            char[][] form = formHelper.parseForm(commandData.newForm(), commandData.newSymbol());
 
-            return parcelRepository.update(
-                    commandData.id(),
-                    commandData.newName(),
-                    commandData.newForm(),
-                    commandData.newSymbol()
-            );
+            var parcel = parcelService.edit(commandData);
+
+            if (parcel != null){
+                return outputService.formatCreateResponse(parcel.getName(), form);
+            }
+            else{
+                return "Такой посылки не существует";
+            }
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
             throw e;

@@ -38,9 +38,9 @@ public class Truck {
         }
     }
 
-    @JsonCreator
-    public Truck(@JsonProperty("truck_type") String truckType, @JsonProperty("parcels") List<Parcel> parcels) {
-        this.truckType = truckType;
-        this.parcels = parcels;
-    }
+//    @JsonCreator
+//    public Truck(@JsonProperty("truck_type") String truckType, @JsonProperty("parcels") List<Parcel> parcels) {
+//        this.truckType = truckType;
+//        this.parcels = parcels;
+//    }
 }

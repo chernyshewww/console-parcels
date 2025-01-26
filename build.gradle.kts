@@ -24,10 +24,18 @@ dependencies {
     implementation("org.telegram:telegrambots:6.5.0")
     implementation("com.beust:jcommander:1.78")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.0.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.1.4")
+    implementation("org.postgresql:postgresql:42.5.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.1.4")
+    implementation("org.mapstruct:mapstruct:1.6.0")
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.0")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
-
+    implementation("org.flywaydb:flyway-core:9.16.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.4")
 
     testCompileOnly("org.projectlombok:lombok:1.18.30")

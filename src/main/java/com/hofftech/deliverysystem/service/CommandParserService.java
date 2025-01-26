@@ -59,35 +59,33 @@ public class CommandParserService {
     public LoadCommand parseLoadCommand(String text) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(
                 "/load -u \"([^\"]+)\"" +
-                        "(?: -parcels-text \"([^\"]+)\")?" +
-                        "(?: -parcels-file \"([^\"]+)\")?" +
+                        "(?: -parcels \"([^\"]+)\")?" +  // Single 'parcels' argument for both cases (All or text)
                         " -trucks \"([^\"]+)\"" +
                         " -type \"([^\"]+)\"" +
                         " -out (text|json-file)" +
                         "(?: -out-filename \"([^\"]+)\")?");
+
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
             throw new InvalidCommandException("""
-                Ошибка! Проверьте формат команды.
-                Примеры:
-                /load -u "UserTest" -parcels-text "Посылка Тип 1\\nКУБ" -trucks "3x3\\n6x2" -type "Одна машина - Одна посылка" -out text
-                /load -u "UserTest" -parcels-file "parcels.csv" -trucks "3x3\\n6x2" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
-                """);
+            Ошибка! Проверьте формат команды.
+            Примеры:
+            /load -u "UserTest" -parcels "КУБ22\nTestParcel" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out text
+            /load -u "UserTest" -parcels "All" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
+            """);
         }
 
-        String user = matcher.group(LOAD_USER_GROUP);
-        String parcelsText = matcher.group(LOAD_PARCELS_TEXT_GROUP);
-        String parcelsFile = matcher.group(LOAD_PARCELS_FILE_GROUP);
-        String trucks = matcher.group(LOAD_TRUCKS_GROUP);
-        String type = matcher.group(LOAD_TYPE_GROUP);
-        String out = matcher.group(LOAD_OUT_GROUP);
-        String outFilename = matcher.group(LOAD_OUT_FILENAME_GROUP);
+        String user = matcher.group(1);
+        String parcels = matcher.group(2);  // This will either be "All" or a description like "КУБ22\nTestParcel"
+        String trucks = matcher.group(3);
+        String type = matcher.group(4);
+        String out = matcher.group(5);
+        String outFilename = matcher.group(6);
 
         return new LoadCommand(
                 user,
-                parcelsText,
-                parcelsFile,
+                parcels,
                 trucks,
                 type,
                 out,

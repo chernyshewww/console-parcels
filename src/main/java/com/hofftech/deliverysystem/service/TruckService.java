@@ -1,6 +1,14 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.mapper.TruckMapper;
+import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.model.entity.ParcelTruckEntity;
+import com.hofftech.deliverysystem.model.entity.TruckEntity;
+import com.hofftech.deliverysystem.repository.ParcelTruckRepository;
+import com.hofftech.deliverysystem.repository.TruckRepository;
+import com.hofftech.deliverysystem.util.TruckGridHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +20,13 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TruckService {
+
+    private final TruckRepository truckrepository;
+    private final TruckMapper truckMapper;
+    private final TruckGridHelper truckGridHelper;
+    private final ParcelTruckService parcelTruckService;
 
     /**
      * Generates a string representation of a truck's grid, where each cell in the grid is
@@ -62,5 +76,25 @@ public class TruckService {
         }
 
         return trucks;
+    }
+
+    public void saveTrucks(List<Truck> loadedTrucks){
+        for(Truck truck : loadedTrucks) {
+            TruckEntity truckEntity = new TruckEntity();
+            truckEntity.setHeight(truck.getHeight());
+            truckEntity.setWidth(truck.getWidth());
+            truckEntity.setGrid(truckGridHelper.parseGridToString(truck.getGrid()));
+            truckrepository.save(truckEntity);
+
+            if (!truck.getParcels().isEmpty()) {
+                for(Parcel parcel : truck.getParcels()) {
+                    parcelTruckService.save(parcel, truckEntity.getId());
+                }
+            }
+        }
+    }
+
+    public List<Long> findAllIds() {
+        return truckrepository.findAll().stream().map(TruckEntity::getId).toList();
     }
 }

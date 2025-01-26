@@ -1,9 +1,14 @@
 package com.hofftech.deliverysystem.service;
 
+import com.hofftech.deliverysystem.mapper.ParcelMapper;
+import com.hofftech.deliverysystem.model.entity.ParcelEntity;
+import com.hofftech.deliverysystem.model.record.command.CreateCommand;
+import com.hofftech.deliverysystem.model.record.command.EditCommand;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.ParcelFileReadException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +23,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParcelService {
 
-    private final ParcelRepositoryImpl parcelRepository;
+    private final ParcelRepository parcelRepository;
+    private final ParcelMapper parcelMapper;
+    private final ParcelTruckService parcelTruckService;
 
     /**
      * Loads parcels from the file based on the provided command data.
@@ -29,13 +36,67 @@ public class ParcelService {
      * @throws ParcelFileReadException If an error occurs while reading the file.
      */
     public List<Parcel> loadParcels(LoadCommand commandData) {
-        if (commandData.parcelsText() != null) {
-            List<String> parcelNames = Arrays.asList(commandData.parcelsText().split("\\\\n"));
-            return getParcelsFromFile(parcelNames);
+        var entities = new ArrayList<ParcelEntity>();
+        if (!commandData.parcels().equals("All")) {
+            List<String> parcelNames = Arrays.asList(commandData.parcels().split("\\\\n"));
+            entities.addAll(parcelRepository.findAllByNameIn(parcelNames));
         } else {
-            return parcelRepository.findAllFromCsv(commandData.parcelsFileName());
+            entities.addAll(parcelRepository.findAll());
         }
+
+        var result = new ArrayList<Parcel>();
+        for (ParcelEntity parcel : entities) {
+            result.add(createParcel(parcel.getName(), Arrays.stream(parcel.getForm().split("\\\\n")).toList(), parcel.getSymbol()));
+        }
+
+        return result;
     }
+
+    private Parcel createParcel(String name, List<String> form, Character symbol) {
+        Parcel parcel = new Parcel();
+        parcel.setName(name);
+
+        char[][] formMatrix = new char[form.size()][];
+        for (int i = 0; i < form.size(); i++) {
+            formMatrix[i] = form.get(i).toCharArray();
+        }
+        parcel.setForm(formMatrix);
+
+        parcel.setSymbol(symbol);
+        return parcel;
+    }
+
+    public Parcel findByName(String name) {
+        return parcelMapper.toDto(parcelRepository.findByName(name));
+    }
+
+    public Parcel create(CreateCommand commandData) {
+        ParcelEntity parcelEntity = new ParcelEntity();
+        parcelEntity.setForm(commandData.form());
+        parcelEntity.setName(commandData.name());
+        parcelEntity.setSymbol(commandData.symbol());
+
+        return parcelMapper.toDto(parcelRepository.save(parcelEntity));
+    }
+
+    public void delete(String name) {
+        parcelRepository.deleteByName(name);
+    }
+
+    public Parcel edit(EditCommand commandData) {
+        ParcelEntity existingParcel = parcelRepository.findByName(commandData.id());
+
+        if (existingParcel == null) {
+            return null;
+        }
+
+        existingParcel.setName(commandData.newName());
+        existingParcel.setSymbol(commandData.newSymbol());
+        existingParcel.setForm(commandData.newForm());
+
+        return parcelMapper.toDto(parcelRepository.save(existingParcel));
+    }
+
 
     /**
      * Unloads parcels from a list of trucks and returns them as a list.
@@ -51,23 +112,29 @@ public class ParcelService {
         return parcels;
     }
 
-    /**
-     * Loads parcels from the file by their names. If the parcel is found in the file,
-     * it is added to the list of parcels.
-     *
-     * @param parcelNames A list of parcel names to search for in the file.
-     * @return A list of parcels that were found in the file.
-     */
-    public List<Parcel> getParcelsFromFile(List<String> parcelNames) {
-        List<Parcel> parcels = new ArrayList<>();
-        for (String name : parcelNames) {
-            Parcel parcel = parcelRepository.findByNameAsObject(name);
-            if (parcel != null) {
-                parcels.add(parcel);
-            }
-        }
-        return parcels;
+    public List<Parcel> findParcelsByTruckIds(List<Long> truckIds) {
+        List<String> parcelNames = parcelTruckService.findNamesByTruckIds(truckIds);
+
+        return parcelMapper.toDto(parcelRepository.findAllByNameIn(parcelNames));
     }
+
+//    /**
+//     * Loads parcels from the file by their names. If the parcel is found in the file,
+//     * it is added to the list of parcels.
+//     *
+//     * @param parcelNames A list of parcel names to search for in the file.
+//     * @return A list of parcels that were found in the file.
+//     */
+//    public List<Parcel> getParcelsFromFile(List<String> parcelNames) {
+//        List<Parcel> parcels = new ArrayList<>();
+//        for (String name : parcelNames) {
+//            Parcel parcel = parcelRepository.findByNameAsObject(name);
+//            if (parcel != null) {
+//                parcels.add(parcel);
+//            }
+//        }
+//        return parcels;
+//    }
 
     /**
      * Attempts to place a parcel on a truck grid. It tries to fit the parcel's form onto the grid.

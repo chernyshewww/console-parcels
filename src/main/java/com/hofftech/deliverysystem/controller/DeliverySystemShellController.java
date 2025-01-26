@@ -51,16 +51,16 @@ public class DeliverySystemShellController {
     @ShellMethod(key = "load", value = "Load parcels into trucks.")
     public String load(
             @ShellOption(help = "User email", value = {"--user", "-u"}) String user,
-            @ShellOption(help = "Path to a file containing parcels data (e.g., 'parcels.csv')", defaultValue = ShellOption.NULL) String file,
             @ShellOption(help = "List of trucks sizes, separated by '\\n' (e.g., '3x3\\n10x10')", defaultValue = ShellOption.NULL) String trucks,
             @ShellOption(help = "Type of loading (e.g., 'Одна машина - Одна посылка')", defaultValue = "Равномерное распределение") String type,
             @ShellOption(help = "Output format (e.g., 'text' or 'json')", defaultValue = "json-file") String out,
             @ShellOption(help = "Inline text description of parcels (e.g., 'Куб\\nПосылка тип 2')", defaultValue = ShellOption.NULL) String parcels,
             @ShellOption(help = "Output filename for saving results (e.g., 'trucks.json')", defaultValue = ShellOption.NULL) String output) {
 
-        String command = loadCommandService.buildLoadCommand(user, file, trucks, type, out, parcels, output);
+        String command = loadCommandService.buildLoadCommand(user, trucks, type, out, parcels, output);
         return commandDispatcher.dispatchCommand(command);
     }
+
 
     @ShellMethod(key = "unload", value = "Unload parcels from trucks.")
     public String unload(

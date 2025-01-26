@@ -73,7 +73,7 @@ public class OutputHelper {
 
         for (int row = 0; row < parcel.getForm().length; row++) {
             for (int col = 0; col < parcel.getForm()[row].length; col++) {
-                if (parcel.getForm()[row][col] == '1') {
+                if (parcel.getForm()[row][col] == 'x') {
                     coordinates.add(Arrays.asList(parcel.getPlacedX() + row, parcel.getPlacedY() + col));
                 }
             }
