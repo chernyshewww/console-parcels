@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Console Parcels
+  console-parcels:
+    build:
+      context: ./console-parcels
+      dockerfile: Dockerfile
+    container_name: console-parcels
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=delivery_db
+      - DB_USER=admin
+      - DB_PASSWORD=admin_password
+    volumes:
+      - ./console-parcels:/app
+    ports:
+      - "8081:8081"
+    depends_on:
+      - database
+
+  # Console Parcels Shell
+  console-parcels-shell:
+    build:
+      context: ./console-parcels-shell
+      dockerfile: Dockerfile
+    container_name: console-parcels-shell
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=delivery_db
+      - DB_USER=admin
+      - DB_PASSWORD=admin_password
+    volumes:
+      - ./console-parcels-shell:/app
+    ports:
+      - "8082:8082"
+    depends_on:
+      - database
+
+  # Console Parcels Telegram
+  console-parcels-telegram:
+    build:
+      context: ./console-parcels-telegram
+      dockerfile: Dockerfile
+    container_name: console-parcels-telegram
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=delivery_db
+      - DB_USER=admin
+      - DB_PASSWORD=admin_password
+    volumes:
+      - ./console-parcels-telegram:/app
+    ports:
+      - "8083:8083"
+    depends_on:
+      - database
+
+  # Database service (PostgreSQL example)
+  database:
+    image: postgres:13
+    container_name: delivery_database
+    environment:
+      POSTGRES_DB: delivery_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+    driver: local

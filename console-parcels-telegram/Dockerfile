@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the application JAR or class files into the container
-COPY ./build/libs/console-parcels.jar /app/console-parcels.jar
+COPY ./build/libs/console-parcels-telegram.jar /app/console-parcels-telegram.jar
 
 # Set the entrypoint (adjust if necessary)
 ENTRYPOINT ["java", "-jar", "console-parcels.jar"]
 
 # Expose port 8081 for the application to run
-EXPOSE 8081
+EXPOSE 8082

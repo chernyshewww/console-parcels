@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the application JAR or class files into the container
-COPY ./build/libs/console-parcels.jar /app/console-parcels.jar
+COPY ./build/libs/console-parcels-shell.jar /app/console-parcels-shell.jar
 
 # Set the entrypoint (adjust if necessary)
 ENTRYPOINT ["java", "-jar", "console-parcels.jar"]

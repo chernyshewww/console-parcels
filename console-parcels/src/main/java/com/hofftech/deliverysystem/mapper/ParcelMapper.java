@@ -2,7 +2,8 @@ package com.hofftech.deliverysystem.mapper;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.entity.ParcelEntity;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
