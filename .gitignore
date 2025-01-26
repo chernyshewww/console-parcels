@@ -43,6 +43,7 @@ bin/
 /.idea/
 /console-parcels-shell/.idea/
 /console-parcels-telegram/.idea/
+/console-parcels/.idea/
 
 
 /parcel_loader.log
