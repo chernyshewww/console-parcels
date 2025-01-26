@@ -1,0 +1,7 @@
+services:
+  url:
+    delivery-system-rest-client: http://localhost:8080
+
+server:
+  port:
+    8081
