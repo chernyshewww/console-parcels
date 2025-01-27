@@ -9,14 +9,11 @@ public class TruckGridHelper {
 
         for (char[] row : grid) {
             for (char cell : row) {
-                // Replace empty characters with '-'
                 gridString.append(cell == '\0' ? '-' : cell);
             }
-            // Add a newline after each row
             gridString.append("\n");
         }
 
-        // Remove the trailing newline for clean output
         if (gridString.length() > 0) {
             gridString.setLength(gridString.length() - 1);
         }

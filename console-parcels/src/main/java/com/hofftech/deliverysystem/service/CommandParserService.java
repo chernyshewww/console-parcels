@@ -58,7 +58,7 @@ public class CommandParserService {
     public LoadCommand parseLoadCommand(String text) throws InvalidCommandException {
         Pattern pattern = Pattern.compile(
                 "/load -u \"([^\"]+)\"" +
-                        "(?: -parcels \"([^\"]+)\")?" +  // Single 'parcels' argument for both cases (All or text)
+                        "(?: -parcels \"([^\"]+)\")?" +
                         " -trucks \"([^\"]+)\"" +
                         " -type \"([^\"]+)\"" +
                         " -out (text|json-file)" +
@@ -76,7 +76,7 @@ public class CommandParserService {
         }
 
         String user = matcher.group(1);
-        String parcels = matcher.group(2);  // This will either be "All" or a description like "КУБ22\nTestParcel"
+        String parcels = matcher.group(2);
         String trucks = matcher.group(3);
         String type = matcher.group(4);
         String out = matcher.group(5);

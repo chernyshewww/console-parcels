@@ -28,8 +28,6 @@ public class BillingService {
     private static final String LOAD = "Погрузка";
     private static final String UNLOAD = "Разгрузка";
 
-    //private final BillingRepositoryImpl billingRepository;
-
     private final BillingRepository billingRepository;
     private final PricingService pricingService;
     private final BillingRecordMapper billingRecordMapper;
@@ -78,7 +76,7 @@ public class BillingService {
      */
     public List<BillingSummary> getBillingSummaries(String user, LocalDate fromDate, LocalDate toDate) {
 
-        LocalDateTime fromDateTime = fromDate.atStartOfDay(); // e.g., 2025-01-24T00:00:00
+        LocalDateTime fromDateTime = fromDate.atStartOfDay();
         LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
 
          return billingRepository.findSummaryByUserAndPeriod(user, fromDateTime, toDateTime).stream().map(billing -> new BillingSummary(

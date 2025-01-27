@@ -118,24 +118,6 @@ public class ParcelService {
         return parcelMapper.toDto(parcelRepository.findAllByNameIn(parcelNames));
     }
 
-//    /**
-//     * Loads parcels from the file by their names. If the parcel is found in the file,
-//     * it is added to the list of parcels.
-//     *
-//     * @param parcelNames A list of parcel names to search for in the file.
-//     * @return A list of parcels that were found in the file.
-//     */
-//    public List<Parcel> getParcelsFromFile(List<String> parcelNames) {
-//        List<Parcel> parcels = new ArrayList<>();
-//        for (String name : parcelNames) {
-//            Parcel parcel = parcelRepository.findByNameAsObject(name);
-//            if (parcel != null) {
-//                parcels.add(parcel);
-//            }
-//        }
-//        return parcels;
-//    }
-
     /**
      * Attempts to place a parcel on a truck grid. It tries to fit the parcel's form onto the grid.
      * If successful, the parcel is placed at the given position, and its coordinates are recorded.

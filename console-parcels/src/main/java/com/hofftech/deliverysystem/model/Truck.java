@@ -37,10 +37,4 @@ public class Truck {
             Arrays.fill(row, (char) Constant.EMPTY_CELL.getValue());
         }
     }
-
-//    @JsonCreator
-//    public Truck(@JsonProperty("truck_type") String truckType, @JsonProperty("parcels") List<Parcel> parcels) {
-//        this.truckType = truckType;
-//        this.parcels = parcels;
-//    }
 }

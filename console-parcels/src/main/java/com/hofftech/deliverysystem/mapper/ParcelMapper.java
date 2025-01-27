@@ -34,7 +34,6 @@ public interface ParcelMapper {
                 .toArray(char[][]::new);
     }
 
-    // Convert char[][] back to List<List<Character>> (for form field)
     @Named("toListMatrix")
     default List<List<Character>> toListMatrix(char[][] form) {
         if (form == null) {
@@ -52,7 +51,6 @@ public interface ParcelMapper {
         return result;
     }
 
-    // Convert String to char[][] (For cases where form is stored as a String in DB)
     @Named("toCharArrayMatrixFromString")
     default char[][] toCharArrayMatrixFromString(String form) {
         if (form == null || form.isEmpty()) {
@@ -68,7 +66,6 @@ public interface ParcelMapper {
         return matrix;
     }
 
-    // Convert char[][] back to String (For cases where form is retrieved as a char[][])
     @Named("toStringFromCharArrayMatrix")
     default String toStringFromCharArrayMatrix(char[][] form) {
         if (form == null || form.length == 0) {
