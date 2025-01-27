@@ -1,9 +1,7 @@
 package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Parcel;
-import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.model.entity.ParcelTruckEntity;
-import com.hofftech.deliverysystem.model.entity.TruckEntity;
 import com.hofftech.deliverysystem.repository.ParcelTruckRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -4,6 +4,7 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.entity.ParcelEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.ArrayList;
 import java.util.List;

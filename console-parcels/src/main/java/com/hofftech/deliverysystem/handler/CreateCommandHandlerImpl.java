@@ -1,12 +1,8 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
-import com.hofftech.deliverysystem.model.Parcel;
-import com.hofftech.deliverysystem.model.entity.ParcelEntity;
 import com.hofftech.deliverysystem.model.record.command.CreateCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.repository.ParcelRepository;
-import com.hofftech.deliverysystem.repository.impl.ParcelRepositoryImpl;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;

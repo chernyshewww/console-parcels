@@ -1,14 +1,10 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
-import com.hofftech.deliverysystem.model.entity.ParcelTruckEntity;
-import com.hofftech.deliverysystem.model.entity.TruckEntity;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
-import com.hofftech.deliverysystem.repository.ParcelTruckRepository;
-import com.hofftech.deliverysystem.repository.TruckRepository;
 import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.OutputService;
@@ -16,7 +12,6 @@ import com.hofftech.deliverysystem.service.ParcelService;
 import com.hofftech.deliverysystem.service.TruckService;
 import com.hofftech.deliverysystem.strategy.LoadingStrategy;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
-import com.hofftech.deliverysystem.util.TruckGridHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,5 @@
 package com.hofftech.deliverysystem.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hofftech.deliverysystem.constants.Constant;
 import lombok.Getter;
 import lombok.Setter;
