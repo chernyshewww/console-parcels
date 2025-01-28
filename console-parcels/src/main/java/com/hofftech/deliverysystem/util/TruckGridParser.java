@@ -3,8 +3,8 @@ package com.hofftech.deliverysystem.util;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TruckGridHelper {
-    public String parseGridToString(char[][] grid) {
+public class TruckGridParser {
+    public String parse(char[][] grid) {
         StringBuilder gridString = new StringBuilder();
 
         for (char[] row : grid) {

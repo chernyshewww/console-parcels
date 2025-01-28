@@ -1,7 +1,16 @@
+object Version {
+    const val SPRING_BOOT = "3.3.3"
+    const val SPRING_SHELL = "3.1.4"
+    const val LOMBOK = "1.18.30"
+    const val LOMBOK_MAPSTRUCT_BINDING = "0.2.0"
+    const val JUNIT_BOM = "5.10.0"
+    const val JUNIT_JUPITER = "5.10.0"
+}
+
 plugins {
     id("java")
     id("org.springframework.boot") version "3.3.3"
-    id ("com.diffplug.spotless")      version "6.22.0"
+    id("com.diffplug.spotless") version "6.19.0"
 }
 
 group = "org.example"
@@ -12,15 +21,15 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.shell:spring-shell-starter:3.1.4")
-    implementation("org.springframework.boot:spring-boot-starter-web:3.3.3")
-    implementation("org.springframework.boot:spring-boot-starter:3.3.3")
-    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-    compileOnly("org.projectlombok:lombok:1.18.30")
+    implementation("org.springframework.shell:spring-shell-starter:${Version.SPRING_SHELL}")
+    implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
+    implementation("org.springframework.boot:spring-boot-starter:${Version.SPRING_BOOT}")
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Version.LOMBOK_MAPSTRUCT_BINDING}")
+    compileOnly("org.projectlombok:lombok:${Version.LOMBOK}")
 
-    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
-    annotationProcessor ("org.projectlombok:lombok:1.18.30")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Version.LOMBOK_MAPSTRUCT_BINDING}")
+    annotationProcessor("org.projectlombok:lombok:${Version.LOMBOK}")
+    testImplementation(platform("org.junit:junit-bom:${Version.JUNIT_BOM}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
@@ -29,6 +38,7 @@ spotless {
         removeUnusedImports()
     }
 }
+
 tasks.test {
     useJUnitPlatform()
 }

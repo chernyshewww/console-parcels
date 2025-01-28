@@ -16,10 +16,6 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Service class for parsing various commands from input text.
- * This class parses commands such as /load, /create, /find, /edit, /delete, and /unload.
- */
 @Service
 public class CommandParserService {
 
@@ -48,39 +44,71 @@ public class CommandParserService {
     private static final int UNLOAD_OUTFILE_GROUP = 2;
     private static final int UNLOAD_WITHCOUNT_GROUP = 3;
 
-    /**
-     * Parses a "/load" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return A LoadCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
-    public LoadCommand parseLoadCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/load -u \"([^\"]+)\"" +
-                        "(?: -parcels \"([^\"]+)\")?" +
-                        " -trucks \"([^\"]+)\"" +
-                        " -type \"([^\"]+)\"" +
-                        " -out (text|json-file)" +
-                        "(?: -out-filename \"([^\"]+)\")?");
+    private static final String LOAD_COMMAND_FORMAT = "/load -u \"([^\"]+)\"(?: -parcels \"([^\"]+)\")? -trucks \"([^\"]+)\" -type \"([^\"]+)\" -out (text|json-file)(?: -out-filename \"([^\"]+)\")?";
+    private static final String CREATE_COMMAND_FORMAT = "-name \"([^\"]+)\" -form \"([^\"]+)\" -symbol \"([^\"]+)\"";
+    private static final String FIND_COMMAND_FORMAT = "/find \"([^\"]+)\"";
+    private static final String EDIT_COMMAND_FORMAT = "-id\\s+\"([^\"]+)\"\\s*-name\\s+\"([^\"]+)\"\\s*-form\\s+\"([^\"]+)\"\\s*-symbol\\s+\"(.)\"";
+    private static final String DELETE_COMMAND_FORMAT = "/delete \"([^\"]+)\"";
+    private static final String UNLOAD_COMMAND_FORMAT = "/unload -u \"([^\"]+)\" -outfile \"([^\"]+)\"( --withcount)?";
+    private static final String BILLING_COMMAND_FORMAT = "/billing -u \"([^\\s]+)\" -from \"(\\d{2}\\.\\d{2}\\.\\d{4})\" -to \"(\\d{2}\\.\\d{2}\\.\\d{4})\"";
 
+    private static final String DATE_FORMAT= "dd.MM.yyyy";
+    private static final String ERROR_INVALID_LOAD_COMMAND = """
+        Ошибка! Проверьте формат команды.
+        Примеры:
+        /load -u "UserTest" -parcels "КУБ22\nTestParcel" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out text
+        /load -u "UserTest" -parcels "All" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
+        """;
+
+    private static final String ERROR_INVALID_CREATE_COMMAND = """
+        Ошибка! Пожалуйста, укажите все параметры в правильном формате:
+        /create -name "Название посылки" -form "форма посылки" -symbol "символ"
+        """;
+
+    private static final String ERROR_INVALID_FIND_COMMAND = """
+        Ошибка! Пожалуйста, укажите имя посылки для поиска.
+        Пример: /find "Название посылки"
+        """;
+
+    private static final String ERROR_INVALID_EDIT_COMMAND = """
+        Ошибка! Укажите все параметры команды в правильном формате:
+        /edit -id "старое имя" -name "новое имя" -form "новая форма" -symbol "новый символ"
+        """;
+
+    private static final String ERROR_INVALID_DELETE_COMMAND = """
+        Ошибка! Пожалуйста, укажите имя посылки для удаления.
+        Пример: /delete "Название посылки"
+        """;
+
+    private static final String ERROR_INVALID_UNLOAD_COMMAND = """
+        Ошибка! Проверьте формат команды.
+        Пример: /unload -u "testUser" --outfile "parcels.csv" --withcount
+        """;
+
+    private static final String ERROR_INVALID_BILLING_COMMAND = """
+        Ошибка! Проверьте формат команды.
+        Пример: billing -u "alex@adlogistic.ru" -from "11.01.2025" -to 12.01.2025
+        """;
+
+    private static final String ERROR_INVALID_DATE_FORMAT = """
+        Ошибка! Убедитесь, что даты указаны в формате ДД.ММ.ГГГГ.
+        Пример: billing -u alex@adlogistic.ru -from 11.01.2025 -to 12.01.2025
+        """;
+
+    public LoadCommand parseLoadCommand(String text) throws InvalidCommandException {
+        Pattern pattern = Pattern.compile(LOAD_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-            Ошибка! Проверьте формат команды.
-            Примеры:
-            /load -u "UserTest" -parcels "КУБ22\nTestParcel" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out text
-            /load -u "UserTest" -parcels "All" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
-            """);
+            throw new InvalidCommandException(ERROR_INVALID_LOAD_COMMAND);
         }
 
-        String user = matcher.group(1);
-        String parcels = matcher.group(2);
-        String trucks = matcher.group(3);
-        String type = matcher.group(4);
-        String out = matcher.group(5);
-        String outFilename = matcher.group(6);
+        String user = matcher.group(LOAD_USER_GROUP);
+        String parcels = matcher.group(LOAD_PARCELS_TEXT_GROUP);
+        String trucks = matcher.group(LOAD_TRUCKS_GROUP);
+        String type = matcher.group(LOAD_TYPE_GROUP);
+        String out = matcher.group(LOAD_OUT_GROUP);
+        String outFilename = matcher.group(LOAD_OUT_FILENAME_GROUP);
 
         return new LoadCommand(
                 user,
@@ -92,22 +120,12 @@ public class CommandParserService {
         );
     }
 
-    /**
-     * Parses a "/create" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return A CreateCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
     public CreateCommand parseCreateCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("-name \"([^\"]+)\" -form \"([^\"]+)\" -symbol \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(CREATE_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                Ошибка! Пожалуйста, укажите все параметры в правильном формате:
-                /create -name "Название посылки" -form "форма посылки" -symbol "символ"
-                """);
+            throw new InvalidCommandException(ERROR_INVALID_CREATE_COMMAND);
         }
 
         return new CreateCommand(
@@ -117,51 +135,25 @@ public class CommandParserService {
         );
     }
 
-    /**
-     * Parses a "/find" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return A FindCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
     public FindCommand parseFindCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("/find \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(FIND_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                Ошибка! Пожалуйста, укажите имя посылки для поиска.
-                Пример: /find "Название посылки"
-                """);
+            throw new InvalidCommandException(ERROR_INVALID_FIND_COMMAND);
         }
 
         return new FindCommand(matcher.group(FIND_NAME_GROUP));
     }
 
-    /**
-     * Parses an "/edit" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return An EditCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
     public EditCommand parseEditCommand(String text) throws InvalidCommandException {
         text = text.replace("“", "\"").replace("”", "\"");
 
-        Pattern pattern = Pattern.compile(
-                "-id\\s+\"([^\"]+)\"\\s*" +
-                        "-name\\s+\"([^\"]+)\"\\s*" +
-                        "-form\\s+\"([^\"]+)\"\\s*" +
-                        "-symbol\\s+\"(.)\"\\s*"
-        );
-
+        Pattern pattern = Pattern.compile(EDIT_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-            Ошибка! Укажите все параметры команды в правильном формате:
-            /edit -id "старое имя" -name "новое имя" -form "новая форма" -symbol "новый символ"
-            """);
+            throw new InvalidCommandException(ERROR_INVALID_EDIT_COMMAND);
         }
 
         return new EditCommand(
@@ -172,44 +164,23 @@ public class CommandParserService {
         );
     }
 
-    /**
-     * Parses a "/delete" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return A DeleteCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
     public DeleteCommand parseDeleteCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("/delete \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(DELETE_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-            Ошибка! Пожалуйста, укажите имя посылки для удаления.
-            Пример: /delete "Название посылки"
-            """);
+            throw new InvalidCommandException(ERROR_INVALID_DELETE_COMMAND);
         }
 
         return new DeleteCommand(matcher.group(DELETE_NAME_GROUP));
     }
 
-    /**
-     * Parses a "/unload" command from the provided input text.
-     *
-     * @param text The command text to parse.
-     * @return An UnloadCommand object with parsed details.
-     * @throws InvalidCommandException If the command format is incorrect.
-     */
     public UnloadCommand parseUnloadCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/unload -u \"([^\"]+)\" -outfile \"([^\"]+)\"( --withcount)?");
+        Pattern pattern = Pattern.compile(UNLOAD_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-                Ошибка! Проверьте формат команды.
-                Пример: /unload -u "testUser" --outfile "parcels.csv" --withcount
-                """);
+            throw new InvalidCommandException(ERROR_INVALID_UNLOAD_COMMAND);
         }
 
         return new UnloadCommand(
@@ -220,15 +191,11 @@ public class CommandParserService {
     }
 
     public BillingCommand parseBillingCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/billing -u \"([^\\s]+)\" -from \"(\\d{2}\\.\\d{2}\\.\\d{4})\" -to \"(\\d{2}\\.\\d{2}\\.\\d{4})\"");
+        Pattern pattern = Pattern.compile(BILLING_COMMAND_FORMAT);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-        Ошибка! Проверьте формат команды.
-        Пример: billing -u "alex@adlogistic.ru" -from "11.01.2025" -to 12.01.2025
-        """);
+            throw new InvalidCommandException(ERROR_INVALID_BILLING_COMMAND);
         }
 
         try {
@@ -238,15 +205,12 @@ public class CommandParserService {
 
             return new BillingCommand(user, fromDate, toDate);
         } catch (DateTimeParseException e) {
-            throw new InvalidCommandException("""
-        Ошибка! Убедитесь, что даты указаны в формате ДД.ММ.ГГГГ.
-        Пример: billing -u alex@adlogistic.ru -from 11.01.2025 -to 12.01.2025
-        """);
+            throw new InvalidCommandException(ERROR_INVALID_DATE_FORMAT);
         }
     }
 
     private LocalDate parseDate(String dateText) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return LocalDate.parse(dateText, formatter);
     }
 }

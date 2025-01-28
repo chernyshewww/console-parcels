@@ -50,4 +50,4 @@ bin/
 *~
 /output.txt
 /truck_state.json
-/spring-shell.log
+/console-parcels-shell/spring-shell.log

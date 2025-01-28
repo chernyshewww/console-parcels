@@ -1,14 +1,11 @@
-# Use a base image for Java, since these appear to be Java-based applications
-FROM openjdk:17-jdk-alpine
-
-# Set the working directory in the container
+# Use an image with Gradle installed to build the JAR
+FROM gradle:7.6-jdk17 AS build
 WORKDIR /app
+COPY . .
+RUN gradle build --no-daemon -x spotlessCheck -x test
 
-# Copy the application JAR or class files into the container
-COPY ./build/libs/console-parcels-shell.jar /app/console-parcels-shell.jar
-
-# Set the entrypoint (adjust if necessary)
-ENTRYPOINT ["java", "-jar", "console-parcels.jar"]
-
-# Expose port 8081 for the application to run
-EXPOSE 8081
+# Use a smaller runtime image for the final build
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/console-parcels-shell-1.0-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

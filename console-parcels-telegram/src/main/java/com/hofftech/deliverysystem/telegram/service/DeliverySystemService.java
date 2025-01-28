@@ -43,35 +43,66 @@ public class DeliverySystemService {
     private static final int UNLOAD_USER_GROUP = 1;
     private static final int UNLOAD_OUTFILE_GROUP = 2;
     private static final int UNLOAD_WITHCOUNT_GROUP = 3;
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
+
+    private static final String ERROR_LOAD_COMMAND_FORMAT = "Ошибка! Проверьте формат команды.\nПримеры:\n" +
+            "/load -u \"UserTest\" -parcels \"КУБ22\nTestParcel\" -trucks \"3x3\n6x2\" -type \"Одна машина - Одна посылка\" -out text\n" +
+            "/load -u \"UserTest\" -parcels \"All\" -trucks \"3x3\n6x2\" -type \"Одна машина - Одна посылка\" -out json-file -out-filename \"trucks.json\"";
+
+    private static final String ERROR_CREATE_COMMAND_FORMAT = "Ошибка! Пожалуйста, укажите все параметры в правильном формате:\n" +
+            "/create -name \"Название посылки\" -form \"форма посылки\" -symbol \"символ\"";
+
+    private static final String ERROR_FIND_COMMAND_FORMAT = "Ошибка! Пожалуйста, укажите имя посылки для поиска.\nПример: /find \"Название посылки\"";
+
+    private static final String ERROR_EDIT_COMMAND_FORMAT = "Ошибка! Укажите все параметры команды в правильном формате:\n" +
+            "/edit -id \"старое имя\" -name \"новое имя\" -form \"новая форма\" -symbol \"новый символ\"";
+
+    private static final String ERROR_DELETE_COMMAND_FORMAT = "Ошибка! Пожалуйста, укажите имя посылки для удаления.\nПример: /delete \"Название посылки\"";
+
+    private static final String ERROR_UNLOAD_COMMAND_FORMAT = "Ошибка! Проверьте формат команды.\nПример: /unload -u \"testUser\" -infile \"trucks.json\" -outfile \"parcels.csv\" --withcount";
+
+    private static final String ERROR_BILLING_COMMAND_FORMAT = "Ошибка! Проверьте формат команды.\nПример: billing -u \"alex@adlogistic.ru\" -from \"11.01.2025\" -to 12.01.2025";
+
+    private static final String ERROR_DATE_FORMAT = "Ошибка! Убедитесь, что даты указаны в формате ДД.ММ.ГГГГ.\nПример: billing -u alex@adlogistic.ru -from 11.01.2025 -to 12.01.2025";
+
+    private static final String LOAD_COMMAND_PATTERN = "/load -u \"([^\"]+)\"" +
+            "(?: -parcels \"([^\"]+)\")?" +
+            " -trucks \"([^\"]+)\"" +
+            " -type \"([^\"]+)\"" +
+            " -out (text|json-file)" +
+            "(?: -out-filename \"([^\"]+)\")?";
+
+    private static final String CREATE_COMMAND_PATTERN = "-name \"([^\"]+)\" -form \"([^\"]+)\" -symbol \"([^\"]+)\"";
+
+    private static final String FIND_COMMAND_PATTERN = "/find \"([^\"]+)\"";
+
+    private static final String EDIT_COMMAND_PATTERN = "-id\\s+\"([^\"]+)\"\\s*" +
+            "-name\\s+\"([^\"]+)\"\\s*" +
+            "-form\\s+\"([^\"]+)\"\\s*" +
+            "-symbol\\s+\"(.)\"\\s*";
+
+    private static final String DELETE_COMMAND_PATTERN = "/delete \"([^\"]+)\"";
+
+    private static final String UNLOAD_COMMAND_PATTERN = "/unload -u \"([^\"]+)\" -outfile \"([^\"]+)\"( --withcount)?";
+
+    private static final String BILLING_COMMAND_PATTERN = "/billing -u \"([^\\s]+)\" -from \"(\\d{2}\\.\\d{2}\\.\\d{4})\" -to \"(\\d{2}\\.\\d{2}\\.\\d{4})\"";
 
     private final DeliverySystemRestClient deliverySystemRestClient;
 
     public String sendLoadCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/load -u \"([^\"]+)\"" +
-                        "(?: -parcels \"([^\"]+)\")?" +  // Single 'parcels' argument for both cases (All or text)
-                        " -trucks \"([^\"]+)\"" +
-                        " -type \"([^\"]+)\"" +
-                        " -out (text|json-file)" +
-                        "(?: -out-filename \"([^\"]+)\")?");
-
+        Pattern pattern = Pattern.compile(LOAD_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-                    Ошибка! Проверьте формат команды.
-                    Примеры:
-                    /load -u "UserTest" -parcels "КУБ22\nTestParcel" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out text
-                    /load -u "UserTest" -parcels "All" -trucks "3x3\n6x2" -type "Одна машина - Одна посылка" -out json-file -out-filename "trucks.json"
-                    """);
+            throw new InvalidCommandException(ERROR_LOAD_COMMAND_FORMAT);
         }
 
-        String user = matcher.group(1);
-        String parcels = matcher.group(2);  // This will either be "All" or a description like "КУБ22\nTestParcel"
-        String trucks = matcher.group(3);
-        String type = matcher.group(4);
-        String out = matcher.group(5);
-        String outFilename = matcher.group(6);
+        String user = matcher.group(LOAD_USER_GROUP);
+        String parcels = matcher.group(LOAD_PARCELS_TEXT_GROUP);
+        String trucks = matcher.group(LOAD_TRUCKS_GROUP);
+        String type = matcher.group(LOAD_TYPE_GROUP);
+        String out = matcher.group(LOAD_OUT_GROUP);
+        String outFilename = matcher.group(LOAD_OUT_FILENAME_GROUP);
 
         return deliverySystemRestClient.load(
                 user,
@@ -84,14 +115,11 @@ public class DeliverySystemService {
     }
 
     public String sendCreateCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("-name \"([^\"]+)\" -form \"([^\"]+)\" -symbol \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(CREATE_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                    Ошибка! Пожалуйста, укажите все параметры в правильном формате:
-                    /create -name "Название посылки" -form "форма посылки" -symbol "символ"
-                    """);
+            throw new InvalidCommandException(ERROR_CREATE_COMMAND_FORMAT);
         }
 
         return deliverySystemRestClient.createParcel(
@@ -101,16 +129,12 @@ public class DeliverySystemService {
         );
     }
 
-
     public String sendFindCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("/find \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(FIND_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                    Ошибка! Пожалуйста, укажите имя посылки для поиска.
-                    Пример: /find "Название посылки"
-                    """);
+            throw new InvalidCommandException(ERROR_FIND_COMMAND_FORMAT);
         }
 
         return deliverySystemRestClient.findParcel(matcher.group(FIND_NAME_GROUP));
@@ -119,20 +143,11 @@ public class DeliverySystemService {
     public String sendEditCommand(String text) throws InvalidCommandException {
         text = text.replace("“", "\"").replace("”", "\"");
 
-        Pattern pattern = Pattern.compile(
-                "-id\\s+\"([^\"]+)\"\\s*" +
-                        "-name\\s+\"([^\"]+)\"\\s*" +
-                        "-form\\s+\"([^\"]+)\"\\s*" +
-                        "-symbol\\s+\"(.)\"\\s*"
-        );
-
+        Pattern pattern = Pattern.compile(EDIT_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                    Ошибка! Укажите все параметры команды в правильном формате:
-                    /edit -id "старое имя" -name "новое имя" -form "новая форма" -symbol "новый символ"
-                    """);
+            throw new InvalidCommandException(ERROR_EDIT_COMMAND_FORMAT);
         }
 
         return deliverySystemRestClient.edit(
@@ -143,30 +158,22 @@ public class DeliverySystemService {
         );
     }
 
-
     public String sendDeleteCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile("/delete \"([^\"]+)\"");
+        Pattern pattern = Pattern.compile(DELETE_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException(""" 
-                    Ошибка! Пожалуйста, укажите имя посылки для удаления.
-                    Пример: /delete "Название посылки"
-                    """);
+            throw new InvalidCommandException(ERROR_DELETE_COMMAND_FORMAT);
         }
         return deliverySystemRestClient.deleteParcel(matcher.group(DELETE_NAME_GROUP));
     }
 
     public String sendUnloadCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/unload -u \"([^\"]+)\" -outfile \"([^\"]+)\"( --withcount)?");
+        Pattern pattern = Pattern.compile(UNLOAD_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-                    Ошибка! Проверьте формат команды.
-                    Пример: /unload -u "testUser" -infile "trucks.json" -outfile "parcels.csv" --withcount
-                    """);
+            throw new InvalidCommandException(ERROR_UNLOAD_COMMAND_FORMAT);
         }
 
         return deliverySystemRestClient.unload(
@@ -177,15 +184,11 @@ public class DeliverySystemService {
     }
 
     public String sendBillingCommand(String text) throws InvalidCommandException {
-        Pattern pattern = Pattern.compile(
-                "/billing -u \"([^\\s]+)\" -from \"(\\d{2}\\.\\d{2}\\.\\d{4})\" -to \"(\\d{2}\\.\\d{2}\\.\\d{4})\"");
+        Pattern pattern = Pattern.compile(BILLING_COMMAND_PATTERN);
         Matcher matcher = pattern.matcher(text);
 
         if (!matcher.find()) {
-            throw new InvalidCommandException("""
-                    Ошибка! Проверьте формат команды.
-                    Пример: billing -u "alex@adlogistic.ru" -from "11.01.2025" -to 12.01.2025
-                    """);
+            throw new InvalidCommandException(ERROR_BILLING_COMMAND_FORMAT);
         }
 
         try {
@@ -193,21 +196,18 @@ public class DeliverySystemService {
             LocalDate fromDate = parseDate(matcher.group(2));
             LocalDate toDate = parseDate(matcher.group(3));
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
             String formattedFromDate = fromDate.format(formatter);
             String formattedToDate = toDate.format(formatter);
 
-            return  deliverySystemRestClient.billing(user, formattedFromDate, formattedToDate);
+            return deliverySystemRestClient.billing(user, formattedFromDate, formattedToDate);
         } catch (DateTimeParseException e) {
-            throw new InvalidCommandException("""
-                    Ошибка! Убедитесь, что даты указаны в формате ДД.ММ.ГГГГ.
-                    Пример: billing -u alex@adlogistic.ru -from 11.01.2025 -to 12.01.2025
-                    """);
+            throw new InvalidCommandException(ERROR_DATE_FORMAT);
         }
     }
 
     private LocalDate parseDate(String dateText) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         return LocalDate.parse(dateText, formatter);
     }
 }

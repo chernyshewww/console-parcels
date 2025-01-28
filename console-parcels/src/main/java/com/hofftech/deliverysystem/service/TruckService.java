@@ -5,7 +5,7 @@ import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.model.entity.TruckEntity;
 import com.hofftech.deliverysystem.repository.TruckRepository;
-import com.hofftech.deliverysystem.util.TruckGridHelper;
+import com.hofftech.deliverysystem.util.TruckGridParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class TruckService {
 
     private final TruckRepository truckrepository;
     private final TruckMapper truckMapper;
-    private final TruckGridHelper truckGridHelper;
+    private final TruckGridParser truckGridParser;
     private final ParcelTruckService parcelTruckService;
 
     /**
@@ -81,7 +81,7 @@ public class TruckService {
             TruckEntity truckEntity = new TruckEntity();
             truckEntity.setHeight(truck.getHeight());
             truckEntity.setWidth(truck.getWidth());
-            truckEntity.setGrid(truckGridHelper.parseGridToString(truck.getGrid()));
+            truckEntity.setGrid(truckGridParser.parse(truck.getGrid()));
             truckrepository.save(truckEntity);
 
             if (!truck.getParcels().isEmpty()) {

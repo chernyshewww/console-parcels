@@ -24,10 +24,10 @@ public interface DeliverySystemRestClient {
 
     @PostExchange("/api/commands/edit")
     String edit(
-                @RequestParam String id,
-                @RequestParam String name,
-                @RequestParam String form,
-                @RequestParam char symbol);
+            @RequestParam String id,
+            @RequestParam String name,
+            @RequestParam String form,
+            @RequestParam char symbol);
 
     @PostExchange("/api/commands/load")
     String load(
