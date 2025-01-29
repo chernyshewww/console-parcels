@@ -1,0 +1,7 @@
+[ {
+  "truck_type" : "10x10",
+  "parcels" : [ {
+    "name" : "TestParcel",
+    "coordinates" : [ ]
+  } ]
+} ]

@@ -1,0 +1,71 @@
+services:
+  # Console Parcels
+  console-parcels:
+    build:
+      context: ./console-parcels
+      dockerfile: Dockerfile
+    container_name: console-parcels
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/delivery_db
+      SPRING_DATASOURCE_USERNAME: delivery_user
+      SPRING_DATASOURCE_PASSWORD: delivery_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    logging:
+        driver: "json-file"
+        options:
+          max-size: "50m"
+    depends_on:
+      - db
+
+  # Console Parcels Shell
+  console-parcels-shell:
+    build:
+      context: ./console-parcels-shell
+      dockerfile: Dockerfile
+    container_name: console-parcels-shell
+    environment:
+      SERVICES_URL_DELIVERY-SYSTEM-REST-CLIENT: http://console-parcels:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+
+  # Console Parcels Telegram
+  console-parcels-telegram:
+    build:
+      context: ./console-parcels-telegram
+      dockerfile: Dockerfile
+    container_name: console-parcels-telegram
+    environment:
+      TELEGRAM_TOKEN: 7546831359:AAGeR2TeS_j-bJ-BcMMff8QAXcz-cRWxinM
+      TELEGRAM_USERNAME: DeliveryParcelsBot
+      SERVICES_URL_DELIVERY-SYSTEM-REST-CLIENT: http://console-parcels:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+  
+
+  # Database service (PostgreSQL example)
+
+  db:
+    image: postgres:15
+    container_name: delivery-system-db
+    environment:
+      POSTGRES_DB: delivery_db
+      POSTGRES_USER: delivery_user
+      POSTGRES_PASSWORD: delivery_password
+    logging:
+        driver: "json-file"
+        options:
+          max-size: "50m"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local

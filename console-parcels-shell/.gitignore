@@ -40,14 +40,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-/.idea/
-/console-parcels-shell/.idea/
-/console-parcels-telegram/.idea/
-/console-parcels/.idea/
-
-
-/parcel_loader.log
-*~
-/output.txt
-/truck_state.json
-/console-parcels-shell/spring-shell.log
