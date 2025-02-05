@@ -1,0 +1,18 @@
+﻿spring:
+  application:
+    name: console-parcels
+  jpa:
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://db:5432/delivery_db
+    username: delivery_user
+    password: delivery_password
+    driver-class-name: org.postgresql.Driver
+
+billing:
+  loadPricing: 50
+  unloadPricing: 80
+  truckPricing: 200
+
+server:
+  port: 8083
