@@ -44,6 +44,7 @@ bin/
 /console-parcels-shell/.idea/
 /console-parcels-telegram/.idea/
 /console-parcels/.idea/
+/console-parcels-billing/.idea/
 
 
 /parcel_loader.log
