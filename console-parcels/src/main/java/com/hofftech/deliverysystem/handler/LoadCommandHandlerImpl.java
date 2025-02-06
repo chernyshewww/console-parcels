@@ -1,6 +1,7 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.model.LoadParcelsBillingDto;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -15,6 +16,7 @@ import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.Message;
 
 import java.util.List;
 
@@ -28,7 +30,6 @@ public class LoadCommandHandlerImpl implements CommandHandler {
     private final CommandParserService commandParserService;
     private final OutputService outputService;
     private final BillingService billingService;
-    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public String handle(String text) {
@@ -47,15 +48,7 @@ public class LoadCommandHandlerImpl implements CommandHandler {
 
             truckService.saveTrucks(loadedTrucks);
 
-            // Отправка сообщения в Kafka
-            String message = String.format("User: %s, Trucks: %d, Parcels: %d",
-                    commandData.user(), loadedTrucks.size(), parcels.size());
-            kafkaTemplate.send("billing-load-topic", commandData.user(), message);
-//            billingService.recordLoadOperation(
-//                    commandData.user(),
-//                    loadedTrucks.size(),
-//                    parcels.size()
-//            );
+            billingService.addLoadParcelsBilling(commandData.user(), loadedTrucks.size(), parcels.size());
 
             return switch (commandData.outputType()) {
                 case "text" -> outputService.generateLoadOutput(loadedTrucks);

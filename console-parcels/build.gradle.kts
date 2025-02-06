@@ -19,6 +19,7 @@ object Version {
     const val MOCKITO = "4.7.0"
     const val JAXB_API = "2.3.1"
     const val JAXB_RUNTIME = "2.3.1"
+    const val GSON = "2.11.0"
 
     object Spring {
         const val CLOUD = "2023.0.3"
@@ -95,6 +96,9 @@ dependencies {
 
     // SpringDoc OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRING_DOC}")
+
+    //Json
+    implementation("com.google.code.gson:gson:${Version.GSON}")
 }
 
 spotless {

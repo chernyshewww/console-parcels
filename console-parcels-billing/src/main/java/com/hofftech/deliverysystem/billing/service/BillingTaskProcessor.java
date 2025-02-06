@@ -16,7 +16,7 @@ public class BillingTaskProcessor {
 
     private final BillingService billingService;
 
-    @KafkaListener(topics = "billing-load-topic", groupId = "delivery-system-group", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "loadParcelsBilling-out-0", groupId = "delivery-system-group", containerFactory = "kafkaListenerContainerFactory")
     public void processLoad(@Payload String task) {
         log.info("Received sorting task: {}", task);
         billingService.recordLoadOperation(task, 1, 2);

@@ -41,7 +41,7 @@ public class UnloadCommandHandlerImpl implements CommandHandler {
 
             fileService.saveToFile(commandData.outputFileName(), result);
 
-            billingService.recordUnloadOperation(
+            billingService.addUnloadParcelsBilling(
                     commandData.user(),
                     truckIds.size(),
                     parcels.size()

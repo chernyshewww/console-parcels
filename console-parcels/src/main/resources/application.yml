@@ -23,6 +23,9 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
 
+schedule:
+  process-outbox-messages:
+    interval: 1000
 
 billing:
   loadPricing: 50

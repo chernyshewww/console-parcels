@@ -1,69 +1,58 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.mapper.BillingRecordMapper;
-import com.hofftech.deliverysystem.model.entity.BillingRecordEntity;
-import com.hofftech.deliverysystem.model.record.billing.BillingRecord;
+import com.hofftech.deliverysystem.exception.BillingSendException;
+import com.hofftech.deliverysystem.model.LoadParcelsBillingDto;
+import com.hofftech.deliverysystem.model.domain.OutboxMessage;
 import com.hofftech.deliverysystem.model.record.billing.BillingSummary;
 import com.hofftech.deliverysystem.repository.BillingRepository;
+import com.hofftech.deliverysystem.repository.OutboxRepository;
+import com.hofftech.deliverysystem.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-/**
- * Service class for managing billing operations, including recording load/unload transactions
- * and retrieving billing summaries for specific users and time periods.
- * <p>
- * This service interacts with the billing repository for data persistence
- * and uses the pricing service to calculate costs for various operations.
- */
-@Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BillingService {
 
-    private static final String LOAD = "Погрузка";
-    private static final String UNLOAD = "Разгрузка";
-
+    private final OutboxRepository outboxRepository;
     private final BillingRepository billingRepository;
-    private final PricingService pricingService;
-    private final BillingRecordMapper billingRecordMapper;
 
+    public void addLoadParcelsBilling(String user, int parcelsCount, int trucksCount) {
+        if (user == null || user.isEmpty()) {
+            throw new BillingSendException("Необходимо указать пользователя");
+        }
 
-    /**
-     * Records a load operation for a user, calculating the cost based on the number
-     * of trucks and parcels involved.
-     *
-     * @param user         The email of the user performing the operation.
-     * @param trucksCount  The number of trucks used for loading.
-     * @param parcelsCount The number of parcels loaded.
-     */
-    public void recordLoadOperation(String user, int trucksCount, int parcelsCount) {
-        int cost = pricingService.calculateLoadCost(trucksCount, parcelsCount);
-        BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), LOAD, trucksCount, parcelsCount, cost);
-        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
-
-        billingRepository.save(billingEntity);
-        log.info("Recorded load operation for user: {}, cost: {}", user, cost);
+        var message = createOutboxMessage(user, parcelsCount, trucksCount, "loadParcelsBilling");
+        outboxRepository.save(message);
     }
 
-    /**
-     * Records an unload operation for a user, calculating the cost based on the number
-     * of trucks and parcels involved.
-     *
-     * @param user         The email of the user performing the operation.
-     * @param trucksCount  The number of trucks used for unloading.
-     * @param parcelsCount The number of parcels unloaded.
-     */
-    public void recordUnloadOperation(String user, int trucksCount, int parcelsCount) {
-        int cost = pricingService.calculateUnloadCost(trucksCount, parcelsCount);
-        BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), UNLOAD, trucksCount, parcelsCount, cost);
-        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
-        billingRepository.save(billingEntity);
-        log.info("Recorded unload operation for user: {}, cost: {}", user, cost);
+
+    public void addUnloadParcelsBilling(String user, int parcelscount, int trucksCount) {
+        if (user == null || user.isEmpty()) {
+            throw new BillingSendException("Необходимо указать пользователя");
+        }
+
+        var message = createOutboxMessage(user, parcelscount, trucksCount, "unloadParcelsBilling");
+        outboxRepository.save(message);
+    }
+
+    private OutboxMessage createOutboxMessage(String user, int parcelsCount, int trucksCount, String messageType) {
+        var message = new OutboxMessage();
+        message.setMessageType(messageType);
+        message.setPayload(JsonUtil.toJson(new LoadParcelsBillingDto(
+                UUID.randomUUID(),
+                user,
+                parcelsCount,
+                trucksCount
+        )));
+        message.setCreatedAt(LocalDateTime.now());
+        message.setOwner(user);
+        return message;
     }
 
     /**
@@ -79,13 +68,13 @@ public class BillingService {
         LocalDateTime fromDateTime = fromDate.atStartOfDay();
         LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
 
-         return billingRepository.findSummaryByUserAndPeriod(user, fromDateTime, toDateTime).stream().map(billing -> new BillingSummary(
+        return billingRepository.findSummaryByUserAndPeriod(user, fromDateTime, toDateTime).stream().map(billing -> new BillingSummary(
                 billing.getTimestamp().toLocalDate(),
                 billing.getOperationType(),
                 billing.getSegments(),
                 billing.getParcels(),
                 billing.getCost()
         )).sorted((a, b) -> b.getTimestamp().compareTo(a.getTimestamp())).toList();
-
     }
 }
+
