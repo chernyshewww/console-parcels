@@ -1,4 +1,4 @@
-﻿package com.hofftech.deliverysystem.billing.model;
+package com.hofftech.deliverysystem.billing.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

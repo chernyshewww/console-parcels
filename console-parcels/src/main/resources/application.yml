@@ -4,11 +4,16 @@ spring:
   jpa:
     open-in-view: false
   datasource:
+    url: jdbc:postgresql://localhost:5432/delivery_db
+    username: delivery_user
+    password: delivery_password
     driver-class-name: org.postgresql.Driver
-
-  swagger:
-    url:
-      path: /
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+swagger:
+  url:
+    path: /
 
 springdoc:
   api-docs:
@@ -44,6 +49,9 @@ common-delivery:
 
 logging.level:
   com.hofftech.deliverysystem: DEBUG
+logging:
+  level:
+    org.springframework.boot.autoconfigure: DEBUG
 
 
 

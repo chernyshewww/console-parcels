@@ -15,6 +15,7 @@ import com.hofftech.deliverysystem.util.FormHelper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class CommandFactory {
     private final OutputService outputService;
     private final FormHelper formHelper;
     private final BillingService billingService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     private final Map<String, Supplier<CommandHandler>> commandRegistry = new HashMap<>();
 
@@ -48,7 +50,7 @@ public class CommandFactory {
         commandRegistry.put("/delete", () ->
                 new DeleteCommandHandlerImpl(parcelService, commandParserService));
         commandRegistry.put("/load", () ->
-                new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService, billingService));
+                new LoadCommandHandlerImpl(parcelService, truckService, strategyHelper, commandParserService, outputService, billingService, kafkaTemplate));
         commandRegistry.put("/unload", () ->
                 new UnloadCommandHandlerImpl(commandParserService, outputService, fileService, billingService, truckService, parcelService));
         commandRegistry.put("/billing", () ->

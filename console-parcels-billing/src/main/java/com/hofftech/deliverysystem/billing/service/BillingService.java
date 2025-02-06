@@ -10,6 +10,7 @@ import com.hofftech.deliverysystem.billing.repository.InboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +40,6 @@ public class BillingService {
     private final InboxRepository inboxRepository;
     private final PricingService pricingService;
     private final BillingRecordMapper billingRecordMapper;
-    private final Clock clock;
 
     /**
      * Records a load operation for a user, calculating the cost based on the number
@@ -49,12 +49,10 @@ public class BillingService {
      * @param trucksCount  The number of trucks used for loading.
      * @param parcelsCount The number of parcels loaded.
      */
-    @Transactional
-    @CacheEvict(value = "billing", key = "#message.user + '-last-month'")
     public void recordLoadOperation(String user, int trucksCount, int parcelsCount) {
-        if (inboxRepository.findById()){
-            return;
-        }
+//        if (inboxRepository.findById()){
+//            return;
+//        }
 
         int cost = pricingService.calculateLoadCost(trucksCount, parcelsCount);
         BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), LOAD, trucksCount, parcelsCount, cost);
@@ -107,7 +105,6 @@ public class BillingService {
     private void addInboxMessage(UUID messageId, String user) {
         var message = new InboxMessage();
         message.setId(messageId);
-        message.setCreatedAt(LocalDateTime.now(clock));
         message.setOwner(user);
         inboxRepository.save(message);
     }

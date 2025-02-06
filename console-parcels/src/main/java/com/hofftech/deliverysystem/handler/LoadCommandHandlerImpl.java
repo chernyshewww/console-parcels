@@ -28,6 +28,7 @@ public class LoadCommandHandlerImpl implements CommandHandler {
     private final CommandParserService commandParserService;
     private final OutputService outputService;
     private final BillingService billingService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public String handle(String text) {
@@ -47,9 +48,9 @@ public class LoadCommandHandlerImpl implements CommandHandler {
             truckService.saveTrucks(loadedTrucks);
 
             // Отправка сообщения в Kafka
-//            String message = String.format("User: %s, Trucks: %d, Parcels: %d",
-//                    commandData.user(), loadedTrucks.size(), parcels.size());
-//            kafkaTemplate.send("billing-load-topic", commandData.user(), message);
+            String message = String.format("User: %s, Trucks: %d, Parcels: %d",
+                    commandData.user(), loadedTrucks.size(), parcels.size());
+            kafkaTemplate.send("billing-load-topic", commandData.user(), message);
 //            billingService.recordLoadOperation(
 //                    commandData.user(),
 //                    loadedTrucks.size(),

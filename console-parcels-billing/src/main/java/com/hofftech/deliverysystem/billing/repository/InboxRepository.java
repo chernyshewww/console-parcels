@@ -1,4 +1,4 @@
-﻿package com.hofftech.deliverysystem.billing.repository;
+package com.hofftech.deliverysystem.billing.repository;
 
 import com.hofftech.deliverysystem.billing.model.InboxMessage;
 import org.springframework.data.jpa.repository.JpaRepository;

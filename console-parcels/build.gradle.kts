@@ -58,9 +58,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter:${Version.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:${Version.SPRING_BOOT}")
-    implementation("org.springframework.cloud:spring-cloud-starter-config")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2024.0.0"))
+    implementation("org.springframework.kafka:spring-kafka:3.0.10")
+
     // Database
     implementation("org.postgresql:postgresql:${Version.POSTGRESQL}")
     implementation("org.flywaydb:flyway-core:${Version.FLYWAY}")
