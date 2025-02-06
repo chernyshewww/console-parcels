@@ -1,6 +1,5 @@
 package com.hofftech.deliverysystem.service;
 
-import com.hofftech.deliverysystem.model.LoadParcelsBillingDto;
 import com.hofftech.deliverysystem.model.domain.OutboxMessage;
 import com.hofftech.deliverysystem.repository.OutboxRepository;
 import lombok.RequiredArgsConstructor;

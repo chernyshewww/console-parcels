@@ -10,14 +10,11 @@ import com.hofftech.deliverysystem.handler.FindCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.HelpCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.LoadCommandHandlerImpl;
 import com.hofftech.deliverysystem.handler.UnloadCommandHandlerImpl;
-import com.hofftech.deliverysystem.model.LoadParcelsBillingDto;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import com.hofftech.deliverysystem.util.FormHelper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

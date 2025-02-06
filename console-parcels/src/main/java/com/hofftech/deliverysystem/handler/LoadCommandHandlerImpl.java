@@ -1,7 +1,6 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
-import com.hofftech.deliverysystem.model.LoadParcelsBillingDto;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -15,8 +14,6 @@ import com.hofftech.deliverysystem.strategy.LoadingStrategy;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.messaging.Message;
 
 import java.util.List;
 
