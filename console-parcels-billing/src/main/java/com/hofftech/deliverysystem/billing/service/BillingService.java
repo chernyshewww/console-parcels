@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.billing.service;
 
 import com.hofftech.deliverysystem.billing.mapper.BillingRecordMapper;
 import com.hofftech.deliverysystem.billing.model.InboxMessage;
+import com.hofftech.deliverysystem.billing.model.domain.LoadParcelsBillingDto;
 import com.hofftech.deliverysystem.billing.model.entity.BillingRecordEntity;
 import com.hofftech.deliverysystem.billing.model.record.BillingRecord;
 import com.hofftech.deliverysystem.billing.model.record.BillingSummary;
@@ -41,43 +42,39 @@ public class BillingService {
     private final PricingService pricingService;
     private final BillingRecordMapper billingRecordMapper;
 
-    /**
-     * Records a load operation for a user, calculating the cost based on the number
-     * of trucks and parcels involved.
-     *
-     * @param user         The email of the user performing the operation.
-     * @param trucksCount  The number of trucks used for loading.
-     * @param parcelsCount The number of parcels loaded.
-     */
-    public void recordLoadOperation(String user, int trucksCount, int parcelsCount) {
-//        if (inboxRepository.findById()){
-//            return;
-//        }
-
-        int cost = pricingService.calculateLoadCost(trucksCount, parcelsCount);
-        BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), LOAD, trucksCount, parcelsCount, cost);
-        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
-
-        billingRepository.save(billingEntity);
-        log.info("Recorded load operation for user: {}, cost: {}", user, cost);
-    }
-
-    /**
-     * Records an unload operation for a user, calculating the cost based on the number
-     * of trucks and parcels involved.
-     *
-     * @param user         The email of the user performing the operation.
-     * @param trucksCount  The number of trucks used for unloading.
-     * @param parcelsCount The number of parcels unloaded.
-     */
     @Transactional
     @CacheEvict(value = "billing", key = "#message.user + '-last-month'")
-    public void recordUnloadOperation(String user, int trucksCount, int parcelsCount) {
-        int cost = pricingService.calculateUnloadCost(trucksCount, parcelsCount);
-        BillingRecord billing = new BillingRecord(user, LocalDateTime.now(), UNLOAD, trucksCount, parcelsCount, cost);
+    public void recordLoadOperation(LoadParcelsBillingDto loadParcelsBillingDto) {
+        if (inboxRepository.findById(loadParcelsBillingDto.getMessageId()).isPresent()) {
+            return;
+        }
+
+        int cost = pricingService.calculateLoadCost(loadParcelsBillingDto.getTrucksCount(), loadParcelsBillingDto.getParcelsCount());
+        BillingRecord billing = new BillingRecord(loadParcelsBillingDto.getUser(), LocalDateTime.now(), LOAD,
+                loadParcelsBillingDto.getTrucksCount(),
+                loadParcelsBillingDto.getParcelsCount(), cost);
+        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
+
+        billingRepository.save(billingEntity);
+        addInboxMessage(loadParcelsBillingDto.getMessageId(), loadParcelsBillingDto.getUser());
+        log.info("Recorded load operation for user: {}, cost: {}", loadParcelsBillingDto.getUser(), cost);
+    }
+
+    @Transactional
+    @CacheEvict(value = "billing", key = "#message.user + '-last-month'")
+    public void recordUnloadOperation(LoadParcelsBillingDto loadParcelsBillingDto) {
+        if (inboxRepository.findById(loadParcelsBillingDto.getMessageId()).isPresent()) {
+            return;
+        }
+
+        int cost = pricingService.calculateUnloadCost(loadParcelsBillingDto.getTrucksCount(), loadParcelsBillingDto.getParcelsCount());
+        BillingRecord billing = new BillingRecord(loadParcelsBillingDto.getUser(), LocalDateTime.now(), UNLOAD,
+                loadParcelsBillingDto.getTrucksCount(),
+                loadParcelsBillingDto.getParcelsCount(), cost);
         BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
         billingRepository.save(billingEntity);
-        log.info("Recorded unload operation for user: {}, cost: {}", user, cost);
+        addInboxMessage(loadParcelsBillingDto.getMessageId(), loadParcelsBillingDto.getUser());
+        log.info("Recorded unload operation for user: {}, cost: {}", loadParcelsBillingDto.getUser(), cost);
     }
 
     /**
@@ -106,6 +103,7 @@ public class BillingService {
         var message = new InboxMessage();
         message.setId(messageId);
         message.setOwner(user);
+        message.setCreatedAt(LocalDateTime.now());
         inboxRepository.save(message);
     }
 }
