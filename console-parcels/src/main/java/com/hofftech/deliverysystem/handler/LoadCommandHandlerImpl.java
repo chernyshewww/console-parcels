@@ -14,6 +14,7 @@ import com.hofftech.deliverysystem.strategy.LoadingStrategy;
 import com.hofftech.deliverysystem.strategy.StrategyHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.List;
 
@@ -45,11 +46,15 @@ public class LoadCommandHandlerImpl implements CommandHandler {
 
             truckService.saveTrucks(loadedTrucks);
 
-            billingService.recordLoadOperation(
-                    commandData.user(),
-                    loadedTrucks.size(),
-                    parcels.size()
-            );
+            // Отправка сообщения в Kafka
+//            String message = String.format("User: %s, Trucks: %d, Parcels: %d",
+//                    commandData.user(), loadedTrucks.size(), parcels.size());
+//            kafkaTemplate.send("billing-load-topic", commandData.user(), message);
+//            billingService.recordLoadOperation(
+//                    commandData.user(),
+//                    loadedTrucks.size(),
+//                    parcels.size()
+//            );
 
             return switch (commandData.outputType()) {
                 case "text" -> outputService.generateLoadOutput(loadedTrucks);
