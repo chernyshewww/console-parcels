@@ -76,6 +76,19 @@ public class BillingService {
         log.info("Recorded unload operation for user: {}, cost: {}", message.getUser(), cost);
     }
 
+    public List<BillingSummary> findBillings(String user, LocalDate fromDate, LocalDate toDate) {
+        LocalDateTime fromDateTime = fromDate.atStartOfDay();
+        LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
+
+        return billingRepository.findSummaryByUserAndPeriod(user, fromDateTime, toDateTime).stream().map(billing -> new BillingSummary(
+                billing.getTimestamp().toLocalDate(),
+                billing.getOperationType(),
+                billing.getSegments(),
+                billing.getParcels(),
+                billing.getCost()
+        )).sorted((a, b) -> b.getTimestamp().compareTo(a.getTimestamp())).toList();
+    }
+
     /**
      * Retrieves billing summaries for a user within a specified date range.
      *
@@ -85,7 +98,7 @@ public class BillingService {
      * @return A list of billing summaries for the specified period.
      */
     @Cacheable(value = "billing", key = "#user")
-    public List<BillingSummary> getBillingSummaries(String user, LocalDate fromDate, LocalDate toDate) {
+    public List<BillingSummary> findBillingSummariesByLastMonth(String user, LocalDate fromDate, LocalDate toDate) {
 
         LocalDateTime fromDateTime = fromDate.atStartOfDay();
         LocalDateTime toDateTime = toDate.atTime(23, 59, 59);

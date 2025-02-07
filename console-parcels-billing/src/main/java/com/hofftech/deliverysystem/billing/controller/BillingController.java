@@ -1,5 +1,6 @@
 package com.hofftech.deliverysystem.billing.controller;
 
+import com.hofftech.deliverysystem.billing.model.enums.Period;
 import com.hofftech.deliverysystem.billing.model.record.BillingSummary;
 import com.hofftech.deliverysystem.billing.service.BillingService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/commands")
 @RequiredArgsConstructor
-@Tag(name = "Delivery System Commands", description = "APIs for managing delivery system commands (e.g., create, find, edit, delete, load, unload, billing).")
+@Tag(name = "Delivery System Billing commands", description = "APIs for managing delivery system billing.")
 public class BillingController {
 
     private final BillingService billingService;
@@ -40,8 +42,9 @@ public class BillingController {
             @ApiResponse(responseCode = "400", description = "Invalid date format or input parameters")
     })
     public String billing(@RequestParam @Parameter(description = "The user for whom to retrieve billing information") String user,
-                          @RequestParam @Parameter(description = "Start date for the billing period") String from,
-                          @RequestParam @Parameter(description = "End date for the billing period") String to) {
+                          @RequestParam(required = false) @Parameter(description = "Start date for the billing period") String from,
+                          @RequestParam(required = false) @Parameter(description = "End date for the billing period") String to,
+                          @Parameter(description = "Период") @RequestParam(defaultValue = "NONE", required = false) Period period) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -49,7 +52,13 @@ public class BillingController {
             LocalDate fromDate = LocalDate.parse(from, formatter);
             LocalDate toDate = LocalDate.parse(to, formatter);
 
-            List<BillingSummary> billingSummaries = billingService.getBillingSummaries(user, fromDate, toDate);
+            List<BillingSummary> billingSummaries = new ArrayList<>();
+            if (period == Period.LAST_MONTH){
+                billingSummaries = billingService.findBillingSummariesByLastMonth(user, fromDate, toDate);
+            }
+            else {
+                billingSummaries = billingService.findBillings(user, fromDate, toDate);
+            }
 
             return billingSummaries.stream()
                     .map(BillingSummary::toString)
