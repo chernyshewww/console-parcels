@@ -1,8 +1,5 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.model.Parcel;
-import com.hofftech.deliverysystem.model.entity.ParcelEntity;
-import com.hofftech.deliverysystem.model.record.command.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
@@ -16,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 

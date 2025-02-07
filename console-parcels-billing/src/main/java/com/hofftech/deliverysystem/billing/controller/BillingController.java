@@ -51,9 +51,8 @@ public class BillingController {
 
             List<BillingSummary> billingSummaries = billingService.getBillingSummaries(user, fromDate, toDate);
 
-            // Convert each BillingSummary to a string and join with newline separators
             return billingSummaries.stream()
-                    .map(BillingSummary::toString) // Use the overridden toString method
+                    .map(BillingSummary::toString)
                     .collect(Collectors.joining("\n"));
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid date format. Please use yyyy-MM-dd.");

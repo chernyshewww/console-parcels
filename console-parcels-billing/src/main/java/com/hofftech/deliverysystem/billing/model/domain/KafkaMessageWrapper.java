@@ -3,10 +3,9 @@ package com.hofftech.deliverysystem.billing.model.domain;
 import java.util.Map;
 
 public class KafkaMessageWrapper {
-    private String payload; // JSON string
-    private Map<String, Object> headers; // Headers
+    private String payload;
+    private Map<String, Object> headers;
 
-    // Getters and setters
     public String getPayload() {
         return payload;
     }

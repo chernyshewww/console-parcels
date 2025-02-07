@@ -2,7 +2,6 @@ package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.repository.TruckRepository;
 import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;

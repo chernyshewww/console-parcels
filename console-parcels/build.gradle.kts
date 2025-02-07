@@ -45,40 +45,33 @@ repositories {
 }
 
 dependencies {
-    // Logging
     implementation("org.slf4j:slf4j-api:${Version.SLF4J}")
     implementation("ch.qos.logback:logback-classic:${Version.LOGBACK}")
 
-    // Jackson
     implementation("com.fasterxml.jackson.core:jackson-databind:${Version.JACKSON}")
     implementation("com.fasterxml.jackson.core:jackson-annotations:${Version.JACKSON}")
     implementation("com.fasterxml.jackson.core:jackson-core:${Version.JACKSON}")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${Version.JACKSON_DATATYPE_JSR310}")
 
-    // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter:${Version.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-web:${Version.SPRING_BOOT}")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:${Version.SPRING_BOOT}")
     implementation("org.springframework.kafka:spring-kafka:3.0.10")
 
-    // Database
     implementation("org.postgresql:postgresql:${Version.POSTGRESQL}")
     implementation("org.flywaydb:flyway-core:${Version.FLYWAY}")
     implementation("jakarta.persistence:jakarta.persistence-api:${Version.JAKARTA_PERSISTENCE_API}")
 
-    // MapStruct
     implementation("org.mapstruct:mapstruct:${Version.MAPSTRUCT}")
     annotationProcessor("org.mapstruct:mapstruct-processor:${Version.MAPSTRUCT}")
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${Version.Lombok.MAP_STRUCT_BINDING}")
 
-    // Lombok
     compileOnly("org.projectlombok:lombok:${Version.LOMBOK}")
     annotationProcessor("org.projectlombok:lombok:${Version.LOMBOK}")
     testCompileOnly("org.projectlombok:lombok:${Version.LOMBOK}")
     testAnnotationProcessor("org.projectlombok:lombok:${Version.LOMBOK}")
 
-    // Testing
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${Version.SPRING_BOOT}")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.1")
     testImplementation(platform("org.junit:junit-bom:${Version.JUNIT}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core:${Version.ASSERTJ_CORE}")
@@ -86,18 +79,15 @@ dependencies {
     testImplementation("org.mockito:mockito-core:${Version.MOCKITO}")
     testImplementation("org.mockito:mockito-junit-jupiter:${Version.MOCKITO}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${Version.JUNIT}")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    // JAXB
     implementation("javax.xml.bind:jaxb-api:${Version.JAXB_API}")
     implementation("org.glassfish.jaxb:jaxb-runtime:${Version.JAXB_RUNTIME}")
 
-    // JCommander
     implementation("com.beust:jcommander:${Version.JCOMMANDER}")
 
-    // SpringDoc OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRING_DOC}")
 
-    //Json
     implementation("com.google.code.gson:gson:${Version.GSON}")
 }
 

@@ -1,6 +1,5 @@
 package com.hofftech.deliverysystem.handler;
 
-import com.hofftech.deliverysystem.mapper.ParcelMapper;
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.entity.ParcelEntity;
 import com.hofftech.deliverysystem.model.record.command.CreateCommand;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -51,10 +49,10 @@ class CreateCommandDispatcherTest {
         parcelEntity.setForm(commandData.form());
         parcelEntity.setSymbol(commandData.symbol());
         Parcel parcel = new Parcel(commandData.name(), commandData.symbol(), form);
-        // Mock dependencies
+
         when(commandParserService.parseCreateCommand(inputText)).thenReturn(commandData);
         when(formHelper.parseForm(commandData.form(), commandData.symbol())).thenReturn(form);
-        when(parcelService.create(commandData)).thenReturn(parcel); // Mock parcelService.create
+        when(parcelService.create(commandData)).thenReturn(parcel);
         when(outputService.formatCreateResponse(parcel.getName(), form)).thenReturn("Посылка Посылка Тип 0 создана");
 
         String result = createCommandHandler.handle(inputText);
