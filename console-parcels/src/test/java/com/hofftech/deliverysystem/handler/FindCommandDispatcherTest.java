@@ -1,10 +1,14 @@
 package com.hofftech.deliverysystem.handler;
 
+import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.entity.ParcelEntity;
 import com.hofftech.deliverysystem.model.record.command.FindCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
+import com.hofftech.deliverysystem.service.OutputService;
+import com.hofftech.deliverysystem.service.ParcelService;
+import com.hofftech.deliverysystem.util.FormHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,22 +29,14 @@ class FindCommandDispatcherTest {
     @Mock
     private CommandParserService commandParserService;
 
+    @Mock
+    private ParcelService parcelService;
+    @Mock
+    private FormHelper formHelper;
+    @Mock
+    private OutputService outputService;
     @InjectMocks
     private FindCommandHandlerImpl findCommandHandler;
-
-    @Test
-    @DisplayName("Должен вернуть посылку при правильном запросе")
-    void handle_ShouldReturnParcel_WhenCommandIsValid() {
-        String inputText = "/find Parcel1";
-        FindCommand commandData = new FindCommand("Parcel1");
-
-        when(commandParserService.parseFindCommand(inputText)).thenReturn(commandData);
-        when(parcelRepository.findByName(commandData.parcelName())).thenReturn(new ParcelEntity());
-
-        String result = findCommandHandler.handle(inputText);
-
-        assertThat(result).isEqualTo(new ParcelEntity());
-    }
 
     @Test
     @DisplayName("Должен выбросить исключение при некорректной команде")

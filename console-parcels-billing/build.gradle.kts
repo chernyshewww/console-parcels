@@ -7,6 +7,7 @@ object Version {
     const val MAPSTRUCT = "1.6.0"
     const val POSTGRESQL = "42.5.0"
     const val SPRING_KAFKA = "3.0.10" // Added for Kafka
+    const val SPRING_DOC = "2.2.0"
 }
 
 plugins {
@@ -54,6 +55,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test:${Version.SPRING_BOOT}")
     testImplementation(platform("org.junit:junit-bom:${Version.JUNIT}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    // SpringDoc OpenAPI
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Version.SPRING_DOC}")
 }
 
 spotless {

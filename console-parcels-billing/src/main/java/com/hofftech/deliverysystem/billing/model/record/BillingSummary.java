@@ -14,4 +14,12 @@ public class BillingSummary {
     private int segments;
     private int parcels;
     private int cost;
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Date: %s, Operation: %s, Segments: %d, Parcels: %d, Cost: %d",
+                timestamp, operationType, segments, parcels, cost
+        );
+    }
 }

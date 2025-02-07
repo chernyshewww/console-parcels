@@ -11,11 +11,10 @@ import com.hofftech.deliverysystem.billing.repository.InboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,38 +42,38 @@ public class BillingService {
     private final BillingRecordMapper billingRecordMapper;
 
     @Transactional
-    @CacheEvict(value = "billing", key = "#message.user + '-last-month'")
-    public void recordLoadOperation(LoadParcelsBillingDto loadParcelsBillingDto) {
-        if (inboxRepository.findById(loadParcelsBillingDto.getMessageId()).isPresent()) {
+    @CacheEvict(value = "billing", key = "#message.user")
+    public void recordLoadOperation(LoadParcelsBillingDto message) {
+        if (inboxRepository.findById(message.getMessageId()).isPresent()) {
             return;
         }
 
-        int cost = pricingService.calculateLoadCost(loadParcelsBillingDto.getTrucksCount(), loadParcelsBillingDto.getParcelsCount());
-        BillingRecord billing = new BillingRecord(loadParcelsBillingDto.getUser(), LocalDateTime.now(), LOAD,
-                loadParcelsBillingDto.getTrucksCount(),
-                loadParcelsBillingDto.getParcelsCount(), cost);
+        int cost = pricingService.calculateLoadCost(message.getTrucksCount(), message.getParcelsCount());
+        BillingRecord billing = new BillingRecord(message.getUser(), LocalDateTime.now(), LOAD,
+                message.getTrucksCount(),
+                message.getParcelsCount(), cost);
         BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
 
         billingRepository.save(billingEntity);
-        addInboxMessage(loadParcelsBillingDto.getMessageId(), loadParcelsBillingDto.getUser());
-        log.info("Recorded load operation for user: {}, cost: {}", loadParcelsBillingDto.getUser(), cost);
+        addInboxMessage(message.getMessageId(), message.getUser());
+        log.info("Recorded load operation for user: {}, cost: {}", message.getUser(), cost);
     }
 
     @Transactional
-    @CacheEvict(value = "billing", key = "#message.user + '-last-month'")
-    public void recordUnloadOperation(LoadParcelsBillingDto loadParcelsBillingDto) {
-        if (inboxRepository.findById(loadParcelsBillingDto.getMessageId()).isPresent()) {
+    @CacheEvict(value = "billing", key = "#message.user")
+    public void recordUnloadOperation(LoadParcelsBillingDto message) {
+        if (inboxRepository.findById(message.getMessageId()).isPresent()) {
             return;
         }
 
-        int cost = pricingService.calculateUnloadCost(loadParcelsBillingDto.getTrucksCount(), loadParcelsBillingDto.getParcelsCount());
-        BillingRecord billing = new BillingRecord(loadParcelsBillingDto.getUser(), LocalDateTime.now(), UNLOAD,
-                loadParcelsBillingDto.getTrucksCount(),
-                loadParcelsBillingDto.getParcelsCount(), cost);
+        int cost = pricingService.calculateUnloadCost(message.getTrucksCount(), message.getParcelsCount());
+        BillingRecord billing = new BillingRecord(message.getUser(), LocalDateTime.now(), UNLOAD,
+                message.getTrucksCount(),
+                message.getParcelsCount(), cost);
         BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
         billingRepository.save(billingEntity);
-        addInboxMessage(loadParcelsBillingDto.getMessageId(), loadParcelsBillingDto.getUser());
-        log.info("Recorded unload operation for user: {}, cost: {}", loadParcelsBillingDto.getUser(), cost);
+        addInboxMessage(message.getMessageId(), message.getUser());
+        log.info("Recorded unload operation for user: {}, cost: {}", message.getUser(), cost);
     }
 
     /**
@@ -85,6 +84,7 @@ public class BillingService {
      * @param toDate   The end date of the period.
      * @return A list of billing summaries for the specified period.
      */
+    @Cacheable(value = "billing", key = "#user")
     public List<BillingSummary> getBillingSummaries(String user, LocalDate fromDate, LocalDate toDate) {
 
         LocalDateTime fromDateTime = fromDate.atStartOfDay();

@@ -2,6 +2,7 @@ package com.hofftech.deliverysystem.service;
 
 import com.hofftech.deliverysystem.model.Parcel;
 import com.hofftech.deliverysystem.model.Truck;
+import com.hofftech.deliverysystem.util.FormHelper;
 import com.hofftech.deliverysystem.util.OutputHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +31,9 @@ class OutputServiceTest {
 
     @Mock
     private FileService fileService;
+
+    @Mock
+    private FormHelper formHelper;
 
     @InjectMocks
     private OutputService outputService;
@@ -87,6 +91,8 @@ class OutputServiceTest {
         String name = "TestParcel";
         char[][] form = {{'T', 'T'}, {'T', 'T'}};
 
+        FormHelper formHelper = new FormHelper();
+        OutputService outputService = new OutputService(truckService, outputHelper, fileService, formHelper);
         String result = outputService.formatCreateResponse(name, form);
 
         assertThat(result).contains("id(name): \"TestParcel\"")

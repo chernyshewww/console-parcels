@@ -4,6 +4,7 @@ import com.hofftech.deliverysystem.model.record.command.DeleteCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.repository.ParcelRepository;
 import com.hofftech.deliverysystem.service.CommandParserService;
+import com.hofftech.deliverysystem.service.ParcelService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,9 @@ class DeleteCommandDispatcherTest {
     @Mock
     private CommandParserService commandParserService;
 
+    @Mock
+    private ParcelService parcelService;
+
     @InjectMocks
     private DeleteCommandHandlerImpl deleteCommandHandler;
 
@@ -34,10 +38,9 @@ class DeleteCommandDispatcherTest {
 
         when(commandParserService.parseDeleteCommand(inputText)).thenReturn(commandData);
 
-
         String result = deleteCommandHandler.handle(inputText);
 
-        assertThat(result).isEqualTo("");
+        assertThat(result).isEqualTo("Посылка 'Parcel123' была успешно удалена");
     }
 
     @Test
@@ -50,7 +53,7 @@ class DeleteCommandDispatcherTest {
 
         String result = deleteCommandHandler.handle(inputText);
 
-        assertThat(result).isEqualTo("");
+        assertThat(result).isEqualTo("Посылка 'ParcelXYZ' была успешно удалена");
     }
 
     @Test
