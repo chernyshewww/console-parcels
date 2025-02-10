@@ -8,7 +8,8 @@
     username: delivery_user
     password: delivery_password
     driver-class-name: org.postgresql.Driver
-
+  kafka:
+    bootstrap-servers: localhost:29092
 billing:
   loadPricing: 50
   unloadPricing: 80

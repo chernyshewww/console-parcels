@@ -38,8 +38,4 @@ public class OutboxService {
                 .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
                 .build();
     }
-
-    public List<OutboxMessage> findAll() {
-        return outboxRepository.findAll();
-    }
 }
