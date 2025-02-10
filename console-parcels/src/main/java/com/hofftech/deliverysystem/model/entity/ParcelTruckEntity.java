@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Builder
@@ -18,7 +17,6 @@ import lombok.experimental.FieldNameConstants;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldNameConstants
 @Table(name = "parcel_truck")
 public class ParcelTruckEntity {
 
