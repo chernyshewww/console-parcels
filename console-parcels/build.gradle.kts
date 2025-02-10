@@ -79,8 +79,13 @@ dependencies {
     testImplementation("org.mockito:mockito-core:${Version.MOCKITO}")
     testImplementation("org.mockito:mockito-junit-jupiter:${Version.MOCKITO}")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${Version.JUNIT}")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly ("org.junit.platform:junit-platform-launcher")
+    testImplementation ("org.testcontainers:postgresql:1.17.6")
+    testImplementation ("org.testcontainers:junit-jupiter:1.17.6")
+    testImplementation ("org.springframework.boot:spring-boot-testcontainers:3.4.1")
     implementation("javax.xml.bind:jaxb-api:${Version.JAXB_API}")
     implementation("org.glassfish.jaxb:jaxb-runtime:${Version.JAXB_RUNTIME}")
 

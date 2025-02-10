@@ -10,6 +10,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   kafka:
     bootstrap-servers: localhost:29092
+  flyway:
+      locations: classpath:db/migration
 swagger:
   url:
     path: /

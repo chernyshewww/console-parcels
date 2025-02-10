@@ -1,32 +1,23 @@
 package com.hofftech.deliverysystem.controller;
 
-import com.hofftech.deliverysystem.command.CommandDispatcher;
-import com.hofftech.deliverysystem.service.LoadCommandService;
+import com.hofftech.deliverysystem.container.AbstractPostgresContainer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(properties = "spring.profiles.active=test")
 @AutoConfigureMockMvc
-class DeliverySystemRestControllerIT {
+class DeliverySystemRestControllerIT  extends AbstractPostgresContainer {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private CommandDispatcher commandDispatcher;
-
-    @Autowired
-    private LoadCommandService loadCommandService;
 
     @Test
     void create_withValidRequest_shouldReturnValidResponse() throws Exception {
