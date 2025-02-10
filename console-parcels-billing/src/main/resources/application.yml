@@ -4,9 +4,9 @@
   jpa:
     open-in-view: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/delivery_db
-    username: delivery_user
-    password: delivery_password
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
 billing:

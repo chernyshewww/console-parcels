@@ -1,7 +1,5 @@
 package com.hofftech.deliverysystem.billing.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hofftech.deliverysystem.billing.model.domain.KafkaMessageWrapper;
 import com.hofftech.deliverysystem.billing.model.domain.LoadParcelsBillingDto;
 import lombok.RequiredArgsConstructor;
@@ -15,30 +13,24 @@ import org.springframework.stereotype.Service;
 public class BillingTaskProcessor {
 
     private final BillingService billingService;
-    private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "loadParcelsBilling-out-0", groupId = "delivery-system-group", containerFactory = "kafkaListenerContainerFactory")
-    public void processLoad(KafkaMessageWrapper task) {
-        try {
-            LoadParcelsBillingDto payload = objectMapper.readValue(task.getPayload(), LoadParcelsBillingDto.class);
+    public void processLoad(KafkaMessageWrapper<LoadParcelsBillingDto> task) {
+        log.info("Received loading task: {}", task);
 
-            billingService.recordLoadOperation(payload);
-        } catch (JsonProcessingException e) {
-            log.error("Error parsing payload: {}", task.getPayload(), e);
+        try{
+            billingService.recordLoadOperation(task.getPayload());
         } catch (Exception e) {
             log.error("Error processing billing  loadtask: {}", task, e);
         }
     }
 
     @KafkaListener(topics = "unloadParcelsBilling-out-0", groupId = "delivery-system-group", containerFactory = "kafkaListenerContainerFactory")
-    public void processUnLoad(KafkaMessageWrapper task) {
+    public void processUnLoad(KafkaMessageWrapper<LoadParcelsBillingDto> task) {
         log.info("Received unloading task: {}", task);
-        try {
-            LoadParcelsBillingDto payload = objectMapper.readValue(task.getPayload(), LoadParcelsBillingDto.class);
 
-            billingService.recordUnloadOperation(payload);
-        } catch (JsonProcessingException e) {
-            log.error("Error parsing payload: {}", task.getPayload(), e);
+        try {
+            billingService.recordUnloadOperation(task.getPayload());
         }
         catch (Exception e) {
             log.error("Error parsing or processing billing unload task: {}", task, e);
