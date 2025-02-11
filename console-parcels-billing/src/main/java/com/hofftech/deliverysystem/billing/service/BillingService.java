@@ -1,10 +1,10 @@
 package com.hofftech.deliverysystem.billing.service;
 
-import com.hofftech.deliverysystem.billing.mapper.BillingRecordMapper;
+import com.hofftech.deliverysystem.billing.mapper.BillingMapper;
 import com.hofftech.deliverysystem.billing.model.InboxMessage;
 import com.hofftech.deliverysystem.billing.model.domain.LoadParcelsBillingDto;
-import com.hofftech.deliverysystem.billing.model.entity.BillingRecordEntity;
-import com.hofftech.deliverysystem.billing.model.record.BillingRecord;
+import com.hofftech.deliverysystem.billing.model.entity.BillingEntity;
+import com.hofftech.deliverysystem.billing.model.record.Billing;
 import com.hofftech.deliverysystem.billing.model.record.BillingSummary;
 import com.hofftech.deliverysystem.billing.repository.BillingRepository;
 import com.hofftech.deliverysystem.billing.repository.InboxRepository;
@@ -39,20 +39,20 @@ public class BillingService {
     private final BillingRepository billingRepository;
     private final InboxRepository inboxRepository;
     private final PricingService pricingService;
-    private final BillingRecordMapper billingRecordMapper;
+    private final BillingMapper billingMapper;
 
     @Transactional
     @CacheEvict(value = "billing", key = "#message.user")
-    public void recordLoadOperation(LoadParcelsBillingDto message) {
+    public void writeLoadOperation(LoadParcelsBillingDto message) {
         if (inboxRepository.findById(message.getMessageId()).isPresent()) {
             return;
         }
 
         int cost = pricingService.calculateLoadCost(message.getTrucksCount(), message.getParcelsCount());
-        BillingRecord billing = new BillingRecord(message.getUser(), LocalDateTime.now(), LOAD,
+        Billing billing = new Billing(message.getUser(), LocalDateTime.now(), LOAD,
                 message.getTrucksCount(),
                 message.getParcelsCount(), cost);
-        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
+        BillingEntity billingEntity = billingMapper.toEntity(billing);
 
         billingRepository.save(billingEntity);
         addInboxMessage(message.getMessageId(), message.getUser());
@@ -61,16 +61,16 @@ public class BillingService {
 
     @Transactional
     @CacheEvict(value = "billing", key = "#message.user")
-    public void recordUnloadOperation(LoadParcelsBillingDto message) {
+    public void writeUnloadOperation(LoadParcelsBillingDto message) {
         if (inboxRepository.findById(message.getMessageId()).isPresent()) {
             return;
         }
 
         int cost = pricingService.calculateUnloadCost(message.getTrucksCount(), message.getParcelsCount());
-        BillingRecord billing = new BillingRecord(message.getUser(), LocalDateTime.now(), UNLOAD,
+        Billing billing = new Billing(message.getUser(), LocalDateTime.now(), UNLOAD,
                 message.getTrucksCount(),
                 message.getParcelsCount(), cost);
-        BillingRecordEntity billingEntity = billingRecordMapper.toEntity(billing);
+        BillingEntity billingEntity = billingMapper.toEntity(billing);
         billingRepository.save(billingEntity);
         addInboxMessage(message.getMessageId(), message.getUser());
         log.info("Recorded unload operation for user: {}, cost: {}", message.getUser(), cost);

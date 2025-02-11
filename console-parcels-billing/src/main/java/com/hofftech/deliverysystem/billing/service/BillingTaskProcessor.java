@@ -19,7 +19,7 @@ public class BillingTaskProcessor {
         log.info("Received loading task: {}", task);
 
         try{
-            billingService.recordLoadOperation(task.getPayload());
+            billingService.writeLoadOperation(task.getPayload());
         } catch (Exception e) {
             log.error("Error processing billing  loadtask: {}", task, e);
         }
@@ -30,7 +30,7 @@ public class BillingTaskProcessor {
         log.info("Received unloading task: {}", task);
 
         try {
-            billingService.recordUnloadOperation(task.getPayload());
+            billingService.writeUnloadOperation(task.getPayload());
         }
         catch (Exception e) {
             log.error("Error parsing or processing billing unload task: {}", task, e);

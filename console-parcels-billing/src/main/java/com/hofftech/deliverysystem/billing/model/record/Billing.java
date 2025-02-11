@@ -1,4 +1,4 @@
-package com.hofftech.deliverysystem.model.record.billing;
+package com.hofftech.deliverysystem.billing.model.record;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BillingRecord {
+public class Billing {
 
     private String user;
     private LocalDateTime timestamp;

@@ -22,6 +22,11 @@ public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.acks}")
+    private String acks;
+
+    @Value("${spring.kafka.retries}")
+    private String retries;
     @Bean
     public KafkaTemplate<String, Message<String>> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
@@ -37,8 +42,8 @@ public class KafkaConfig {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        props.put(ProducerConfig.ACKS_CONFIG, "all");
-        props.put(ProducerConfig.RETRIES_CONFIG, 3);
+        props.put(ProducerConfig.ACKS_CONFIG, acks);
+        props.put(ProducerConfig.RETRIES_CONFIG, retries);
         return props;
     }
 }

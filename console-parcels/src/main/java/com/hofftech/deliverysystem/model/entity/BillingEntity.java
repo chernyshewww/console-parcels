@@ -1,4 +1,4 @@
-package com.hofftech.deliverysystem.billing.model.entity;
+package com.hofftech.deliverysystem.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.FieldNameConstants;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +20,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldNameConstants
 @Table(name = "billing_record")
-public class BillingRecordEntity {
+public class BillingEntity {
 
     @Id
     @Column

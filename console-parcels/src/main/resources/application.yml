@@ -10,6 +10,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   kafka:
     bootstrap-servers: localhost:29092
+    acks: all
+    retries: 3
   flyway:
       locations: classpath:db/migration
 swagger:
@@ -53,6 +55,7 @@ common-delivery:
 
 logging.level:
   com.hofftech.deliverysystem: DEBUG
+
 
 
 
