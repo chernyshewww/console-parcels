@@ -1,0 +1,19 @@
+﻿spring:
+  application:
+    name: console-parcels
+  jpa:
+    open-in-view: false
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: localhost:29092
+billing:
+  loadPricing: 50
+  unloadPricing: 80
+  truckPricing: 200
+
+server:
+  port: 8083

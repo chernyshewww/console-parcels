@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BillingRecord {
+public class Billing{
 
     private String user;
     private LocalDateTime timestamp;

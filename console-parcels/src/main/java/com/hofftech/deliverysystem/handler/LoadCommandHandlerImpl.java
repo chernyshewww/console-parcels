@@ -1,6 +1,7 @@
 package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.command.CommandHandler;
+import com.hofftech.deliverysystem.model.enums.OutputType;
 import com.hofftech.deliverysystem.model.record.command.LoadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
 import com.hofftech.deliverysystem.model.Parcel;
@@ -45,18 +46,9 @@ public class LoadCommandHandlerImpl implements CommandHandler {
 
             truckService.saveTrucks(loadedTrucks);
 
-            billingService.recordLoadOperation(
-                    commandData.user(),
-                    loadedTrucks.size(),
-                    parcels.size()
-            );
+            billingService.addLoadParcelsBilling(commandData.user(), loadedTrucks.size(), parcels.size());
 
-            return switch (commandData.outputType()) {
-                case "text" -> outputService.generateLoadOutput(loadedTrucks);
-                case "json-file" -> outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks);
-                default -> "Ошибка: Неподдерживаемый тип вывода.";
-            };
-
+            return processOutput(commandData, loadedTrucks);
         } catch (InvalidCommandException e) {
             log.error("Invalid command", e);
             throw e;
@@ -67,5 +59,14 @@ public class LoadCommandHandlerImpl implements CommandHandler {
             log.error("Error while processing /load command", e);
             return "Произошла ошибка: " + e.getMessage();
         }
+    }
+
+    private String processOutput(LoadCommand commandData, List<Truck> loadedTrucks) {
+        OutputType outputType = OutputType.fromString(commandData.outputType());
+
+        return switch (outputType) {
+            case TEXT -> outputService.generateLoadOutput(loadedTrucks);
+            case JSON_FILE -> outputService.saveJsonOutput(commandData.outputFileName(), loadedTrucks);
+        };
     }
 }

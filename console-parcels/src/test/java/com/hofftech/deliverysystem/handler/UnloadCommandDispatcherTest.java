@@ -2,13 +2,13 @@ package com.hofftech.deliverysystem.handler;
 
 import com.hofftech.deliverysystem.model.record.command.UnloadCommand;
 import com.hofftech.deliverysystem.exception.InvalidCommandException;
-import com.hofftech.deliverysystem.model.Truck;
 import com.hofftech.deliverysystem.repository.TruckRepository;
 import com.hofftech.deliverysystem.service.BillingService;
 import com.hofftech.deliverysystem.service.CommandParserService;
 import com.hofftech.deliverysystem.service.FileService;
 import com.hofftech.deliverysystem.service.OutputService;
 import com.hofftech.deliverysystem.service.ParcelService;
+import com.hofftech.deliverysystem.service.TruckService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +39,9 @@ class UnloadCommandDispatcherTest {
     private OutputService outputService;
 
     @Mock
+    private TruckService truckService;
+
+    @Mock
     private FileService fileService;
 
     @Mock
@@ -60,26 +63,14 @@ class UnloadCommandDispatcherTest {
     }
 
     @Test
-    @DisplayName("Должен вернуть ошибку, если файл с грузовиками не найден")
-    void handle_ShouldReturnError_WhenTrucksFileNotFound() {
-        String inputText = "/unload  -outfile \"parcels-with-count.csv\" --withcount";
-        UnloadCommand commandData = mock(UnloadCommand.class);
-
-        when(commandParserService.parseUnloadCommand(inputText)).thenReturn(commandData);
-        String result = unloadCommandHandler.handle(inputText);
-
-        assertThat(result).isEqualTo("Произошла ошибка при выгрузке посылок: Файл не найден");
-    }
-
-    @Test
     @DisplayName("Должен вернуть ошибку, если произошла ошибка при выгрузке посылок")
     void handle_ShouldReturnError_WhenErrorDuringUnload() {
         String inputText = "/unload  -outfile \"parcels-with-count.csv\" --withcount";
         UnloadCommand commandData = mock(UnloadCommand.class);
-        List<Truck> trucks = new ArrayList<>();
+        List<Long> truckIds = new ArrayList<>();
 
         when(commandParserService.parseUnloadCommand(inputText)).thenReturn(commandData);
-        when(parcelService.unloadParcelsFromTrucks(trucks)).thenThrow(new RuntimeException("Ошибка при выгрузке"));
+        when(parcelService.findParcelsByTruckIds(truckIds)).thenThrow(new RuntimeException("Ошибка при выгрузке"));
 
         String result = unloadCommandHandler.handle(inputText);
 

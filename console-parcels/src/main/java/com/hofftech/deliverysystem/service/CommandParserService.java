@@ -21,11 +21,10 @@ public class CommandParserService {
 
     private static final int LOAD_USER_GROUP = 1;
     private static final int LOAD_PARCELS_TEXT_GROUP = 2;
-    private static final int LOAD_PARCELS_FILE_GROUP = 3;
-    private static final int LOAD_TRUCKS_GROUP = 4;
-    private static final int LOAD_TYPE_GROUP = 5;
-    private static final int LOAD_OUT_GROUP = 6;
-    private static final int LOAD_OUT_FILENAME_GROUP = 7;
+    private static final int LOAD_TRUCKS_GROUP = 3;
+    private static final int LOAD_TYPE_GROUP = 4;
+    private static final int LOAD_OUT_GROUP = 5;
+    private static final int LOAD_OUT_FILENAME_GROUP = 6;
 
     private static final int CREATE_NAME_GROUP = 1;
     private static final int CREATE_FORM_GROUP = 2;
